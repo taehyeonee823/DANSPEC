@@ -54,7 +54,7 @@ class LoginRequest(BaseModel):
 
 @app.get("/")
 def read_root():
-    return {"message": "FastAPI 서버가 정상적으로 실행 중입니다!"}
+    return {"message": "FastAPI 서버가 정상적으로 실행 중입니다"}
 
 # 회원가입 API
 @app.post("/api/signup")

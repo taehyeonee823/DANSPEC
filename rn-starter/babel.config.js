@@ -16,8 +16,6 @@ module.exports = function (api) {
             '.js',
             '.jsx',
             '.json',
-            '.tsx',
-            '.ts',
           ],
         },
       ],
