@@ -43,7 +43,7 @@ export default function LoginScreen() {
 
       if (response.ok && data.success) {
         Alert.alert('👋 환영합니다', `${data.user.name}님, 로그인이 완료되었습니다.`, [
-          { text: '확인' }
+          { text: '확인', onPress: () => router.push('/home') }
         ]);
       } else {
         Alert.alert('⚠️ 로그인 실패', data.message || '이메일 또는 비밀번호가 올바르지 않습니다.', [
