@@ -52,7 +52,7 @@ export default function LoginScreen() {
       }
     } catch (error) {
       console.error('로그인 오류:', error);
-      Alert.alert('⚠️ 오류', '서버와 통신 중 오류가 발생했습니다.', [
+      Alert.alert('⚠️ 오류', '백엔드 서버가 응답하지 않습니다.', [
         { text: '확인' }
       ]);
     }

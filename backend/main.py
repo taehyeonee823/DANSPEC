@@ -5,6 +5,11 @@ import pymysql
 from pymysql.cursors import DictCursor
 from typing import Optional
 import logging
+import os
+from dotenv import load_dotenv
+
+# .env 파일 로드
+load_dotenv()
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
@@ -24,11 +29,11 @@ app.add_middleware(
 # MySQL 연결 설정
 def get_db_connection():
     return pymysql.connect(
-        host='localhost',
-        user='root',
-        password='0000000000000',
-        database='board_db',
-        charset='utf8mb4',
+        host=os.getenv('DB_HOST', 'localhost'),
+        user=os.getenv('DB_USER', 'root'),
+        password=os.getenv('DB_PASSWORD'),
+        database=os.getenv('DB_NAME', 'board_db'),
+        charset=os.getenv('DB_CHARSET', 'utf8mb4'),
         cursorclass=DictCursor
     )
 
