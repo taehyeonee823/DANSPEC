@@ -26,7 +26,7 @@ def get_db_connection():
     return pymysql.connect(
         host='localhost',
         user='root',
-        password='potatopizza823',
+        password='0000000000000',
         database='board_db',
         charset='utf8mb4',
         cursorclass=DictCursor
