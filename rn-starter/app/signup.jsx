@@ -15,7 +15,7 @@ export default function SignUpScreen() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordMatch, setPasswordMatch] = useState(true);
   const [name, setName] = useState('');
-  const [campus, setCampus] = useState<'죽전' | '천안' | ''>('');
+  const [campus, setCampus] = useState('');
   const [department, setDepartment] = useState('');
   const [showDepartmentModal, setShowDepartmentModal] = useState(false);
   const [major, setMajor] = useState('');
@@ -32,7 +32,7 @@ export default function SignUpScreen() {
    const cheonanDepartments = [
     '외국어대학','공공인재대학','과학기술대학','바이오융합대학','보건과학대학','의·약학계열','스포츠과학대학','예술대학'
   ];
-  const departmentMajorsJukjeon: { [key: string]: string[] } = {
+  const departmentMajorsJukjeon = {
     '문과대학': ['국어국문학과', '사학과', '철학과', '영미인문학과'],
     '법과대학': ['법학과'],
     '사회과학대학': ['정치외교학과', '행정학과', '도시계획·부동산학부', '미디어커뮤니케이션학과'],
@@ -43,7 +43,7 @@ export default function SignUpScreen() {
     '음악·예술대학': ['도예과', '디자인학부', '공연영화학부','무용과','음악학부'],
   };
 
-  const departmentMajorscheonan: { [key: string]: string[] } = {
+  const departmentMajorscheonan = {
     '외국어대학': [],
     '공공인재대학': [''],
     '과학기술대학': ['수학과','물리학과','화학과','식품영양학과','신소재공학과','에너지공학과','식품공학과','경영공학과','제약공학과'],
@@ -71,7 +71,7 @@ export default function SignUpScreen() {
     ]);
   };
 
-  const validatePassword = (text: string) => {
+  const validatePassword = (text) => {
     setPassword(text);
 
     if (text.length > 0 && text.length < 7) {
@@ -89,7 +89,7 @@ export default function SignUpScreen() {
     }
   };
 
-  const handleConfirmPasswordChange = (text: string) => {
+  const handleConfirmPasswordChange = (text) => {
     setConfirmPassword(text);
     // 비밀번호 일치 여부 확인
     setPasswordMatch(password === text);
