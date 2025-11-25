@@ -1,2 +1,4 @@
-# DANSPEC 데모 버전입니다.
-DB 연결하기 위해 env.example 형식에 직접 로컬 mysql 비밀번호와 서버 동작을 위한 포트번호 입력해주세요.
+# 단국대 학생을 위한 AI 기반 자기 계발 및 커리어 설계 앱 DANSPEC
+### ⚙️기술 스택
+<b>[Frontend]</b><br/>
+- <img src="https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white">
