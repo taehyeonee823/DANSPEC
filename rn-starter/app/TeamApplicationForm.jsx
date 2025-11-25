@@ -1,11 +1,13 @@
-import { Text, View, StyleSheet, KeyboardAvoidingView, ScrollView } from "react-native";
+import { Text, View, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpacity, Image } from "react-native";
 import React, {useState} from "react";
+import { useRouter } from 'expo-router';
 import Button from '../components/Button';
-import MultiplelineInput from '../components/MultiplelineInput'; 
+import MultiplelineInput from '../components/MultiplelineInput';
 import SinglelineInput from '../components/SinglelineInput';
 
 export default function Index() {
-  const [motivationInfo, setMotivation] = useState(""); 
+  const router = useRouter();
+  const [motivationInfo, setMotivation] = useState("");
   const [introductionInfo, setIntroduction] = useState("");
   const [portfolioLink, setPortfolioLink] = useState("");
   const [contactInfo, setContactInfo] = useState("");
@@ -16,10 +18,17 @@ export default function Index() {
   const teamLeaderGrade = "3학년";
 
   return (
+      <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
+        <TouchableOpacity
+          style={{ position: 'absolute', top:60, left: 20, zIndex: 999, padding: 8 }}
+          onPress={() => router.back()}
+        >
+          <Text style={{ fontSize: 28, color: '#000', fontWeight: 'bold' }}>←</Text>
+        </TouchableOpacity>
 
-      <KeyboardAvoidingView behavior="height" style={{ flex: 1 }}>
-        <ScrollView style={styles.container}
-            contentContainerStyle={styles.contentContainer}>
+        <KeyboardAvoidingView behavior="height" style={{ flex: 1, marginTop: 110 }}>
+          <ScrollView style={styles.container}
+              contentContainerStyle={styles.contentContainer}>
             <Text style={styles.mainTitle}>팀 지원글 작성하기</Text>
 
             <Text style={styles.sectionTitle}>이름</Text>
@@ -64,20 +73,22 @@ export default function Index() {
                 }}
                 style={{ marginTop: 20 }}
             />
-        </ScrollView>
-      </KeyboardAvoidingView>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      </View>
     );
 }
 
 const styles = StyleSheet.create({
   container: {
         flex: 1,
-        padding: 20,
+        paddingHorizontal: 20,
         backgroundColor: '#ffffff',
     },
   contentContainer: {
         padding: 20,
         paddingBottom: 50,
+        zIndex: 900
     },
     mainTitle: {
         fontSize: 24,
@@ -90,14 +101,14 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: '#333',
         marginBottom: 5,
-        marginTop: 15, 
+        marginTop: 15,
     },
     readOnlyText: {
         fontSize: 16,
         color: '#666',
         paddingVertical: 10,
         paddingHorizontal: 15,
-        backgroundColor: '#f5f5f5', 
+        backgroundColor: '#f5f5f5',
         borderRadius: 5,
         borderWidth: 1,
         borderColor: '#eee',

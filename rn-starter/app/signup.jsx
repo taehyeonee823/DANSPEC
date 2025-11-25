@@ -372,52 +372,7 @@ export default function SignUpScreen() {
 
     <TouchableOpacity
       style={styles.signupButton}
-      onPress={async () => {
-
-        if (!email || !password || !confirmPassword || !name || !campus || !department || !major || !grade || !introduction) {
-          Alert.alert('⚠️ 경고', '모든 정보를 입력하세요.', [{ text: '확인' }]);
-          return;
-        }
-
-        if (password !== confirmPassword) {
-          Alert.alert('⚠️ 경고', '비밀번호가 일치하지 않습니다.', [{ text: '확인' }]);
-          return;
-        }
-
-        try {
-          // 회원가입 API 호출
-          // iOS 시뮬레이터나 Android 에뮬레이터에서 로컬 서버에 접근
-          const response = await fetch(API_ENDPOINTS.SIGNUP, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              email,
-              password,
-              name,
-              campus,
-              department,
-              major,
-              grade: grade === '선택안함' || !grade ? null : grade,
-              introduction,
-            }),
-          });
-
-          const data = await response.json();
-
-          if (response.ok && data.success) {
-            Alert.alert('👋 완료', '회원가입이 완료되었습니다!', [
-              { text: '확인', onPress: () => router.back() }
-            ]);
-          } else {
-            Alert.alert('⚠️ 오류', data.message || '회원가입에 실패했습니다.', [{ text: '확인' }]);
-          }
-        } catch (error) {
-          console.error('회원가입 오류:', error);
-          Alert.alert('⚠️ 오류', '서버와 통신 중 오류가 발생했습니다.', [{ text: '확인' }]);
-        }
-      }}
+      onPress={() => router.back()}
     >
       <ThemedText style={styles.signupButtonText}>가입하기</ThemedText>
     </TouchableOpacity>
