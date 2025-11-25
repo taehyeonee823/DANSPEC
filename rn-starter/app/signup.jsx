@@ -99,7 +99,7 @@ export default function SignUpScreen() {
     <ThemedView style={styles.container}>
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
         <Image
-          source={require('@/assets/images/undo.png')}
+          source={require('@/assets/images/left.svg')}
           style={styles.backIcon}
           resizeMode="contain"
         />

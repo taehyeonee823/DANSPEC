@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 
 export default function NaviBar({ currentPage }) {
@@ -9,33 +10,40 @@ export default function NaviBar({ currentPage }) {
     <View style={styles.navigationBar}>
       <TouchableOpacity style={styles.navItem} onPress={() => router.push('/home')}>
         <Image
-          source={currentPage === 'home' ? require('@/assets/images/blueHome.png') : require('@/assets/images/home.png')}
+          source={require('../assets/images/home.svg')}
           style={styles.navIcon}
-          resizeMode="contain"
+          contentFit="contain"
+          tintColor={currentPage === 'home' ? '#3E6AF4' : '#333333'}
         />
         <Text style={currentPage === 'home' ? styles.nowNavText : styles.navText}>홈</Text>
       </TouchableOpacity>
+
       <TouchableOpacity style={styles.navItem} onPress={() => router.push('/activity')}>
         <Image
-          source={currentPage === 'activity' ? require('@/assets/images/blueActivity.png') : require('@/assets/images/activity.png')}
+          source={require('../assets/images/compass.svg')}
           style={styles.navIcon}
-          resizeMode="contain"
+          contentFit="contain"
+          tintColor={currentPage === 'activity' ? '#3E6AF4' : '#333333'}
         />
         <Text style={currentPage === 'activity' ? styles.nowNavText : styles.navText}>활동</Text>
       </TouchableOpacity>
+
       <TouchableOpacity style={styles.navItem} onPress={() => router.push('/team')}>
         <Image
-          source={currentPage === 'team' ? require('@/assets/images/blueTeam.png') : require('@/assets/images/team.png')}
+          source={require('../assets/images/users.svg')}
           style={styles.navIcon}
-          resizeMode="contain"
+          contentFit="contain"
+          tintColor={currentPage === 'team' ? '#3E6AF4' : '#333333'}
         />
         <Text style={currentPage === 'team' ? styles.nowNavText : styles.navText}>팀</Text>
       </TouchableOpacity>
+
       <TouchableOpacity style={styles.navItem} onPress={() => router.push('/my')}>
         <Image
-          source={currentPage === 'my' ? require('@/assets/images/blueMy.png') : require('@/assets/images/my.png')}
+          source={require('../assets/images/user.svg')}
           style={styles.navIcon}
-          resizeMode="contain"
+          contentFit="contain"
+          tintColor={currentPage === 'my' ? '#3E6AF4' : '#333333'}
         />
         <Text style={currentPage === 'my' ? styles.nowNavText : styles.navText}>마이</Text>
       </TouchableOpacity>
@@ -78,6 +86,7 @@ const styles = StyleSheet.create({
   },
   nowNavText: {
     fontSize: 12,
+    fontWeight: '700',
     color: '#3E6AF4',
   },
 });
