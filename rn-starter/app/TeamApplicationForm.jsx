@@ -57,7 +57,7 @@ export default function Index() {
                 placeholder="포트폴리오나 깃허브 링크를 입력해주세요." 
             /> 
             <Button
-                title="지원서 제출하기"
+                title="신청하기"
                 onPress={() => {
                     // 추후에 fetch로 지원서 제출 로직 추가 예정
                     console.log("지원서 제출됨");
