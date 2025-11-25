@@ -1,8 +1,8 @@
 import { Text, View, StyleSheet, KeyboardAvoidingView, ScrollView } from "react-native";
 import React, {useState} from "react";
-import Button from '../component/Button';
-import MultiplelineInput from '../component/MultiplelineInput'; 
-import SinglelineInput from '../component/SinglelineInput';
+import Button from '../components/Button';
+import MultiplelineInput from '../components/MultiplelineInput'; 
+import SinglelineInput from '../components/SinglelineInput';
 
 export default function Index() {
   const [motivationInfo, setMotivation] = useState(""); 
