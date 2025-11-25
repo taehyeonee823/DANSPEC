@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   floatingButton: {
     position: 'absolute',
     right: 20,
-    bottom: 20,
+    bottom: 110,
     width: 60,
     height: 60,
     justifyContent: 'center',
@@ -56,8 +56,6 @@ const styles = StyleSheet.create({
   plusIcon: {
     width: 60,
     height: 60,
-    marginBottom: 170,
-    marginRight: 20,
     resizeMode: 'contain',
   },
 });
