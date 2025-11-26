@@ -1,26 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import NaviBar from './naviBar';
+import CategoryChips from '../components/CategoryChips';
 import { ThemedText } from '@/components/themed-text';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function Team() {
   const router = useRouter();
+  const [selectedCategory, setSelectedCategory] = useState("모든 모집글");
+  const categories = ["모든 모집글", "내가 쓴 모집글만"];
 
   return (
-    <View style={styles.container}>
-      <NaviBar currentPage="team" />
-       <ThemedText style={styles.title}>이곳은 팀 화면 입니다.</ThemedText>
+    <View style={styles.container}>     
+      <ScrollView style={styles.contentArea}>  
+        <ThemedText style={styles.title}>이곳은 팀 화면 입니다.</ThemedText>
 
-       <TouchableOpacity
-         style={styles.floatingButton}
-         onPress={() => router.push('/teamApplicationForm')}
-       >
-         <Image
-           source={require('@/assets/images/plusBotton.png')}
-           style={styles.plusIcon}
-         />
-       </TouchableOpacity>
+        <View style={styles.chipsWrapper}>
+          <ScrollView 
+            horizontal 
+            showsHorizontalScrollIndicator={false} 
+            contentContainerStyle={styles.chipScrollViewContent}
+          >
+            <CategoryChips
+              categories={categories}
+              selectedCategory={selectedCategory}
+              onSelectCategory={setSelectedCategory}
+            />
+          </ScrollView>
+        </View>
+
+        <ThemedText style={{ padding: 20 }}>
+          현재 선택된 카테고리: {selectedCategory}
+        </ThemedText>
+      </ScrollView>
+      
+      <TouchableOpacity
+        style={styles.floatingButton}
+        onPress={() => router.push('/TeamRecruitmentForm')}
+      >
+        <Image
+          source={require('@/assets/images/plusBotton.png')}
+          style={styles.plusIcon}
+        />
+      </TouchableOpacity>
+      <NaviBar currentPage="team" />
+      
     </View>
   );
 }
@@ -30,19 +55,29 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
+  contentArea: {
+    flex: 1, 
+  },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginTop: 120,
+    marginTop: 60,   
     marginLeft: 20,
+    marginBottom: 20, 
     paddingTop: 10,
     color: '#000',
     textAlign: 'left',
   },
+  chipsWrapper: {
+    paddingLeft: 15,
+  },
+  chipScrollViewContent: {
+    paddingRight: 30,
+  },
   floatingButton: {
     position: 'absolute',
     right: 20,
-    bottom: 110,
+    bottom: 110, 
     width: 60,
     height: 60,
     justifyContent: 'center',
@@ -52,6 +87,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
+    zIndex: 999, 
   },
   plusIcon: {
     width: 60,
