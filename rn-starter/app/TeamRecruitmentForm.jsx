@@ -167,14 +167,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     borderRadius: 8,
   },
-  // ⭐️ 동적 필드 관련 스타일 추가 ⭐️
+
   inputRow: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 10,
   },
   input: {
-    flex: 1, // 남은 공간 차지
+    flex: 1, 
     backgroundColor: '#fff',
     borderWidth: 1,
     borderColor: '#ddd',
