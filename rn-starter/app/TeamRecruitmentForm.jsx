@@ -123,9 +123,7 @@ export default function TeamRecruitmentForm() {
               title="등록하기"
               onPress={() => {
                 // 제출 로직 구현
-                // 추후에 fetch로 모집글 제출 로직 추가 예정
-                console.log("모집글 제출됨");
-                router.push('/applyConfirmed');
+                router.back();
               }}
             />
           </ScrollView>
