@@ -32,10 +32,6 @@ export default function Team() {
           </ScrollView>
         </View>
 
-        <ThemedText style={{ padding: 20 }}>
-          현재 선택된 카테고리: {selectedCategory}
-        </ThemedText>
-
         {teamData.map((team) => (
           <TeamApplyBox
             key={team.id}
