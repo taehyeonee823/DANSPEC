@@ -5,6 +5,8 @@ import NaviBar from './naviBar';
 import CategoryChips from '../components/CategoryChips';
 import { ThemedText } from '@/components/themed-text';
 import { ScrollView } from 'react-native-gesture-handler';
+import TeamApplyBox from './teamApplyBox';
+import teamData from './teamApplyBoxDemo.json';
 
 export default function Team() {
   const router = useRouter();
@@ -33,6 +35,17 @@ export default function Team() {
         <ThemedText style={{ padding: 20 }}>
           현재 선택된 카테고리: {selectedCategory}
         </ThemedText>
+
+        {teamData.map((team) => (
+          <TeamApplyBox
+            key={team.id}
+            status={team.status}
+            dueDate={team.dueDate}
+            title={team.title}
+            description={team.description}
+            tag={team.tag}
+          />
+        ))}
       </ScrollView>
       
       <TouchableOpacity

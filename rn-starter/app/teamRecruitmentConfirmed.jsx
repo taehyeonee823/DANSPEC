@@ -26,8 +26,8 @@ export default function ApplyConfirmed() {
           contentFit="contain"
           tintColor="#3E6AF4"
         />
-        <ThemedText style={styles.title}>신청 완료</ThemedText>
-        <ThemedText style={styles.text}>신청이 완료되었습니다!{"\n"}새로운 모집글을 더 둘러 보세요.</ThemedText>
+        <ThemedText style={styles.title}>등록 완료</ThemedText>
+        <ThemedText style={styles.text}>모집글이 성공적으로 등록되었습니다!{"\n"}알림 기능을 통해 지원 현황을 빠르게 확인해 보세요.</ThemedText>
     </View>
   );
 }

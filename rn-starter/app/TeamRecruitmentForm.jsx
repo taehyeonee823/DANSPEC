@@ -5,7 +5,7 @@ import Button from '../components/Button';
 import MultiplelineInput from '../components/MultiplelineInput';
 import SinglelineInput from '../components/SinglelineInput';
 
-export default function TeamRecruitment() {
+export default function TeamRecruitmentForm() {
   const router = useRouter();
   const [titleInfo, setTitleInfo] = React.useState("");
   const [roleInfo, setRoleInfo] = React.useState("");
@@ -123,7 +123,9 @@ export default function TeamRecruitment() {
               title="등록하기"
               onPress={() => {
                 // 제출 로직 구현
-                router.back();
+                // 추후에 fetch로 모집글 제출 로직 추가 예정
+                console.log("모집글 제출됨");
+                router.push('/applyConfirmed');
               }}
             />
           </ScrollView>

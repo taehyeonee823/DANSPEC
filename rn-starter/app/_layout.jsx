@@ -17,8 +17,9 @@ export default function RootLayout() {
           <Stack.Screen name="login" />
           <Stack.Screen name="signup" />
           <Stack.Screen name="home" />
-          <Stack.Screen name="TeamApplicationForm" />
+          <Stack.Screen name="teamApplicationForm" />
           <Stack.Screen name="TeamRecruitmentForm" />
+          <Stack.Screen name="applyConfirmed" />
           <Stack.Screen name="activity" />
           <Stack.Screen name="team" />
           <Stack.Screen name="my" />
