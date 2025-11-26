@@ -123,7 +123,7 @@ export default function TeamRecruitmentForm() {
               title="등록하기"
               onPress={() => {
                 // 제출 로직 구현
-                router.back();
+                router.push('teamRecruitmentConfirmed');
               }}
             />
           </ScrollView>
