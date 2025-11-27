@@ -1,26 +1,26 @@
+import React from "react";
 import { Text, View, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpacity, Image } from "react-native";
-import React, {useState} from "react";
 import { useRouter } from 'expo-router';
 import Button from '../../components/Button';
 import MultiplelineInput from '../../components/MultiplelineInput';
 import SinglelineInput from '../../components/SinglelineInput';
-import teamPostData from '../teamApplyBoxDemo.json'; // 팀 모집글 데이터 불러오기
+import teamInfoData from '../teamInfo.json'; 
 
 export default function Index() {
   const router = useRouter();
-  const [motivationInfo, setMotivation] = useState("");
-  const [introductionInfo, setIntroduction] = useState("");
-  const [portfolioLink, setPortfolioLink] = useState("");
-  const [contactInfo, setContactInfo] = useState("");
 
-  // 팀 모집글 작성자 정보 사용
-  const teamLeaderName = teamPostData.name; 
-  const teamLeaderGrade = teamPostData.grade;
-  const teamLeaderDepartment = "SW융합대학"; // 예시로 유지
+  // teamInfo.json dummy data에서 팀장 정보 추출
+  const teamLeaderTag = teamInfoData[0].tag;
+  const teamLeaderDescription = teamInfoData[0].description;
+  const teamLeaderName = teamInfoData[0].name; 
+  const teamLeaderGrade = teamInfoData[0].grade;
+  const teamLeaderDepartment = teamInfoData[0].department;
+  const teamLeaderRole = teamInfoData[0].role.join(", ");
+  const teamLeaderTrait = teamInfoData[0].trait;
+  
 
   return (
       <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
-        {/* 뒤로 가기 버튼 */}
         <TouchableOpacity
           style={{ position: 'absolute', top:60, left: 20, zIndex: 999, padding: 8 }}
           onPress={() => router.back()}
@@ -30,10 +30,15 @@ export default function Index() {
 
         <KeyboardAvoidingView behavior="height" style={{ flex: 1, marginTop: 110 }}>
           
-
           <ScrollView style={styles.container}
               contentContainerStyle={styles.contentContainer}>
             <Text style={styles.mainTitle}>[데분 캠프] 데이터 분석 팀 1 모집</Text>
+
+            <Text style={styles.sectionTitle}>연결된 활동 / 공모전</Text>
+            <Text style={styles.readOnlyText}>{teamLeaderTag}</Text>
+
+            <Text style={styles.sectionTitle}>진행 방식 및 소개</Text>
+            <Text style={styles.readOnlyText}>{teamLeaderDescription}</Text>
 
             <Text style={styles.sectionTitle}>이름</Text>
             <Text style={styles.readOnlyText}>{teamLeaderName}</Text>
@@ -44,31 +49,12 @@ export default function Index() {
             <Text style={styles.sectionTitle}>학년</Text>
             <Text style={styles.readOnlyText}>{teamLeaderGrade}</Text>
 
-            <Text style={styles.sectionTitle}>연락처</Text>
-            <SinglelineInput
-                value={contactInfo}
-                onChangeText={setContactInfo}
-                placeholder="연락처를 입력해주세요."
-            />
-            <Text style={styles.sectionTitle}>간단 소개글</Text>
-            <MultiplelineInput
-                value={introductionInfo}
-                onChangeText={setIntroduction}
-                placeholder="자신에 대한 간단한 소개를 한 줄 이상 작성해주세요." 
-            />
+            <Text style={styles.sectionTitle}>역할</Text>
+            <Text style={styles.readOnlyText}>{teamLeaderRole}</Text>
 
-            <Text style={styles.sectionTitle}>지원 동기</Text>
-            <MultiplelineInput
-                value={motivationInfo}
-                onChangeText={setMotivation}
-                placeholder="팀에 지원하게 된 동기와 기여하고 싶은 부분을 상세히 작성해 주세요." 
-            />
-            <Text style={styles.sectionTitle}>포트폴리오 / 깃허브 링크</Text>
-            <SinglelineInput
-                value={portfolioLink}
-                onChangeText={setPortfolioLink}
-                placeholder="포트폴리오나 깃허브 링크를 입력해주세요." 
-            /> 
+            <Text style={styles.sectionTitle}>특징</Text>
+            <Text style={styles.readOnlyText}>{teamLeaderTrait}</Text>
+
             <Button
                 title="지원하기"
                 onPress={() => {
@@ -121,14 +107,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 8,
         paddingVertical: 3,
         borderRadius: 5,
-    },
-    statusActive: {
-        backgroundColor: '#d0f0d0', // 모집 중
-        color: '#008000',
-    },
-    statusInactive: {
-        backgroundColor: '#ffe0e0', // 모집 완료 등
-        color: '#cc0000',
     },
     dueDate: {
         fontSize: 14,
