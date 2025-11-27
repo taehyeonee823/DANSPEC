@@ -5,7 +5,7 @@ import Button from '../components/Button';
 import MultiplelineInput from '../components/MultiplelineInput';
 import SinglelineInput from '../components/SinglelineInput';
 
-export default function TeamRecruitmentForm() {
+export default function teamRecruitmentForm() {
   const router = useRouter();
   const [titleInfo, setTitleInfo] = React.useState("");
   const [roleInfo, setRoleInfo] = React.useState("");

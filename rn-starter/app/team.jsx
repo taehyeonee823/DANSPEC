@@ -46,7 +46,7 @@ export default function Team() {
       
       <TouchableOpacity
         style={styles.floatingButton}
-        onPress={() => router.push('/TeamInfo')}
+        onPress={() => router.push('/teamRecruitmentForm')}
       >
         <Image
           source={require('@/assets/images/plusBotton.png')}

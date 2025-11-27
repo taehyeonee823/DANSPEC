@@ -1,9 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useRouter } from 'expo-router';
 
-export default function TeamApplyBox({ status, dueDate, title, description, tag }) {
+export default function teamApplyBox({ status, dueDate, title, description, tag }) {
+  const router = useRouter();
+
   return (
-    <View style={styles.card}>
+    <TouchableOpacity style={styles.card} onPress={() => router.push('/teamInfo')}>
       <View style={styles.header}>
         <Text style={styles.status}>{status}</Text>
         <Text style={styles.dueDate}>{dueDate}</Text>
@@ -12,7 +15,7 @@ export default function TeamApplyBox({ status, dueDate, title, description, tag 
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.description}>{description}</Text>
       <Text style={styles.tag}>{tag}</Text>
-    </View>
+    </TouchableOpacity>
   );
 }
 
