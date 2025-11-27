@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import NaviBar from './naviBar';
-import CategoryChips from '../components/CategoryChips';
+import CategoryChips from '@/components/CategoryChips';
 import { ThemedText } from '@/components/themed-text';
 import { ScrollView } from 'react-native-gesture-handler';
 import TeamApplyBox from './teamApplyBox';
@@ -46,7 +46,7 @@ export default function Team() {
       
       <TouchableOpacity
         style={styles.floatingButton}
-        onPress={() => router.push('/TeamRecruitmentForm')}
+        onPress={() => router.push('/TeamInfo')}
       >
         <Image
           source={require('@/assets/images/plusBotton.png')}
