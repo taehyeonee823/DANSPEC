@@ -2,16 +2,31 @@ import React, { useState } from "react";
 import { useRouter } from 'expo-router';
 import { View, Text, ScrollView, KeyboardAvoidingView, TouchableOpacity, StyleSheet, TextInput } from 'react-native'; 
 import Button from '../../components/Button';
-import MultiplelineInput from '../../components/MultiplelineInput';
-import SinglelineInput from '../../components/SinglelineInput';
+
+// 선택 가능한 활동/공모전 목록 (dummy data)
+const activityOptions = [
+  "단국대 X 데이터 분석 캠프",
+  "캡스톤 디자인 프로젝트",
+  "교내 창업 경진대회",
+  "AI 개발 공모전",
+  "SW 해커톤",
+];
 
 export default function teamRecruitmentForm() {
   const router = useRouter();
-  const [titleInfo, setTitleInfo] = React.useState("");
-  const [roleInfo, setRoleInfo] = React.useState("");
-  const [traitInfo, setTraitInfo] = React.useState("");
-  const [introductionInfo, setIntroductionInfo] = React.useState("");
+  const [titleInfo, setTitleInfo] = useState("");
+  const [traitInfo, setTraitInfo] = useState("");
+  const [introductionInfo, setIntroductionInfo] = useState("");
+  
+  const [selectedActivity, setSelectedActivity] = useState(null); 
+  const [isPickerOpen, setIsPickerOpen] = useState(false); 
   const [inputs, setInputs] = useState([{id: Date.now(), value: ''}])
+
+  // 드롭다운 항목 선택 핸들러
+  const handleActivitySelect = (activity) => {
+    setSelectedActivity(activity);
+    setIsPickerOpen(false); 
+  };
 
   const handleChange = (text, id) => {
     const newInputs = inputs.map((item) => {
@@ -55,14 +70,35 @@ export default function teamRecruitmentForm() {
             <Text style={styles.caption}>공모전·교내·대외 활동별로 함께할 팀원을 모집해보세요.</Text>
 
             <Text style={styles.sectionTitle}>연결할 활동 / 공모전</Text>
-            <MultiplelineInput
-                value={roleInfo}
-                onChangeText={setRoleInfo}
-                placeholder="모집하는 역할에 대해 상세히 작성해주세요." 
-            />
+            <View style={styles.pickerContainer}>
+              <TouchableOpacity 
+                style={styles.pickerField}
+                onPress={() => setIsPickerOpen(!isPickerOpen)}
+              >
+                <Text style={selectedActivity ? styles.pickerValue : styles.pickerPlaceholder}>
+                  {selectedActivity || "활동/공모전을 선택해주세요."}
+                </Text>
+                <Text style={styles.arrow}>{isPickerOpen ? '▲' : '▼'}</Text>
+              </TouchableOpacity>
+
+              {isPickerOpen && (
+                <View style={styles.pickerList}>
+                  {activityOptions.map((activity) => (
+                    <TouchableOpacity
+                      key={activity}
+                      style={styles.pickerItem}
+                      onPress={() => handleActivitySelect(activity)}
+                    >
+                      <Text style={styles.pickerItemText}>{activity}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
+            </View>
 
             <Text style={styles.sectionTitle}>제목</Text>
-            <SinglelineInput
+            <TextInput
+                style={styles.defaultInput}
                 value={titleInfo}
                 onChangeText={setTitleInfo}
                 placeholder="제목을 입력해주세요." 
@@ -106,23 +142,26 @@ export default function teamRecruitmentForm() {
             })}
 
             <Text style={styles.sectionTitle}>특성</Text>
-            <SinglelineInput
+            <TextInput
+                style={styles.defaultInput}
                 value={traitInfo}
                 onChangeText={setTraitInfo}
                 placeholder="팀이 선호하는 인재상에 대해 작성해주세요."
             />
 
             <Text style={styles.sectionTitle}>진행 방식 및 한 줄 소개</Text>
-            <MultiplelineInput
+            <TextInput
+                style={styles.multilineInput}
                 value={introductionInfo}
                 onChangeText={setIntroductionInfo}
                 placeholder="모집글에 대한 소개를 상세하게 작성해주세요."
+                multiline={true}
             />
-
+            <View style={{ height: 20 }} />
             <Button
               title="등록하기"
               onPress={() => {
-                // 제출 로직 구현
+                console.log("선택된 활동:", selectedActivity);
                 router.push('/Team/teamRecruitmentConfirmed');
               }}
             />
@@ -166,6 +205,84 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     backgroundColor: '#f0f0f0',
     borderRadius: 8,
+  },
+
+  pickerContainer: {
+    zIndex: 10, 
+    marginBottom: 10,
+  },
+  pickerField: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: 48,
+    paddingHorizontal: 15,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+  },
+  pickerPlaceholder: {
+    fontSize: 16,
+    color: '#999',
+  },
+  pickerValue: {
+    fontSize: 16,
+    color: '#333',
+  },
+  arrow: {
+    fontSize: 12,
+    color: '#666',
+    fontWeight: 'bold',
+  },
+  pickerList: {
+    // 드롭다운 목록
+    position: 'absolute',
+    top: 48, // pickerField 높이만큼 아래에 위치
+    left: 0,
+    right: 0,
+    backgroundColor: '#ffffff',
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    marginTop: -1, // 경계선 겹치기
+    maxHeight: 200, // 최대 높이 설정
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  pickerItem: {
+    padding: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  pickerItemText: {
+    fontSize: 16,
+    color: '#333',
+  }, 
+  
+  // 기타 입력 필드 스타일
+  defaultInput: {
+    height: 48,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#ddd',
+    padding: 10,
+    borderRadius: 8,
+    fontSize: 16,
+  },
+  multilineInput: {
+    height: 100,
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#ddd',
+    padding: 10,
+    borderRadius: 8,
+    fontSize: 16,
+    textAlignVertical: 'top',
   },
 
   inputRow: {
