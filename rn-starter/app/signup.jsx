@@ -22,15 +22,18 @@ export default function SignUpScreen() {
   const [showMajorModal, setShowMajorModal] = useState(false);
   const [grade, setGrade] = useState('');
   const [showGradeModal, setShowGradeModal] = useState(false);
+  const [firstJobPreference, setFirstJobPreference] = useState('');
+  const [secondJobPreference, setSecondJobPreference] = useState('');
+  const [thirdJobPreference, setThirdJobPreference] = useState('');
   const [introduction, setIntroduction] = useState('');
 
-  const grades = ['1', '2', '3', '4', '5', '6'];
+  const grades = ['1', '2', '3', '4'];
 
   const jukjeonDepartments = [
     '문과대학','법과대학','경영경제대학','사회과학대학','공과대학','SW융합대학','사범대학','음악·예술대학'
   ];
    const cheonanDepartments = [
-    '외국어대학','공공인재대학','과학기술대학','바이오융합대학','보건과학대학','의·약학계열','스포츠과학대학','예술대학'
+    '외국어대학','공공인재대학','과학기술대학','바이오융합대학','보건과학대학','의과대학','치과대학','약학대학','간호대학','스포츠과학대학','예술대학'
   ];
   const departmentMajorsJukjeon = {
     '문과대학': ['국어국문학과', '사학과', '철학과', '영미인문학과'],
@@ -44,13 +47,17 @@ export default function SignUpScreen() {
   };
 
   const departmentMajorscheonan = {
-    '외국어대학': [],
-    '공공인재대학': [''],
+    '외국어대학': ['아시아중동학부', '유럽중남미학부', '영어과' ,'글로벌한국어과'],
+    '공공인재대학': ['공공정책학과', '식품자원경제학과','사회복지학과','해병대군사학과'],
     '과학기술대학': ['수학과','물리학과','화학과','식품영양학과','신소재공학과','에너지공학과','식품공학과','경영공학과','제약공학과'],
-    '바이오융합대학': [''],
-    '의·약학계열': ['의과대학','치과대학','약학대학','간호대학'],
-    '스포츠과학대학': [],
-    '예술대학': [''],
+    '바이오융합대학': ['생명자원학부', '의생명과학부', '식품공학과','코스메디컬소재학과'],
+    '의과대학': ['의예과', '의학과'],
+    '치과대학': ['치의예과', '치의학과'],
+    '약학대학': ['약학과'],
+    '간호대학': ['간호학과'],
+    '보건과학대학' : ['임상병리학과','물리치료학과','보건행정학과','치위생학과','심리치료학과'],
+    '스포츠과학대학': ['생활체육학과', '스포츠경영학과', '국제스포츠학부'],
+    '예술대학': ['문예창작과', '미술학부', '뉴뮤직학부'],
   };
 
   const handleCheckDuplicate = () => {
@@ -355,8 +362,38 @@ export default function SignUpScreen() {
         </ScrollView>
       )}
     </View>
+    <ThemedText style={styles.text}>* 희망 직무 1순위</ThemedText>
+    <View style={styles.inputContainer3}>
+      <TextInput
+          style={styles.input}
+          placeholder="직무 입력"
+          placeholderTextColor="#999"
+          value={firstJobPreference}
+          onChangeText={setFirstJobPreference}
+        />
+      </View>
+      <ThemedText style={styles.text}>* 희망 직무 2순위</ThemedText>
+    <View style={styles.inputContainer3}>
+      <TextInput
+          style={styles.input}
+          placeholder="직무 입력"
+          placeholderTextColor="#999"
+          value={secondJobPreference}
+          onChangeText={setSecondJobPreference}
+        />
+      </View>
+      <ThemedText style={styles.text}>* 희망 직무 3순위</ThemedText>
+    <View style={styles.inputContainer3}>
+      <TextInput
+          style={styles.input}
+          placeholder="직무 입력"
+          placeholderTextColor="#999"
+          value={thirdJobPreference}
+          onChangeText={setThirdJobPreference}
+        />
+      </View>
 
-    <ThemedText style={styles.text}>* 관심 직무와 간단 소개</ThemedText>
+    <ThemedText style={styles.text}>* 간단 소개</ThemedText>
     <View style={styles.inputContainer3}>
       <TextInput
         style={[styles.input, styles.introInput]}
