@@ -40,12 +40,6 @@ export default function Index() {
             <Text style={styles.sectionTitle}>학년</Text>
             <Text style={styles.readOnlyText}>{teamLeaderGrade}</Text>
 
-            <Text style={styles.sectionTitle}>연락처</Text>
-            <SinglelineInput
-                value={contactInfo}
-                onChangeText={setContactInfo}
-                placeholder="연락처를 입력해주세요."
-            />
             <Text style={styles.sectionTitle}>간단 소개글</Text>
             <MultiplelineInput
                 value={introductionInfo}
@@ -65,6 +59,12 @@ export default function Index() {
                 onChangeText={setPortfolioLink}
                 placeholder="포트폴리오나 깃허브 링크를 입력해주세요." 
             /> 
+            <Text style={styles.sectionTitle}>연락처</Text>
+            <SinglelineInput
+                value={contactInfo}
+                onChangeText={setContactInfo}
+                placeholder="연락처를 입력해주세요."
+            />
             <Button
                 title="신청하기"
                 onPress={() => {

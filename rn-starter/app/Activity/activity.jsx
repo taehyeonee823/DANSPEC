@@ -5,8 +5,8 @@ import NaviBar from '../naviBar';
 import CategoryChips from '@/components/CategoryChips';
 import { ThemedText } from '@/components/themed-text';
 import { ScrollView } from 'react-native-gesture-handler';
-import TeamApplyBox from '../Team/teamApplyBox';
-import teamData from '../teamApplyBoxDemo.json';
+import ActivityApplyBox from './activityApplyBox';
+import teamActivity from '../teamActivity.json';
 import DeptTab from './deptTab';
 
 export default function Activity() {
@@ -32,6 +32,16 @@ export default function Activity() {
             />
           </ScrollView>
         </View>
+
+        {teamActivity.map((team) => (
+                  <ActivityApplyBox
+                    key={team.id}
+                    tag={team.tag}
+                    dueDate={team.dueDate}
+                    title={team.title}
+                    description={team.description}
+                  />
+                ))}
 
       </ScrollView>
       
