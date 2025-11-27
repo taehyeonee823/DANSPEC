@@ -70,7 +70,7 @@ export default function Index() {
                 onPress={() => {
                     // 추후에 fetch로 지원서 제출 로직 추가 예정
                     console.log("지원서 제출됨");
-                    router.push('/applyConfirmed');
+                    router.push('/Team/applyConfirmed');
                 }}
                 style={{ marginTop: 20 }}
             />

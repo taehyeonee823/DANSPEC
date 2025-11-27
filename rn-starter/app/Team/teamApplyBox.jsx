@@ -6,7 +6,7 @@ export default function teamApplyBox({ status, dueDate, title, description, tag 
   const router = useRouter();
 
   return (
-    <TouchableOpacity style={styles.card} onPress={() => router.push('/teamInfo')}>
+    <TouchableOpacity style={styles.card} onPress={() => router.push('/Team/teamInfo')}>
       <View style={styles.header}>
         <Text style={styles.status}>{status}</Text>
         <Text style={styles.dueDate}>{dueDate}</Text>

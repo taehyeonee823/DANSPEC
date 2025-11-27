@@ -16,15 +16,15 @@ export default function RootLayout() {
           <Stack.Screen name="index" />
           <Stack.Screen name="login" />
           <Stack.Screen name="signup" />
-          <Stack.Screen name="home" />
-          <Stack.Screen name="teamApplicationForm" />
-          <Stack.Screen name="teamRecruitmentForm" />
-          <Stack.Screen name="applyConfirmed" />
-          <Stack.Screen name="teamRecruitmentConfirmed" />
-          <Stack.Screen name="teamInfo" />
-          <Stack.Screen name="activity" />
-          <Stack.Screen name="team" />
-          <Stack.Screen name="my" />
+          <Stack.Screen name="Home/home" />
+          <Stack.Screen name="Team/teamApplicationForm" />
+          <Stack.Screen name="Team/teamRecruitmentForm" />
+          <Stack.Screen name="Team/applyConfirmed" />
+          <Stack.Screen name="Team/teamRecruitmentConfirmed" />
+          <Stack.Screen name="Team/teamInfo" />
+          <Stack.Screen name="Team/team" />
+          <Stack.Screen name="Activity/activity" />
+          <Stack.Screen name="My/my" />
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>

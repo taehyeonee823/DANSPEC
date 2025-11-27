@@ -11,7 +11,7 @@ export default function ApplyConfirmed() {
     <View style={styles.container}>
         <TouchableOpacity
           style={{ position: 'absolute', top: 60, right: 20, zIndex: 999, padding: 8 }}
-          onPress={() => router.push('/team')}
+          onPress={() => router.push('/Team/team')}
         >
           <Image
             source={require('@/assets/images/cancel.svg')}

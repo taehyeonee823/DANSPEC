@@ -6,7 +6,7 @@ import CategoryChips from '@/components/CategoryChips';
 import { ThemedText } from '@/components/themed-text';
 import { ScrollView } from 'react-native-gesture-handler';
 import TeamApplyBox from './teamApplyBox';
-import teamData from './teamApplyBoxDemo.json';
+import teamData from '../teamApplyBoxDemo.json';
 
 export default function Team() {
   const router = useRouter();
@@ -46,7 +46,7 @@ export default function Team() {
       
       <TouchableOpacity
         style={styles.floatingButton}
-        onPress={() => router.push('/teamRecruitmentForm')}
+        onPress={() => router.push('/Team/teamRecruitmentForm')}
       >
         <Image
           source={require('@/assets/images/plusBotton.png')}

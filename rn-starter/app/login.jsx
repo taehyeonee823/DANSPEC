@@ -101,7 +101,7 @@ export default function LoginScreen() {
         <ThemedText style={styles.autoLoginText}>자동 로그인</ThemedText>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={() => router.push('/home')}>
+      <TouchableOpacity style={styles.button} onPress={() => router.push('/Home/home')}>
         <ThemedText style={styles.buttonText}>Start</ThemedText>
       </TouchableOpacity>
       <View style={styles.signupContainer}>

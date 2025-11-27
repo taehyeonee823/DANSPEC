@@ -8,7 +8,7 @@ export default function NaviBar({ currentPage }) {
 
   return (
     <View style={styles.navigationBar}>
-      <TouchableOpacity style={styles.navItem} onPress={() => router.push('/home')}>
+      <TouchableOpacity style={styles.navItem} onPress={() => router.push('/Home/home')}>
         <Image
           source={require('../assets/images/home.svg')}
           style={styles.navIcon}
@@ -18,7 +18,7 @@ export default function NaviBar({ currentPage }) {
         <Text style={currentPage === 'home' ? styles.nowNavText : styles.navText}>홈</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.navItem} onPress={() => router.push('/activity')}>
+      <TouchableOpacity style={styles.navItem} onPress={() => router.push('/Activity/activity')}>
         <Image
           source={require('../assets/images/compass.svg')}
           style={styles.navIcon}
@@ -28,7 +28,7 @@ export default function NaviBar({ currentPage }) {
         <Text style={currentPage === 'activity' ? styles.nowNavText : styles.navText}>활동</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.navItem} onPress={() => router.push('/team')}>
+      <TouchableOpacity style={styles.navItem} onPress={() => router.push('/Team/team')}>
         <Image
           source={require('../assets/images/users.svg')}
           style={styles.navIcon}
@@ -38,7 +38,7 @@ export default function NaviBar({ currentPage }) {
         <Text style={currentPage === 'team' ? styles.nowNavText : styles.navText}>팀</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.navItem} onPress={() => router.push('/my')}>
+      <TouchableOpacity style={styles.navItem} onPress={() => router.push('/My/my')}>
         <Image
           source={require('../assets/images/user.svg')}
           style={styles.navIcon}

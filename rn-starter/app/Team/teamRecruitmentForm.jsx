@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useRouter } from 'expo-router';
 import { View, Text, ScrollView, KeyboardAvoidingView, TouchableOpacity, StyleSheet, TextInput } from 'react-native'; 
-import Button from '../components/Button';
-import MultiplelineInput from '../components/MultiplelineInput';
-import SinglelineInput from '../components/SinglelineInput';
+import Button from '../../components/Button';
+import MultiplelineInput from '../../components/MultiplelineInput';
+import SinglelineInput from '../../components/SinglelineInput';
 
 export default function teamRecruitmentForm() {
   const router = useRouter();
@@ -123,7 +123,7 @@ export default function teamRecruitmentForm() {
               title="등록하기"
               onPress={() => {
                 // 제출 로직 구현
-                router.push('teamRecruitmentConfirmed');
+                router.push('/Team/teamRecruitmentConfirmed');
               }}
             />
           </ScrollView>

@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import Button from '../../components/Button';
 import MultiplelineInput from '../../components/MultiplelineInput';
 import SinglelineInput from '../../components/SinglelineInput';
-import teamPostData from './teamApplyBoxDemo.json'; // 팀 모집글 데이터 불러오기
+import teamPostData from '../teamApplyBoxDemo.json'; // 팀 모집글 데이터 불러오기
 
 export default function Index() {
   const router = useRouter();
@@ -74,7 +74,7 @@ export default function Index() {
                 onPress={() => {
                     // 추후에 fetch로 지원서 제출 로직 추가 예정
                     console.log("지원서 제출됨");
-                    router.push('/teamApplicationForm');
+                    router.push('/Team/teamApplicationForm');
                 }}
                 style={{ marginTop: 20 }}
             />

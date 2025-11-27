@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { useRouter } from 'expo-router';
-import NaviBar from './naviBar';
+import NaviBar from '../naviBar';
 import CategoryChips from '@/components/CategoryChips';
 import { ThemedText } from '@/components/themed-text';
 import { ScrollView } from 'react-native-gesture-handler';
-import TeamApplyBox from './Team/teamApplyBox';
-import teamData from './teamApplyBoxDemo.json';
+import TeamApplyBox from '../Team/teamApplyBox';
+import teamData from '../teamApplyBoxDemo.json';
 
 export default function Team() {
   const router = useRouter();
