@@ -16,9 +16,19 @@ const getApiUrl = () => {
 
 export const API_BASE_URL = getApiUrl();
 
+// 외부 이벤트 서버 URL
+export const EVENT_SERVER_URL = 'http://220.78.211.55:8080';
+
 // API 엔드포인트
 export const API_ENDPOINTS = {
   LOGIN: `${API_BASE_URL}/api/login`,
   SIGNUP: `${API_BASE_URL}/api/signup`,
   CHECK_EMAIL: `${API_BASE_URL}/api/check-email`,
+
+  // 이벤트 관련 API
+  ALL_EVENTS: `${EVENT_SERVER_URL}/api/events`,
+  SEARCH_BY_COLLEGE: (college) =>
+    `${EVENT_SERVER_URL}/api/events/search?college=${encodeURIComponent(college)}`,
+  SEARCH_EVENTS: (college, category) =>
+    `${EVENT_SERVER_URL}/api/events/search?college=${encodeURIComponent(college)}&category=${encodeURIComponent(category)}`,
 };

@@ -4,9 +4,9 @@ import { Image } from 'expo-image';
 
 const categories = ['전체', '문과대학', '법과대학', '사회과학대학', '경영경제대학', '사범대학',
     '프리무스국제대학', '공과대학', 'SW융합대학', '음악·예술대학', '외국어대학', '공공인재대학', '보건과학대학',
-    '과학기술대학', '간호대학', '바이오융합대학', '예술대학', '스포츠과학대학', '의과대학', '치과대학', '약학대학'];
+    '과학기술대학', '바이오융합대학', '예술대학', '스포츠과학대학', '의과대학', '치과대학', '약학대학', '간호대학'];
 
-export default function DeptTab() {
+export default function DeptTab({ selectedDepartment, onSelectDepartment }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const underlineX = useRef(new Animated.Value(0)).current;
 
@@ -18,6 +18,11 @@ export default function DeptTab() {
       toValue: index * tabWidth,
       useNativeDriver: false,
     }).start();
+
+    // 선택된 단과대를 부모 컴포넌트로 전달
+    if (onSelectDepartment) {
+      onSelectDepartment(categories[index]);
+    }
   };
 
   return (
