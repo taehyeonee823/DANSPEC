@@ -7,6 +7,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ScrollView } from 'react-native-gesture-handler';
 import TeamApplyBox from './teamApplyBox';
 import teamData from '../teamApplyBoxDemo.json';
+import CategoryTab from './categoryTab';
 
 export default function Team() {
   const router = useRouter();
@@ -14,9 +15,9 @@ export default function Team() {
   const categories = ["모든 모집글", "내가 쓴 모집글만"];
 
   return (
-    <View style={styles.container}>     
-      <ScrollView style={styles.contentArea}>  
-        <ThemedText style={styles.title}>이곳은 팀 화면 입니다.</ThemedText>
+    <View style={styles.container}>
+      <ScrollView style={styles.contentArea}>
+        <CategoryTab />
 
         <View style={styles.chipsWrapper}>
           <ScrollView 
@@ -78,6 +79,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
   chipsWrapper: {
+    paddingTop: 15,
     paddingLeft: 15,
   },
   chipScrollViewContent: {

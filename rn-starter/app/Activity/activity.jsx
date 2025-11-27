@@ -7,16 +7,17 @@ import { ThemedText } from '@/components/themed-text';
 import { ScrollView } from 'react-native-gesture-handler';
 import TeamApplyBox from '../Team/teamApplyBox';
 import teamData from '../teamApplyBoxDemo.json';
+import DeptTab from './deptTab';
 
-export default function Team() {
+export default function Activity() {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState("전체");
   const categories = ["전체", "공모전", "대외 활동", "교내", "자율 프로젝트"];
 
   return (
-    <View style={styles.container}>     
-      <ScrollView style={styles.contentArea}>  
-        <ThemedText style={styles.title}>이곳은 활동 화면 입니다.</ThemedText>
+    <View style={styles.container}>
+      <ScrollView style={styles.contentArea}>
+       <DeptTab />
 
         <View style={styles.chipsWrapper}>
           <ScrollView 
@@ -59,6 +60,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
   chipsWrapper: {
+    paddingTop: 15,
     paddingLeft: 15,
   },
   chipScrollViewContent: {

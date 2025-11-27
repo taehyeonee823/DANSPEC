@@ -72,8 +72,6 @@ export default function Index() {
             <Button
                 title="지원하기"
                 onPress={() => {
-                    // 추후에 fetch로 지원서 제출 로직 추가 예정
-                    console.log("지원서 제출됨");
                     router.push('/Team/teamApplicationForm');
                 }}
                 style={{ marginTop: 20 }}

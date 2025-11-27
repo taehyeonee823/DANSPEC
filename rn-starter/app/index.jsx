@@ -11,7 +11,7 @@ export default function LoadingScreen() {
   useEffect(() => {
     const timer = setTimeout(() => {
       router.push('/login');
-    }, 4000);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
