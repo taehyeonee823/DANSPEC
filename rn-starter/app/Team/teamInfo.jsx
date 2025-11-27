@@ -10,6 +10,7 @@ export default function Index() {
   const router = useRouter();
 
   // teamInfo.json dummy data에서 팀장 정보 추출
+  const teamLeaderTitle = teamInfoData[0].title;
   const teamLeaderTag = teamInfoData[0].tag;
   const teamLeaderDescription = teamInfoData[0].description;
   const teamLeaderName = teamInfoData[0].name; 
@@ -32,7 +33,7 @@ export default function Index() {
           
           <ScrollView style={styles.container}
               contentContainerStyle={styles.contentContainer}>
-            <Text style={styles.mainTitle}>[데분 캠프] 데이터 분석 팀 1 모집</Text>
+            <Text style={styles.mainTitle}>{teamLeaderTitle}</Text>
 
             <Text style={styles.sectionTitle}>연결된 활동 / 공모전</Text>
             <Text style={styles.readOnlyText}>{teamLeaderTag}</Text>
