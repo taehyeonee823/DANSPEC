@@ -33,7 +33,7 @@ export default function Index() {
 
           <ScrollView style={styles.container}
               contentContainerStyle={styles.contentContainer}>
-            <Text style={styles.mainTitle}>팀 지원글 작성하기</Text>
+            <Text style={styles.mainTitle}>[데분 캠프] 데이터 분석 팀 1 모집</Text>
 
             <Text style={styles.sectionTitle}>이름</Text>
             <Text style={styles.readOnlyText}>{teamLeaderName}</Text>
@@ -70,11 +70,11 @@ export default function Index() {
                 placeholder="포트폴리오나 깃허브 링크를 입력해주세요." 
             /> 
             <Button
-                title="신청하기"
+                title="지원하기"
                 onPress={() => {
                     // 추후에 fetch로 지원서 제출 로직 추가 예정
                     console.log("지원서 제출됨");
-                    router.push('/applyConfirmed');
+                    router.push('/teamApplicationForm');
                 }}
                 style={{ marginTop: 20 }}
             />
