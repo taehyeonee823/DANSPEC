@@ -1,9 +1,9 @@
 import { Text, View, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpacity, Image } from "react-native";
 import React, {useState} from "react";
 import { useRouter } from 'expo-router';
-import Button from '../components/Button';
-import MultiplelineInput from '../components/MultiplelineInput';
-import SinglelineInput from '../components/SinglelineInput';
+import Button from '../../components/Button';
+import MultiplelineInput from '../../components/MultiplelineInput';
+import SinglelineInput from '../../components/SinglelineInput';
 
 export default function Index() {
   const router = useRouter();
@@ -87,7 +87,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
     },
   contentContainer: {
-        padding: 20,
         paddingBottom: 50,
         zIndex: 900
     },

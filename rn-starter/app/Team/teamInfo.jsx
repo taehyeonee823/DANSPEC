@@ -1,9 +1,9 @@
 import { Text, View, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpacity, Image } from "react-native";
 import React, {useState} from "react";
 import { useRouter } from 'expo-router';
-import Button from '../components/Button';
-import MultiplelineInput from '../components/MultiplelineInput';
-import SinglelineInput from '../components/SinglelineInput';
+import Button from '../../components/Button';
+import MultiplelineInput from '../../components/MultiplelineInput';
+import SinglelineInput from '../../components/SinglelineInput';
 import teamPostData from './teamApplyBoxDemo.json'; // 팀 모집글 데이터 불러오기
 
 export default function Index() {

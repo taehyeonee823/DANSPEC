@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import NaviBar from './naviBar';
+import NaviBar from '../naviBar';
 import { ThemedText } from '@/components/themed-text';
 
 export default function My() {
