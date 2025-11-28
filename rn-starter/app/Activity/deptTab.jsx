@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
-import { View, Text, Pressable, Animated, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, Pressable, Animated, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
+import ButtonSheet from './buttonSheet';
 
 const categories = ['전체', '문과대학', '법과대학', '사회과학대학', '경영경제대학', '사범대학',
     '프리무스국제대학', '공과대학', 'SW융합대학', '음악·예술대학', '외국어대학', '공공인재대학', '보건과학대학',
@@ -8,6 +9,7 @@ const categories = ['전체', '문과대학', '법과대학', '사회과학대�
 
 export default function DeptTab({ selectedDepartment, onSelectDepartment }) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [sheetVisible, setSheetVisible] = useState(false);
   const underlineX = useRef(new Animated.Value(0)).current;
 
   const tabWidth = 100;
@@ -59,12 +61,31 @@ export default function DeptTab({ selectedDepartment, onSelectDepartment }) {
         </View>
       </ScrollView>
       <View style={styles.iconContainer}>
-        <Image
-          source={require('@/assets/images/down.svg')}
-          style={styles.downIcon}
-          contentFit="contain"
-        />
+        <TouchableOpacity onPress={() => {
+          console.log('down icon clicked');
+          setSheetVisible(true);
+        }}>
+          <Image
+            source={require('@/assets/images/down.svg')}
+            style={styles.downIcon}
+            contentFit="contain"
+          />
+        </TouchableOpacity>
       </View>
+
+      <ButtonSheet
+        visible={sheetVisible}
+        onClose={() => setSheetVisible(false)}
+        onSelectCollege={(collegeName) => {
+          if (onSelectDepartment) {
+            onSelectDepartment(collegeName);
+          }
+          const index = categories.findIndex(cat => cat === collegeName);
+          if (index !== -1) {
+            onPressTab(index);
+          }
+        }}
+      />
     </View>
   );
 }
