@@ -1,12 +1,14 @@
 import React, { useState, useRef } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { View, StyleSheet, ScrollView, Image, Dimensions, TouchableOpacity, Text } from 'react-native';
+import { useRouter } from 'expo-router';
 import NaviBar from '../naviBar';
 import { ThemedText } from '@/components/themed-text';
 
 const { width } = Dimensions.get('window');
 
 export default function Home() {
+  const router = useRouter();
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollViewRef = useRef(null);
 
@@ -37,7 +39,8 @@ export default function Home() {
             >
               <View style={styles.slideContent}>
                 <View style={styles.leftBox}>
-                  <TouchableOpacity style={styles.button}>
+                  <TouchableOpacity style={styles.button} onPress={() => 
+                    router.push('/Activity/activity')}>
                     <Text style={styles.buttonText}>활동 둘러보기</Text>
                   </TouchableOpacity>
 
@@ -67,7 +70,8 @@ export default function Home() {
             >
               <View style={styles.slideContent}>
                 <View style={styles.leftBox}>
-                  <TouchableOpacity style={styles.button}>
+                  <TouchableOpacity style={styles.button} onPress={() => 
+                    router.push('/Activity/activity')}>
                     <Text style={styles.buttonText}>활동 둘러보기</Text>
                   </TouchableOpacity>
 
