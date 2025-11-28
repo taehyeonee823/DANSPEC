@@ -14,6 +14,9 @@ export default function Team() {
   const [selectedCategory, setSelectedCategory] = useState("모든 모집글");
   const categories = ["모든 모집글", "내가 쓴 모집글만"];
 
+  // TODO: 외부 API 연결 예정
+  const displayedTeams = teamData;
+
   return (
     <View style={styles.container}>
       <ScrollView style={styles.contentArea}>
@@ -33,18 +36,18 @@ export default function Team() {
           </ScrollView>
         </View>
 
-        {teamData.map((team) => (
+        {displayedTeams.map((team) => (
           <TeamApplyBox
             key={team.id}
             status={team.status}
             dueDate={team.dueDate}
             title={team.title}
             description={team.description}
-            tag={team.tag}
+            tag={`연결된 활동: ${team.tag}`}
           />
         ))}
       </ScrollView>
-      
+
       <TouchableOpacity
         style={styles.floatingButton}
         onPress={() => router.push('/Team/teamRecruitmentForm')}
@@ -54,6 +57,7 @@ export default function Team() {
           style={styles.plusIcon}
         />
       </TouchableOpacity>
+
       <NaviBar currentPage="team" />
       
     </View>

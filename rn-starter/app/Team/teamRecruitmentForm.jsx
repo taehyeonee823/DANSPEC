@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from 'expo-router';
-import { View, Text, ScrollView, KeyboardAvoidingView, TouchableOpacity, StyleSheet, TextInput } from 'react-native'; 
+import { View, Text, ScrollView, KeyboardAvoidingView, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import Button from '../../components/Button';
 
 // 선택 가능한 활동/공모전 목록 (dummy data)
@@ -47,9 +47,36 @@ export default function teamRecruitmentForm() {
   };
 
   const removeInput = (id) => {
-    if (inputs.length === 1) return; 
+    if (inputs.length === 1) return;
     const newInputs = inputs.filter((item) => item.id !== id);
     setInputs(newInputs);
+  };
+
+  // 모집글 저장 함수
+  const saveRecruitment = async () => {
+    const roles = inputs.map(input => input.value.trim()).filter(value => value !== '');
+
+    const newRecruitment = {
+      title: titleInfo,
+      tag: selectedActivity,
+      description: introductionInfo,
+      name: teamLeaderName,
+      department: "SW융합대학",
+      grade: "3학년",
+      role: roles,
+      trait: traitInfo,
+    };
+
+    console.log("저장할 데이터:", newRecruitment);
+
+    // TODO: 백엔드 API 연결
+    // await fetch('YOUR_API_ENDPOINT', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(newRecruitment)
+    // });
+
+    router.push('/Team/teamRecruitmentConfirmed');
   };
 
   const teamLeaderName = "김단국";
@@ -160,10 +187,7 @@ export default function teamRecruitmentForm() {
             <View style={{ height: 20 }} />
             <Button
               title="등록하기"
-              onPress={() => {
-                console.log("선택된 활동:", selectedActivity);
-                router.push('/Team/teamRecruitmentConfirmed');
-              }}
+              onPress={saveRecruitment}
             />
           </ScrollView>
         </KeyboardAvoidingView>
