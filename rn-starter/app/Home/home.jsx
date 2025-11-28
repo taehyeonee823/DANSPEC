@@ -145,14 +145,14 @@ const styles = StyleSheet.create({
     height: 150,
     marginLeft: 30,
     marginRight: 20,
-    opacity: 0.7
+    opacity: 0.8
   },
   logo2: {
     width: 100,
     height: 100,
     marginLeft: 30,
     marginRight: 20,
-    opacity: 0.7
+    opacity: 0.4
   },
   title: {
     fontSize: 24,
