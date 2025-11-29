@@ -4,7 +4,7 @@ import { Image } from 'expo-image';
 import { BlurView } from 'expo-blur';
 import { useRouter } from 'expo-router';
 
-export default function Applier({name, grade, campus, college, major, introduction, description, time}) {
+export default function Applier({id, name, grade, campus, college, major, introduction, description, time, onAccept, onReject, hideButtons = false}) {
 
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -53,27 +53,29 @@ export default function Applier({name, grade, campus, college, major, introducti
             <Text style={styles.description}>{description}</Text>
           </View>
 
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity
-              style={[styles.button, { borderColor: '#4CAF50' }]}
-              onPress={(e) => {
-                e.stopPropagation();
-                setShowAcceptModal(true);
-              }}
-            >
-              <Text style={[styles.buttonText, { color: '#4CAF50' }]}>✅ 승인</Text>
-            </TouchableOpacity>
+          {!hideButtons && (
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={[styles.button, { borderColor: '#4CAF50' }]}
+                onPress={(e) => {
+                  e.stopPropagation();
+                  setShowAcceptModal(true);
+                }}
+              >
+                <Text style={[styles.buttonText, { color: '#4CAF50' }]}>✅ 승인</Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[styles.button, { borderColor: '#F44336' }]}
-              onPress={(e) => {
-                e.stopPropagation();
-                setShowRejectModal(true);
-              }}
-            >
-              <Text style={[styles.buttonText, { color: '#F44336' }]}>❌ 거절</Text>
-            </TouchableOpacity>
-          </View>
+              <TouchableOpacity
+                style={[styles.button, { borderColor: '#F44336' }]}
+                onPress={(e) => {
+                  e.stopPropagation();
+                  setShowRejectModal(true);
+                }}
+              >
+                <Text style={[styles.buttonText, { color: '#F44336' }]}>❌ 거절</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </>
       )}
 
@@ -110,7 +112,9 @@ export default function Applier({name, grade, campus, college, major, introducti
                 onPress={() => {
                   console.log('승인:', name);
                   setShowAcceptModal(false);
-                  // 승인 후 카드 승인자 탭으로 이동, 인원 수 1 증가
+                  if (onAccept) {
+                    onAccept(id);
+                  }
                 }}
               >
                 <Text style={styles.modalConfirmButtonText}>승인</Text>
@@ -150,7 +154,9 @@ export default function Applier({name, grade, campus, college, major, introducti
                 onPress={() => {
                   console.log('거절:', name);
                   setShowRejectModal(false);
-                  // 거절 후 카드 삭제
+                  if (onReject) {
+                    onReject(id);
+                  }
                 }}
               >
                 <Text style={styles.modalRejectButtonText}>거절</Text>

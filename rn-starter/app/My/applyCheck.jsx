@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Text } from 'react-native';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
@@ -9,7 +9,24 @@ import applierData from './applier.json';
 
 export default function My() {
   const router = useRouter();
-  const appliers = applierData;
+  const [appliers, setAppliers] = useState(applierData);
+
+  const handleAccept = (id) => {
+    setAppliers(prevAppliers =>
+      prevAppliers.map(applier =>
+        applier.id === id ? { ...applier, status: 'accepted' } : applier
+      )
+    );
+  };
+
+  const handleReject = (id) => {
+    setAppliers(prevAppliers =>
+      prevAppliers.filter(applier => applier.id !== id)
+    );
+  };
+
+  const pendingAppliers = appliers.filter(applier => applier.status === 'pending');
+  const acceptedAppliers = appliers.filter(applier => applier.status === 'accepted');
 
   return (
     <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
@@ -73,9 +90,10 @@ export default function My() {
           <Text style={styles.subtitle}>받은 요청</Text>
         </View>
 
-        {appliers.map((applier) => (
+        {pendingAppliers.map((applier) => (
           <Applier
             key={applier.id}
+            id={applier.id}
             name={applier.name}
             grade={applier.grade}
             campus={applier.campus}
@@ -84,6 +102,8 @@ export default function My() {
             introduction={applier.introduction}
             description={applier.description}
             time={applier.time}
+            onAccept={handleAccept}
+            onReject={handleReject}
           />
         ))}
 
@@ -94,6 +114,22 @@ export default function My() {
           />
           <Text style={styles.subtitle}>현재 멤버</Text>
         </View>
+
+        {acceptedAppliers.map((applier) => (
+          <Applier
+            key={applier.id}
+            id={applier.id}
+            name={applier.name}
+            grade={applier.grade}
+            campus={applier.campus}
+            college={applier.college}
+            major={applier.major}
+            introduction={applier.introduction}
+            description={applier.description}
+            time={applier.time}
+            hideButtons={true}
+          />
+        ))}
       </ScrollView>
       <NaviBar currentPage="my" />
     </View>
