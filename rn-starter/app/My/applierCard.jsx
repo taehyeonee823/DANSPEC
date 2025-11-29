@@ -4,18 +4,42 @@ import { Image } from 'expo-image';
 import { BlurView } from 'expo-blur';
 import { useRouter } from 'expo-router';
 
-export default function Applier({name, grade, campus, college, major, introduction, description}) {
+export default function Applier({name, grade, campus, college, major, introduction, description, time}) {
+
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
   const [showAcceptModal, setShowAcceptModal] = useState(false);
   const [showRejectModal, setShowRejectModal] = useState(false);
+
+  const getTimeAgo = (timestamp) => {
+    const diff = Date.now() - new Date(timestamp).getTime();
+    const minutes = Math.floor(diff / 1000 / 60);
+
+    if (minutes < 1) return "방금 전";
+    
+    if (minutes < 60) return `${minutes}분 전`;
+
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}시간 전`;
+
+    const days = Math.floor(hours / 24);
+    return `${days}일 전`;
+  };
+
+  const createdAt = time
+  const formattedTime = getTimeAgo(createdAt);
 
   return (
     <TouchableOpacity
       style={styles.card}
       onPress={() => setIsExpanded(!isExpanded)}
     >
-      <Text style={styles.name}>{name}</Text>
+
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Text style={styles.name}>{name}</Text>
+        <Text style={styles.label}>{formattedTime}</Text>
+      </View>
+
       <Text style={styles.college}>{grade} | {campus}캠퍼스 {college} {major}</Text>
 
       {isExpanded && (

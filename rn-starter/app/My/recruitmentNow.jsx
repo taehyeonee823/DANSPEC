@@ -17,7 +17,7 @@ export default function RecruitmentNow() {
         top: 0,
         left: 0,
         right: 0,
-        height: 140,
+        height: 150,
         backgroundColor: '#ffffff',
         zIndex: 998
       }} />
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollViewContent: {
-    paddingTop: 120,
+    paddingTop: 140,
     paddingLeft: 30,
     paddingRight: 30,
     paddingBottom: 150,
