@@ -11,6 +11,16 @@ export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [autoLogin, setAutoLogin] = useState(false);
+  const [emailError, setEmailError] = useState(false);
+
+  const handleEmailChange = (text) => {
+    setEmail(text);
+    if (text.length > 0 && !text.includes('dankook.ac.kr')) {
+      setEmailError(true);
+    } else {
+      setEmailError(false);
+    }
+  };
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -66,16 +76,30 @@ export default function LoginScreen() {
         resizeMode="contain"
       />
 
-      <TextInput
-        style={styles.input}
-        placeholder="이메일을 입력하세요."
-        placeholderTextColor="#666666"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-        autoComplete="email"
-      />
+      <View style={{ width: '100%' }}>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={[styles.input, emailError && styles.inputError, emailError && { paddingRight: 45 }]}
+            placeholder="이메일을 입력하세요."
+            placeholderTextColor="#666666"
+            value={email}
+            onChangeText={handleEmailChange}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoComplete="email"
+          />
+          {emailError && (
+            <Image
+              source={require('@/assets/images/error.png')}
+              style={styles.errorIcon}
+              resizeMode="contain"
+            />
+          )}
+        </View>
+        {emailError && (
+          <ThemedText style={styles.errorText}>유효한 단국대학교 이메일을 입력하세요.</ThemedText>
+        )}
+      </View>
 
       <TextInput
         style={styles.input}
@@ -125,6 +149,10 @@ const styles = StyleSheet.create({
     marginTop: -150,
     marginBottom: -100,
   },
+  inputContainer: {
+    position: 'relative',
+    width: '100%',
+  },
   input: {
     width: '100%',
     height: 50,
@@ -135,6 +163,23 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     fontSize: 14,
     backgroundColor:'#FAFAFA'
+  },
+  inputError: {
+    borderColor: '#FF0000',
+    borderWidth: 2,
+  },
+  errorIcon: {
+    position: 'absolute',
+    right: 15,
+    top: 15,
+    width: 20,
+    height: 20,
+  },
+  errorText: {
+    color: '#FF0000',
+    fontSize: 12,
+    marginTop: -10,
+    marginLeft: 5,
   },
   autoLoginContainer: {
     flexDirection: 'row',

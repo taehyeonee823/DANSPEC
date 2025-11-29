@@ -71,7 +71,6 @@ export default function DeptTab({ selectedDepartment, onSelectDepartment }) {
       </ScrollView>
       <View style={styles.iconContainer}>
         <TouchableOpacity onPress={() => {
-          console.log('down icon clicked');
           setSheetVisible(true);
         }}>
           <Image
