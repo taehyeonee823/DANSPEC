@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity, View, Alert, Image, ScrollView } from 'react-native';
+import { StyleSheet, TextInput, TouchableOpacity, Text, View, Alert, Image, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 
 import { ThemedText } from '@/components/themed-text';
@@ -103,22 +103,30 @@ export default function SignUpScreen() {
   };
 
   return (
-    <ThemedView style={styles.container}>
-      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-        <Image
-          source={require('@/assets/images/left.svg')}
-          style={styles.backIcon}
-          resizeMode="contain"
-        />
+    <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
+
+      <View style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: 105,
+        backgroundColor: '#ffffff',
+        zIndex: 998
+      }} />
+
+      <TouchableOpacity
+          style={{ position: 'absolute', top:60, left: 20, zIndex: 999, padding: 8 }}
+          onPress={() => router.back()}
+        >
+          <Text style={{ fontSize: 28, color: '#000', fontWeight: 'bold' }}>←</Text>
       </TouchableOpacity>
 
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollViewContent}
-        showsVerticalScrollIndicator={false}
-      >
-        <ThemedText style={styles.title}>반가워요 👋 </ThemedText>
-        <ThemedText style={styles.subtitle}>회원가입을 하고 단스펙의 다양한 서비스를 만나보세요!</ThemedText>
+      <ScrollView style={styles.container} 
+        contentContainerStyle={styles.scrollViewContent}>
+  
+      <ThemedText style={styles.title}>회원가입 👋 </ThemedText>
+    <ThemedText style={styles.subtitle}>단국대 학생만 누릴 수 있는 다양한 서비스를 만나보세요</ThemedText>
 
       <ThemedText style={styles.text}>* 아이디</ThemedText>
       <View style={styles.inputContainer}>
@@ -415,43 +423,33 @@ export default function SignUpScreen() {
     </TouchableOpacity>
 
       </ScrollView>
-    </ThemedView>
+    </View>
   );
 
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#lightgrey',
+        flex: 1,
+        backgroundColor: '#ffffff',
   },
-  scrollView: {
-    flex: 1,
-  },
+  contentContainer: {
+        padding: 20,
+        paddingBottom: 50,
+        zIndex: 900
+    },
   scrollViewContent: {
     paddingTop: 85,
     paddingLeft: 30,
     paddingRight: 0,
     paddingBottom: 150,
   },
-  backButton: {
-    position: 'absolute',
-    top: 50,
-    left: 20,
-    zIndex: 10,
-    padding: 10,
-  },
-  backIcon: {
-    width: 20,
-    height: 20,
-    marginBottom: 20
-  },
   title: {
     fontSize: 26,
     fontWeight: 'bold',
     color: '#000',
     textAlign: 'left',
-    paddingTop: 20,
+    paddingTop: 30,
   },
   subtitle: {
     fontSize: 16,
@@ -459,7 +457,7 @@ const styles = StyleSheet.create({
     color: '#000',
     textAlign: 'left',
     marginTop: 5,
-    marginBottom: 30
+    marginBottom: 20
   },
    text: {
     fontSize: 14,
@@ -664,12 +662,11 @@ const styles = StyleSheet.create({
   signupButton: {
     width: '90%',
     height: 50,
-    backgroundColor: '#007AFF',
+    backgroundColor: '#4869EC',
     borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 20,
-    marginBottom: 30,
   },
   signupButtonText: {
     color: '#fff',

@@ -65,13 +65,11 @@ export default function LoginScreen() {
         style={styles.logo}
         resizeMode="contain"
       />
-      <ThemedText style={styles.title}>다시 만났네, 단스펙 ✨</ThemedText>
-      <ThemedText style={styles.text}>단국대학교 메일로 로그인하고{"\n"}드림이가 추천해주는 공모전·활동·팀원을 만나보세요.</ThemedText>
 
       <TextInput
         style={styles.input}
-        placeholder="Email ID(dankook.ac.kr)"
-        placeholderTextColor="#999"
+        placeholder="이메일을 입력하세요."
+        placeholderTextColor="#666666"
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
@@ -81,8 +79,8 @@ export default function LoginScreen() {
 
       <TextInput
         style={styles.input}
-        placeholder="Password"
-        placeholderTextColor="#999"
+        placeholder="비밀번호를 입력하세요."
+        placeholderTextColor="#666666"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
@@ -102,10 +100,10 @@ export default function LoginScreen() {
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.button} onPress={() => router.push('/Home/home')}>
-        <ThemedText style={styles.buttonText}>Start</ThemedText>
+        <ThemedText style={styles.buttonText}>로그인</ThemedText>
       </TouchableOpacity>
       <View style={styles.signupContainer}>
-        <ThemedText style={styles.signupText}>아직 회원이 아니신가요? </ThemedText>
+        <ThemedText style={styles.signupText}>계정이 아직 없으신가요? </ThemedText>
         <TouchableOpacity onPress={() => router.push('/signup')}>
           <ThemedText style={styles.signupLink}>회원 가입하기</ThemedText>
         </TouchableOpacity>
@@ -120,41 +118,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 30,
-    backgroundColor: '#215198',
+    backgroundColor: '#fff',
   },
   logo: {
     width: '40%',
     marginTop: -150,
     marginBottom: -100,
   },
-  title: {
-    paddingTop: 10,
-    marginBottom: 10,
-    fontSize: 24,
-    textAlign: 'left',
-    color: '#fff',
-    fontFamily: 'System',
-    fontWeight: 'bold',
-    width: '100%',
-  },
-  text: {
-    marginBottom: 15,
-    fontSize: 16,
-    fontFamily: 'System',
-    color: '#fff',
-    textAlign: 'left',
-    width: '100%',
-  },
   input: {
     width: '100%',
     height: 50,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: '#E6E6E6',
     borderRadius: 8,
     paddingHorizontal: 15,
     marginBottom: 15,
-    fontSize: 16,
-    backgroundColor: '#fff',
+    fontSize: 14,
+    backgroundColor:'#FAFAFA'
   },
   autoLoginContainer: {
     flexDirection: 'row',
@@ -166,7 +146,7 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderWidth: 2,
-    borderColor: '#fff',
+    borderColor: '#4869EC',
     borderRadius: 4,
     marginRight: 8,
     justifyContent: 'center',
@@ -175,22 +155,21 @@ const styles = StyleSheet.create({
   checkboxChecked: {
     width: 10,
     height: 10,
-    backgroundColor: '#007AFF',
+    backgroundColor: '#4869EC',
     borderRadius: 2,
   },
   autoLoginText: {
-    color: '#fff',
+    color: '#000',
     fontSize: 12,
     fontFamily: 'System',
   },
   button: {
     width: '100%',
     height: 50,
-    backgroundColor: '#007AFF',
-    borderRadius: 8,
+    backgroundColor: '#4869EC',
+    borderRadius: 25,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 5,
   },
   buttonText: {
     color: '#fff',
@@ -203,13 +182,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   signupText: {
-    color: '#fff',
+    color: '#000',
     fontSize: 12,
     fontWeight: '300',
     fontFamily: 'System',
   },
   signupLink: {
-    color: '#9FBCD7',
+    color: '#4869EC',
     fontSize: 12,
     fontWeight: '300',
     fontFamily: 'System',
