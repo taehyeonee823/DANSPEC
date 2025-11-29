@@ -12,37 +12,65 @@ export default function RecruitmentNow() {
 
   return (
     <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
-      <View style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        height: 150,
-        backgroundColor: '#ffffff',
-        zIndex: 998
-      }} />
+      <View
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 140,
+          backgroundColor: '#ffffff',
+          zIndex: 998,
+        }}
+      />
 
-      <TouchableOpacity
-        style={{ position: 'absolute', top: 60, left: 20, zIndex: 999, padding: 8 }}
-        onPress={() => router.back()}
+      {/* 화살표와 글씨를 한 행에 배치, 글씨 중앙 정렬 */}
+      <View
+        style={{
+          position: 'absolute',
+          top: 60,
+          left: 20,
+          right: 20,
+          flexDirection: 'row',
+          alignItems: 'center',
+          zIndex: 999,
+          justifyContent: 'center',
+        }}
       >
-        <Text style={{ fontSize: 28, color: '#000', fontWeight: 'bold' }}>←</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            padding: 8,
+            position: 'absolute',
+            left: 0,
+          }}
+          onPress={() => router.back()}
+        >
+          <Text style={{ fontSize: 28, color: '#000', fontWeight: 'bold' }}>←</Text>
+        </TouchableOpacity>
+        <View style={{ flex: 1, alignItems: 'center' }}>
+          <Text
+            style={{
+              fontSize: 18,
+              fontWeight: '600',
+              color: '#000',
+              textAlign: 'center',
+            }}
+          >
+            팀 관리하기
+          </Text>
+        </View>
+      </View>
 
       <View style={{ position: 'absolute', top: 95, left: 30, zIndex: 999 }}>
         <Text style={styles.title}>현재 모집중</Text>
       </View>
 
-      <ScrollView style={styles.container}
-        contentContainerStyle={styles.scrollViewContent}>
-
+      <ScrollView style={styles.container} contentContainerStyle={styles.scrollViewContent}>
         {teamData.map((team) => (
-          <RecruitmentCard
-            key={team.id}
-            {...team}
-          />
+          <RecruitmentCard key={team.id} {...team} />
         ))}
       </ScrollView>
+
       <NaviBar currentPage="my" />
     </View>
   );
@@ -64,11 +92,12 @@ const styles = StyleSheet.create({
     paddingBottom: 150,
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 20,
+    fontWeight: '600',
     color: '#000',
     textAlign: 'left',
-    paddingTop: 10,
-    marginBottom: 20,
+    paddingTop: 20,
+    marginBottom: 10,
   },
+
 });
