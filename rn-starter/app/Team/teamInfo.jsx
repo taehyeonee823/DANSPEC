@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import Button from '../../components/Button';
 import MultiplelineInput from '../../components/MultiplelineInput';
 import SinglelineInput from '../../components/SinglelineInput';
-import teamInfoData from '../teamInfo.json'; 
+import teamInfoData from './teamInfo.json'; 
 
 export default function Index() {
   const router = useRouter();

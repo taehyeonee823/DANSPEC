@@ -32,7 +32,7 @@ export default function SignUpScreen() {
   const jukjeonDepartments = [
     '문과대학','법과대학','경영경제대학','사회과학대학','공과대학','SW융합대학','사범대학','음악·예술대학'
   ];
-   const cheonanDepartments = [
+  const cheonanDepartments = [
     '외국어대학','공공인재대학','과학기술대학','바이오융합대학','보건과학대학','의과대학','치과대학','약학대학','간호대학','스포츠과학대학','예술대학'
   ];
   const departmentMajorsJukjeon = {
@@ -81,16 +81,14 @@ export default function SignUpScreen() {
   const validatePassword = (text) => {
     setPassword(text);
 
-    if (text.length > 0 && text.length < 7) {
-      // 길이 부족
-      return;
-    }
+    if (text.length > 0 && text.length < 7) { return; }
+
   const hasLetter = /[a-zA-Z]/.test(text);
 
   const hasNumber = /[0-9]/.test(text);
-    if (text.length >= 7 && (!hasLetter || !hasNumber)) {
-      return;
-    }
+
+    if (text.length >= 7 && (!hasLetter || !hasNumber)) {return;}
+
     if (confirmPassword) {
       setPasswordMatch(text === confirmPassword);
     }
@@ -100,6 +98,35 @@ export default function SignUpScreen() {
     setConfirmPassword(text);
     // 비밀번호 일치 여부 확인
     setPasswordMatch(password === text);
+  };
+
+  const handleSignup = () => {
+    if (!email || !email.includes('@dankook.ac.kr')) {
+      Alert.alert('⚠️ 오류', '단국대학교 이메일을 입력해주세요.', [{ text: '확인' }]);
+      return;
+    }
+    if (!verificationCode || !name || !campus || !department || !major || !grade || !firstJobPreference || !secondJobPreference || !thirdJobPreference) {
+      Alert.alert('⚠️ 오류', '필수 항목들을 입력해주세요.', [{ text: '확인' }]);
+      return;
+    }
+    if (!password || password.length < 7) {
+      Alert.alert('⚠️ 오류', '비밀번호는 7자리 이상이어야 합니다.', [{ text: '확인' }]);
+      return;
+    }
+    const hasLetter = /[a-zA-Z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    if (!hasLetter || !hasNumber) {
+      Alert.alert('⚠️ 오류', '비밀번호는 영문과 숫자를 포함해야 합니다.', [{ text: '확인' }]);
+      return;
+    }
+    if (!confirmPassword || password !== confirmPassword) {
+      Alert.alert('⚠️ 오류', '비밀번호가 일치하지 않습니다.', [{ text: '확인' }]);
+      return;
+    }
+
+    Alert.alert('✅ 성공', '회원가입이 완료되었습니다.', [
+      { text: '확인', onPress: () => router.back() }
+    ]);
   };
 
   return (
@@ -124,9 +151,7 @@ export default function SignUpScreen() {
 
       <ScrollView style={styles.container} 
         contentContainerStyle={styles.scrollViewContent}>
-  
-      <ThemedText style={styles.title}>회원가입 👋 </ThemedText>
-    <ThemedText style={styles.subtitle}>내 정보 입력을 완료해주세요. {'\n'}드림이가 딱 맞는 활동을 추천해 드릴게요.</ThemedText>
+      <ThemedText style={styles.subtitle}>내 정보 입력을 완료해주세요. {'\n'}드림이가 딱 맞는 활동을 추천해 드릴게요.</ThemedText>
 
       <ThemedText style={styles.text}>* 아이디</ThemedText>
       <View style={styles.inputContainer}>
@@ -138,7 +163,7 @@ export default function SignUpScreen() {
           onChangeText={setEmail}
           keyboardType="email-address"
           autoCapitalize="none"
-          autoComplete="email"
+          autoComplete="none"
         />
         <TouchableOpacity style={styles.checkButton} onPress={handleCheckDuplicate}>
           <ThemedText style={styles.checkButtonText}>인증</ThemedText>
@@ -195,7 +220,7 @@ export default function SignUpScreen() {
     <View style={styles.inputContainer3}>
       <TextInput
           style={styles.input}
-          placeholder="이름 입력"
+          placeholder="이름을 입력해 주세요"
           placeholderTextColor="#999"
           value={name}
           onChangeText={setName}
@@ -374,7 +399,7 @@ export default function SignUpScreen() {
     <View style={styles.inputContainer3}>
       <TextInput
           style={styles.input}
-          placeholder="직무 입력"
+          placeholder="희망 직무를 입력해주세요"
           placeholderTextColor="#999"
           value={firstJobPreference}
           onChangeText={setFirstJobPreference}
@@ -384,7 +409,7 @@ export default function SignUpScreen() {
     <View style={styles.inputContainer3}>
       <TextInput
           style={styles.input}
-          placeholder="직무 입력"
+          placeholder="희망 직무를 입력해주세요"
           placeholderTextColor="#999"
           value={secondJobPreference}
           onChangeText={setSecondJobPreference}
@@ -394,14 +419,14 @@ export default function SignUpScreen() {
     <View style={styles.inputContainer3}>
       <TextInput
           style={styles.input}
-          placeholder="직무 입력"
+          placeholder="희망 직무를 입력해주세요"
           placeholderTextColor="#999"
           value={thirdJobPreference}
           onChangeText={setThirdJobPreference}
         />
       </View>
 
-    <ThemedText style={styles.text}>* 간단 소개</ThemedText>
+    <ThemedText style={styles.text}>간단 소개</ThemedText>
     <View style={styles.inputContainer3}>
       <TextInput
         style={[styles.input, styles.introInput]}
@@ -417,7 +442,7 @@ export default function SignUpScreen() {
 
     <TouchableOpacity
       style={styles.signupButton}
-      onPress={() => router.back()}
+      onPress={handleSignup}
     >
       <ThemedText style={styles.signupButtonText}>가입하기</ThemedText>
     </TouchableOpacity>
@@ -444,19 +469,12 @@ const styles = StyleSheet.create({
     paddingRight: 0,
     paddingBottom: 150,
   },
-  title: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    color: '#000',
-    textAlign: 'left',
-    paddingTop: 30,
-  },
   subtitle: {
-    fontSize: 16,
-    fontWeight: '300',
+    fontSize: 18,
+    fontWeight: '500',
     color: '#000',
     textAlign: 'left',
-    marginTop: 7,
+    marginTop: 30,
     marginBottom: 20
   },
    text: {

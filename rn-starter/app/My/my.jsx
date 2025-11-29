@@ -35,7 +35,7 @@ export default function My() {
       <TouchableOpacity
           style={{ position: 'absolute', top: 60, right: 30, zIndex: 999 }}
           onPress={() => {
-            console.log('Bell 눌림');
+            router.push('/My/recruitmentNow');
           }}
         >
           <Image
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginTop: 50,
+    marginTop: 30,
     color: '#000',
     textAlign: 'left',
   },

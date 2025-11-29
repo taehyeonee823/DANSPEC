@@ -25,8 +25,9 @@ export default function RootLayout() {
           <Stack.Screen name="Team/team" />
           <Stack.Screen name="Activity/activity" />
           <Stack.Screen name="My/my" />
+          <Stack.Screen name="My/applyCheck" />
         </Stack>
-        <StatusBar style="auto" />
+        <StatusBar style="dark" />
       </ThemeProvider>
     </GestureHandlerRootView>
   );

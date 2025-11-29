@@ -287,8 +287,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
   }, 
-  
-  // 기타 입력 필드 스타일
   defaultInput: {
     height: 48,
     backgroundColor: '#fff',
