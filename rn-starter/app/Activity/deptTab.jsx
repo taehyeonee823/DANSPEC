@@ -11,6 +11,7 @@ export default function DeptTab({ selectedDepartment, onSelectDepartment }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [sheetVisible, setSheetVisible] = useState(false);
   const underlineX = useRef(new Animated.Value(0)).current;
+  const scrollViewRef = useRef(null);
 
   const tabWidth = 100;
 
@@ -21,7 +22,14 @@ export default function DeptTab({ selectedDepartment, onSelectDepartment }) {
       useNativeDriver: false,
     }).start();
 
-    // 선택된 단과대를 부모 컴포넌트로 전달
+    // ScrollView를 해당 탭 위치로 스크롤
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollTo({
+        x: index * tabWidth - 100,
+        animated: true,
+      });
+    }
+
     if (onSelectDepartment) {
       onSelectDepartment(categories[index]);
     }
@@ -30,6 +38,7 @@ export default function DeptTab({ selectedDepartment, onSelectDepartment }) {
   return (
     <View style={styles.wrapper}>
       <ScrollView
+        ref={scrollViewRef}
         horizontal
         showsHorizontalScrollIndicator={false}
         style={styles.scrollView}

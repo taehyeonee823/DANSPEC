@@ -126,7 +126,7 @@ export default function SignUpScreen() {
         contentContainerStyle={styles.scrollViewContent}>
   
       <ThemedText style={styles.title}>회원가입 👋 </ThemedText>
-    <ThemedText style={styles.subtitle}>단국대 학생만 누릴 수 있는 다양한 서비스를 만나보세요</ThemedText>
+    <ThemedText style={styles.subtitle}>내 정보 입력을 완료해주세요. {'\n'}드림이가 딱 맞는 활동을 추천해 드릴게요.</ThemedText>
 
       <ThemedText style={styles.text}>* 아이디</ThemedText>
       <View style={styles.inputContainer}>
@@ -453,10 +453,10 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: '300',
     color: '#000',
     textAlign: 'left',
-    marginTop: 5,
+    marginTop: 7,
     marginBottom: 20
   },
    text: {

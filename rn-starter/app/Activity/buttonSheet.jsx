@@ -25,7 +25,6 @@ const colleges = [
 ];
 
 export default function ButtonSheet({ visible, onClose, onSelectCollege }) {
-  console.log('ButtonSheet visible:', visible);
   return (
     <Modal
       visible={visible}
