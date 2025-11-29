@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import NaviBar from '../naviBar';
 import CategoryChips from '@/components/CategoryChips';
-import { ThemedText } from '@/components/themed-text';
-import { ScrollView } from 'react-native-gesture-handler';
 import TeamApplyBox from './teamApplyBox';
 import teamData from '../teamApplyBoxDemo.json';
 import CategoryTab from './categoryTab';
@@ -19,13 +17,13 @@ export default function Team() {
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.contentArea}>
+      <View style={styles.headerBackground} />
+      <View style={styles.fixedHeader}>
         <CategoryTab />
-
         <View style={styles.chipsWrapper}>
-          <ScrollView 
-            horizontal 
-            showsHorizontalScrollIndicator={false} 
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.chipScrollViewContent}
           >
             <CategoryChips
@@ -35,7 +33,9 @@ export default function Team() {
             />
           </ScrollView>
         </View>
+      </View>
 
+      <ScrollView style={styles.contentArea} contentContainerStyle={styles.scrollContent}>
         {displayedTeams.map((team) => (
           <TeamApplyBox
             key={team.id}
@@ -69,15 +69,36 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
+  headerBackground: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 180,
+    backgroundColor: '#FFFFFF',
+    zIndex: 998,
+  },
+  fixedHeader: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#FFFFFF',
+    zIndex: 999,
+  },
   contentArea: {
-    flex: 1, 
+    flex: 1,
+    marginTop: 210,
+  },
+  scrollContent: {
+    paddingBottom: 120,
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginTop: 60,   
+    marginTop: 60,
     marginLeft: 20,
-    marginBottom: 20, 
+    marginBottom: 20,
     paddingTop: 10,
     color: '#000',
     textAlign: 'left',
