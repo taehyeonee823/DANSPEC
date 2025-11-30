@@ -17,7 +17,16 @@ export default function Activity() {
   const [loading, setLoading] = useState(false);
   const categories = ["전체", "공모전", "대외 활동", "교내", "자율 프로젝트"];
 
-  // API에서 이벤트 데이터 가져오기
+  // 카테고리 한글 -> API 값 매핑
+  const categoryMapping = {
+    "전체": "전체",
+    "공모전": "CONTEST",
+    "대외 활동": "EXTERNAL",
+    "교내": "SCHOOL",
+    "자율 프로젝트": "PROJECT"
+  };
+
+  // API에서 데이터 가져오기
   useEffect(() => {
     fetchEvents();
   }, [selectedDepartment, selectedCategory]);
@@ -26,6 +35,9 @@ export default function Activity() {
     try {
       setLoading(true);
       let url;
+
+      // 카테고리 매핑
+      const apiCategory = categoryMapping[selectedCategory];
 
       // API 호출 URL 결정
       if (selectedDepartment === "전체" && selectedCategory === "전체") {
@@ -36,15 +48,23 @@ export default function Activity() {
         url = API_ENDPOINTS.SEARCH_BY_COLLEGE(selectedDepartment);
       } else if (selectedDepartment === "전체" && selectedCategory !== "전체") {
         // 카테고리별 전체 이벤트
-        url = API_ENDPOINTS.SEARCH_EVENTS("전체", selectedCategory);
+        url = API_ENDPOINTS.SEARCH_BY_CATEGORY(apiCategory);
       } else {
         // 단과대 + 카테고리 필터링
-        url = API_ENDPOINTS.SEARCH_EVENTS(selectedDepartment, selectedCategory);
+        url = API_ENDPOINTS.SEARCH_EVENTS(selectedDepartment, apiCategory);
       }
 
       const response = await fetch(url);
       const data = await response.json();
-      setEvents(data);
+
+      // 마감일 순으로 정렬 
+      const sortedData = data.sort((a, b) => {
+        const dateA = new Date(a.endDate);
+        const dateB = new Date(b.endDate);
+        return dateA - dateB;
+      });
+
+      setEvents(sortedData);
     }
     catch (error) {
       console.error('이벤트 데이터 불러오기 실패:', error);
@@ -55,7 +75,7 @@ export default function Activity() {
     }
   };
 
-  // 마감일 계산 (D-day 형식으로)
+  // 마감일 계산
   const calculateDueDate = (endDate) => {
     const today = new Date();
     const end = new Date(endDate);
@@ -95,10 +115,11 @@ export default function Activity() {
           events.map((event) => (
             <ActivityApplyBox
               key={event.id}
+              event={event}
               tag={event.category}
               dueDate={calculateDueDate(event.endDate)}
               title={event.title}
-              description={event.description}
+              summarizedDescription={event.summarizedDescription}
             />
           ))
         ) : (

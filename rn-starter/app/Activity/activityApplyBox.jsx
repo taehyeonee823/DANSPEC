@@ -3,18 +3,30 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 
 
-export default function activityApplyBox({ tag, title, description, dueDate }) {
+export default function activityApplyBox({ event, tag, title, summarizedDescription, dueDate }) {
   const router = useRouter();
 
+  const handlePress = () => {
+    router.push({
+      pathname: './activityInfo',
+      params: {
+        eventData: JSON.stringify(event)
+      }
+    });
+  };
+
   return (
-    <TouchableOpacity style={styles.card}>
+    <TouchableOpacity
+      style={styles.card}
+      onPress={handlePress}
+    >
       <View style={styles.header}>
         <Text style={styles.tag}>{tag}</Text>
         <Text style={styles.dueDate}>{dueDate}</Text>
       </View>
 
       <Text style={styles.title}>{title}</Text>
-      <Text style={styles.description}>{description}</Text>
+      <Text style={styles.summarizedDescription}>{summarizedDescription}</Text>
     </TouchableOpacity>
   );
 }
@@ -56,7 +68,7 @@ const styles = StyleSheet.create({
     color: '#000',
     marginBottom: 8,
   },
-  description: {
+  summarizedDescription: {
     fontSize: 14,
     color: '#666',
     marginBottom: 8,

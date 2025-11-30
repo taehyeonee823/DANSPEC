@@ -24,7 +24,6 @@ export default function RecruitmentNow() {
         }}
       />
 
-      {/* 화살표와 글씨를 한 행에 배치, 글씨 중앙 정렬 */}
       <View
         style={{
           position: 'absolute',
