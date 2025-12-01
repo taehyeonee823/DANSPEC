@@ -1,27 +1,28 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, ScrollView, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, ScrollView } from 'react-native';
+import { Image } from 'expo-image';
 
 const colleges = [
-  { id: 1, name: '문과대학', image: require('@/assets/images/college/humanities.png') },
-  { id: 2, name: '법과대학', image: require('@/assets/images/college/law.png') },
-  { id: 3, name: '사회과학대학', image: require('@/assets/images/college/socialScience.png') },
-  { id: 4, name: '경영경제대학', image: require('@/assets/images/college/businessEconomic.png') },
-  { id: 5, name: '사범대학', image: require('@/assets/images/college/edu.png') },
-  { id: 6, name: '프리무스국제대학', image: require('@/assets/images/college/primus.png') },
-  { id: 7, name: '공과대학', image: require('@/assets/images/college/engineering.png') },
-  { id: 8, name: 'SW융합대학', image: require('@/assets/images/college/swconv.png') },
-  { id: 9, name: '음악예술대학', image: require('@/assets/images/college/musicArt.png') },
-  { id: 10, name: '외국어대학', image: require('@/assets/images/college/foreignLang.png') },
-  { id: 11, name: '공공인재대학', image: require('@/assets/images/college/public.png') },
-  { id: 12, name: '보건과학대학', image: require('@/assets/images/college/health.png') },
-  { id: 13, name: '과학기술대학', image: require('@/assets/images/college/science.png') },
-  { id: 14, name: '바이오융합대학', image: require('@/assets/images/college/biotech.png') },
-  { id: 15, name: '예술대학', image: require('@/assets/images/college/art.png') },
-  { id: 16, name: '스포츠과학대학', image: require('@/assets/images/college/sports.png') },
-  { id: 17, name: '의과대학', image: require('@/assets/images/college/med.png') },
-  { id: 18, name: '치과대학', image: require('@/assets/images/college/dentistry.png') },
-  { id: 19, name: '약학대학', image: require('@/assets/images/college/pharmacy.png') },
-  { id: 20, name: '간호대학', image: require('@/assets/images/college/nursing.png') },
+  { id: 1, name: '문과대학', image: require('@/assets/images/college/humanities.svg') },
+  { id: 2, name: '공공인재대학', image: require('@/assets/images/college/public.svg') },
+  { id: 3, name: '법과대학', image: require('@/assets/images/college/law.svg') },
+  { id: 4, name: '보건과학대학', image: require('@/assets/images/college/health.svg') },
+  { id: 5, name: '사회과학대학', image: require('@/assets/images/college/socialScience.svg') },
+  { id: 6, name: '과학기술대학', image: require('@/assets/images/college/science.svg') },
+  { id: 7, name: '경영경제대학', image: require('@/assets/images/college/businessEconomic.svg') },
+  { id: 8, name: '간호대학', image: require('@/assets/images/college/nursing.svg') },
+  { id: 9, name: '사범대학', image: require('@/assets/images/college/edu.svg') },
+  { id: 10, name: '바이오융합대학', image: require('@/assets/images/college/biotech.svg') },
+  { id: 11, name: '프리무스국제대학', image: require('@/assets/images/college/primus.svg') },
+  { id: 12, name: '예술대학', image: require('@/assets/images/college/art.svg') },
+  { id: 13, name: '공과대학', image: require('@/assets/images/college/engineering.svg') },
+  { id: 14, name: '스포츠과학대학', image: require('@/assets/images/college/sports.svg') },
+  { id: 15, name: 'SW융합대학', image: require('@/assets/images/college/swconv.svg') },
+  { id: 16, name: '의과대학', image: require('@/assets/images/college/med.svg') },
+  { id: 17, name: '음악예술대학', image: require('@/assets/images/college/musicArt.svg') },
+  { id: 18, name: '치과대학', image: require('@/assets/images/college/dentistry.svg') },
+  { id: 19, name: '외국어대학', image: require('@/assets/images/college/foreignLang.svg') },
+  { id: 20, name: '약학대학', image: require('@/assets/images/college/pharmacy.svg') },
 ];
 
 export default function ButtonSheet({ visible, onClose, onSelectCollege }) {
@@ -51,7 +52,7 @@ export default function ButtonSheet({ visible, onClose, onSelectCollege }) {
                     onClose();
                   }}
                 >
-                  <Image source={college.image} style={styles.collegeImage} resizeMode="contain" />
+                  <Image source={college.image} style={styles.collegeImage} contentFit="contain" />
                   <Text style={styles.collegeName}>{college.name}</Text>
                 </TouchableOpacity>
               ))}

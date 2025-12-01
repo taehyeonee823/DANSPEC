@@ -10,7 +10,7 @@ import CategoryTab from './categoryTab';
 export default function Team() {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState("모든 모집글");
-  const categories = ["모든 모집글", "내가 쓴 모집글만"];
+  const categories = ["모든 모집글", "내가 쓴 모집글만", "내가 쓴 지원글만"];
 
   // TODO: 외부 API 연결 예정
   const displayedTeams = teamData;
