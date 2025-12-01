@@ -3,30 +3,13 @@ import { useRouter } from 'expo-router';
 import { View, Text, ScrollView, KeyboardAvoidingView, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import Button from '../../components/Button';
 
-// 선택 가능한 활동/공모전 목록 (dummy data)
-const activityOptions = [
-  "단국대 X 데이터 분석 캠프",
-  "캡스톤 디자인 프로젝트",
-  "교내 창업 경진대회",
-  "AI 개발 공모전",
-  "SW 해커톤",
-];
-
 export default function teamRecruitmentForm() {
   const router = useRouter();
   const [titleInfo, setTitleInfo] = useState("");
   const [traitInfo, setTraitInfo] = useState("");
   const [introductionInfo, setIntroductionInfo] = useState("");
-  
-  const [selectedActivity, setSelectedActivity] = useState(null); 
-  const [isPickerOpen, setIsPickerOpen] = useState(false); 
-  const [inputs, setInputs] = useState([{id: Date.now(), value: ''}])
 
-  // 드롭다운 항목 선택 핸들러
-  const handleActivitySelect = (activity) => {
-    setSelectedActivity(activity);
-    setIsPickerOpen(false); 
-  };
+  const [inputs, setInputs] = useState([{id: Date.now(), value: ''}]);
 
   const handleChange = (text, id) => {
     const newInputs = inputs.map((item) => {
@@ -53,12 +36,12 @@ export default function teamRecruitmentForm() {
   };
 
   // 모집글 저장 함수
-  const saveRecruitment = async () => {
+  const saveRecruitment = () => {
     const roles = inputs.map(input => input.value.trim()).filter(value => value !== '');
 
     const newRecruitment = {
       title: titleInfo,
-      tag: selectedActivity,
+      tag: "기타",
       description: introductionInfo,
       name: teamLeaderName,
       department: "SW융합대학",
@@ -76,7 +59,7 @@ export default function teamRecruitmentForm() {
     //   body: JSON.stringify(newRecruitment)
     // });
 
-    router.push('/recruitmentConfirmed');
+    router.replace('/Activity/recruitmentConfirmed');
   };
 
   const teamLeaderName = "김단국";
@@ -94,34 +77,10 @@ export default function teamRecruitmentForm() {
           <ScrollView style={styles.container}
               contentContainerStyle={styles.contentContainer}>
             <Text style={styles.mainTitle}>팀 모집글 작성하기</Text>
-            <Text style={styles.caption}>공모전·교내·대외 활동별로 함께할 팀원을 모집해보세요.</Text>
+            <Text style={styles.caption}>원하는 활동을 함께할 팀원을 모집해보세요.</Text>
 
             <Text style={styles.sectionTitle}>연결할 활동 / 공모전</Text>
-            <View style={styles.pickerContainer}>
-              <TouchableOpacity 
-                style={styles.pickerField}
-                onPress={() => setIsPickerOpen(!isPickerOpen)}
-              >
-                <Text style={selectedActivity ? styles.pickerValue : styles.pickerPlaceholder}>
-                  {selectedActivity || "활동/공모전을 선택해주세요."}
-                </Text>
-                <Text style={styles.arrow}>{isPickerOpen ? '▲' : '▼'}</Text>
-              </TouchableOpacity>
-
-              {isPickerOpen && (
-                <View style={styles.pickerList}>
-                  {activityOptions.map((activity) => (
-                    <TouchableOpacity
-                      key={activity}
-                      style={styles.pickerItem}
-                      onPress={() => handleActivitySelect(activity)}
-                    >
-                      <Text style={styles.pickerItemText}>{activity}</Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              )}
-            </View>
+            <Text style={styles.readOnlyText}>기타</Text>
 
             <Text style={styles.sectionTitle}>제목</Text>
             <TextInput
@@ -229,63 +188,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     backgroundColor: '#f0f0f0',
     borderRadius: 8,
-  },
-
-  pickerContainer: {
-    zIndex: 10, 
-    marginBottom: 10,
-  },
-  pickerField: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    height: 48,
-    paddingHorizontal: 15,
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-  },
-  pickerPlaceholder: {
-    fontSize: 16,
-    color: '#999',
-  },
-  pickerValue: {
-    fontSize: 16,
-    color: '#333',
-  },
-  arrow: {
-    fontSize: 12,
-    color: '#666',
-    fontWeight: 'bold',
-  },
-  pickerList: {
-    // 드롭다운 목록
-    position: 'absolute',
-    top: 48, // pickerField 높이만큼 아래에 위치
-    left: 0,
-    right: 0,
-    backgroundColor: '#ffffff',
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    marginTop: -1, // 경계선 겹치기
-    maxHeight: 200, // 최대 높이 설정
-    overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 3,
-  },
-  pickerItem: {
-    padding: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-  },
-  pickerItemText: {
-    fontSize: 16,
-    color: '#333',
   }, 
   defaultInput: {
     height: 48,

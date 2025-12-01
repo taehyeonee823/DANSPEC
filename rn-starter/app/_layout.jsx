@@ -20,7 +20,7 @@ export default function RootLayout() {
           <Stack.Screen name="Team/teamApplicationForm" />
           <Stack.Screen name="Team/teamRecruitmentForm" />
           <Stack.Screen name="Team/applyConfirmed" />
-          <Stack.Screen name="Team/teamRecruitmentConfirmed" />
+          <Stack.Screen name="Activity/recruitmentConfirmed" />
           <Stack.Screen name="Team/teamInfo" />
           <Stack.Screen name="Team/team" />
           <Stack.Screen name="Activity/activity" />

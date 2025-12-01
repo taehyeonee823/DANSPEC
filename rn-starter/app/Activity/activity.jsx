@@ -15,7 +15,7 @@ export default function Activity() {
   const [selectedDepartment, setSelectedDepartment] = useState("전체");
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(false);
-  const categories = ["전체", "공모전", "대외 활동", "교내"];
+  const categories = ["전체", "공모전", "대외 활동", "교내", "기타"];
 
   // 카테고리 한글 -> API 값 매핑
   const categoryMapping = {
@@ -31,6 +31,11 @@ export default function Activity() {
   }, [selectedDepartment, selectedCategory]);
 
   const fetchEvents = async () => {
+    if (selectedCategory === "기타") {
+      setEvents([]);
+      return;
+    }
+
     try {
       setLoading(true);
       let url;
@@ -56,7 +61,7 @@ export default function Activity() {
       const response = await fetch(url);
       const data = await response.json();
 
-      // 마감일 순으로 정렬 
+      // 마감일 순으로 정렬
       const sortedData = data.sort((a, b) => {
         const dateA = new Date(a.endDate);
         const dateB = new Date(b.endDate);
@@ -88,16 +93,38 @@ export default function Activity() {
 
   return (
     <View style={styles.container}>
+      <View
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 105,
+          backgroundColor: '#ffffff',
+          zIndex: 998,
+        }}
+      />
+      <TouchableOpacity
+        style={{ position: 'absolute', top: 60, left: 30, zIndex: 1000 }}
+        onPress={() => router.push('/Home/home')}
+      >
+        <Image
+          source={require('../../assets/images/danspecLogo.png')}
+          style={{ width: 35, height: 35 }}
+          contentFit="contain"
+        />
+      </TouchableOpacity>
+
       <ScrollView style={styles.contentArea}>
-       <DeptTab
+        <DeptTab
           selectedDepartment={selectedDepartment}
           onSelectDepartment={setSelectedDepartment}
         />
 
         <View style={styles.chipsWrapper}>
-          <ScrollView 
-            horizontal 
-            showsHorizontalScrollIndicator={false} 
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
             contentContainerStyle={styles.chipScrollViewContent}
           >
             <CategoryChips
@@ -124,11 +151,21 @@ export default function Activity() {
         ) : (
           <ThemedText style={styles.emptyText}>검색 결과가 없습니다.</ThemedText>
         )}
-
       </ScrollView>
-      
+
+      {selectedCategory === "기타" && (
+        <TouchableOpacity
+          style={styles.floatingButton}
+          onPress={() => router.push('./etcRecruitmentForm')}
+        >
+          <Image
+            source={require('@/assets/images/plusBotton.png')}
+            style={styles.plusIcon}
+          />
+        </TouchableOpacity>
+      )}
+
       <NaviBar currentPage="activity" />
-      
     </View>
   );
 }
@@ -139,12 +176,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   contentArea: {
+    marginTop: 30,
     flex: 1, 
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginTop: 60,   
+    marginTop: 100,   
     marginLeft: 20,
     marginBottom: 20, 
     paddingTop: 10,
@@ -169,5 +207,25 @@ const styles = StyleSheet.create({
     marginTop: 40,
     fontSize: 16,
     color: '#999',
+  },
+  floatingButton: {
+    position: 'absolute',
+    right: 20,
+    bottom: 110,
+    width: 60,
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    zIndex: 999,
+  },
+  plusIcon: {
+    width: 60,
+    height: 60,
+    resizeMode: 'contain',
   },
 });

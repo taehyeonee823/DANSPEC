@@ -1,13 +1,13 @@
 import React, { useRef, useState } from 'react';
 import { View, Text, Pressable, Animated, StyleSheet } from 'react-native';
 
-const categories = ['전체', '공모전', '대외활동', '교내활동', '기타'];
+const categories = ['모든 모집글', '내가 쓴 모집글', '내가 쓴 지원글'];
 
 export default function CategoryTab() {
   const [activeIndex, setActiveIndex] = useState(0);
   const underlineX = useRef(new Animated.Value(0)).current;
 
-  const tabWidth = 86;
+  const tabWidth = 143;
 
   const onPressTab = (index) => {
     setActiveIndex(index);
@@ -45,14 +45,14 @@ export default function CategoryTab() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 100,
+    paddingTop: 60,
     flexDirection: 'row',
     borderBottomWidth: 1,
     borderBottomColor: '#d1d1d1',
   },
   tabText: {
     textAlign: 'center',
-    paddingVertical: 14,
+    paddingVertical: 12,
     fontSize: 16,
     fontWeight: '700',
   },
@@ -63,7 +63,8 @@ const styles = StyleSheet.create({
     color: '#cfcfcf',
   },
   underline: {
-    height: 2,
+    marginTop: -4,
+    height: 3,
     backgroundColor: '#000',
   },
 });

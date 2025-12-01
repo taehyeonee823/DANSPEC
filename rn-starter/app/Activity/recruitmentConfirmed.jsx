@@ -4,14 +4,14 @@ import { Image } from 'expo-image';
 import { ThemedText } from '@/components/themed-text';
 import { useRouter } from 'expo-router';
 
-export default function ApplyConfirmed() {
+export default function recruitmentConfirmed() {
   const router = useRouter();
 
   return (
     <View style={styles.container}>
         <TouchableOpacity
           style={{ position: 'absolute', top: 60, right: 20, zIndex: 999, padding: 8 }}
-          onPress={() => router.push('/Team/team')}
+          onPress={() => router.push('/Activity/activity')}
         >
           <Image
             source={require('@/assets/images/cancel.svg')}
