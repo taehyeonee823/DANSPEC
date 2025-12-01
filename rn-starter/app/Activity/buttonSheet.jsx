@@ -19,7 +19,7 @@ const colleges = [
   { id: 14, name: '스포츠과학대학', image: require('@/assets/images/college/sports.svg') },
   { id: 15, name: 'SW융합대학', image: require('@/assets/images/college/swconv.svg') },
   { id: 16, name: '의과대학', image: require('@/assets/images/college/med.svg') },
-  { id: 17, name: '음악예술대학', image: require('@/assets/images/college/musicArt.svg') },
+  { id: 17, name: '음악·예술대학', image: require('@/assets/images/college/musicArt.svg') },
   { id: 18, name: '치과대학', image: require('@/assets/images/college/dentistry.svg') },
   { id: 19, name: '외국어대학', image: require('@/assets/images/college/foreignLang.svg') },
   { id: 20, name: '약학대학', image: require('@/assets/images/college/pharmacy.svg') },
