@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useRouter } from 'expo-router';
 import { View, Text, ScrollView, KeyboardAvoidingView, TouchableOpacity, StyleSheet, TextInput, Platform, Modal } from 'react-native';
+import { Image } from 'expo-image';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Button from '../../components/Button';
 
-export default function teamRecruitmentForm() {
+export default function etcteamRecruitmentForm() {
   const router = useRouter();
   const [titleInfo, setTitleInfo] = useState("");
   const [traitInfo, setTraitInfo] = useState("");
@@ -153,7 +154,7 @@ export default function teamRecruitmentForm() {
   return (
       <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
         <TouchableOpacity
-          style={{ position: 'absolute', top:60, left: 20, zIndex: 999, padding: 8 }}
+          style={{ position: 'absolute', top:60, left: 8, zIndex: 999, padding: 8 }}
           onPress={() => router.back()}
         >
           <Text style={{ fontSize: 28, color: '#000', fontWeight: 'bold' }}>←</Text>
@@ -163,8 +164,7 @@ export default function teamRecruitmentForm() {
           <ScrollView style={styles.container}
               contentContainerStyle={styles.contentContainer}>
             <Text style={styles.mainTitle}>팀 모집글 작성하기</Text>
-            <Text style={styles.caption}>원하는 활동을 함께할 팀원을 모집해보세요.</Text>
-
+            <Text style={styles.caption}>공모전·교내·대외 활동별로 함께할 팀원을 모집해보세요.</Text>
             <Text style={styles.sectionTitle}>연결할 활동 / 공모전</Text>
             <Text style={styles.readOnlyText}>기타</Text>
 
@@ -173,7 +173,7 @@ export default function teamRecruitmentForm() {
                 style={styles.defaultInput}
                 value={titleInfo}
                 onChangeText={setTitleInfo}
-                placeholder="제목을 입력해주세요." 
+                placeholder="제목을 입력해주세요" 
             />
 
             <Text style={styles.sectionTitle}>팀장 이름</Text>
@@ -184,27 +184,34 @@ export default function teamRecruitmentForm() {
             <Text style={styles.readOnlyText}>3학년</Text>
             <Text style={styles.sectionTitle}>모집 인원</Text>
             
-            <Text style={styles.sectionTitle}>모집 날짜</Text>
             <View style={styles.datePickerContainer}>
               <View style={styles.datePickerRow}>
-                <Text style={styles.dateLabel}>시작일</Text>
+                <Text style={styles.sectionTitle}>모집 시작일</Text>
                 <TouchableOpacity
                   style={styles.datePickerButton}
                   onPress={() => setShowStartDatePicker(true)}
                 >
                   <Text style={styles.datePickerText}>{formatDate(startDate)}</Text>
-                  <Text style={styles.datePickerArrow}>▼</Text>
+                  <Image
+                    source={require('@/assets/images/down.svg')}
+                    style={styles.datePickerArrow}
+                    contentFit="contain"
+                  />
                 </TouchableOpacity>
               </View>
               
               <View style={styles.datePickerRow}>
-                <Text style={styles.dateLabel}>종료일</Text>
+                <Text style={styles.sectionTitle}>모집 종료일</Text>
                 <TouchableOpacity
                   style={styles.datePickerButton}
                   onPress={() => setShowEndDatePicker(true)}
                 >
                   <Text style={styles.datePickerText}>{formatDate(endDate)}</Text>
-                  <Text style={styles.datePickerArrow}>▼</Text>
+                  <Image
+                    source={require('@/assets/images/down.svg')}
+                    style={styles.datePickerArrow}
+                    contentFit="contain"
+                  />
                 </TouchableOpacity>
               </View>
             </View>
@@ -314,12 +321,14 @@ export default function teamRecruitmentForm() {
                       isLastItem ? styles.addButton : styles.removeButton
                     ]}
                   >
-                    <Text style={[
-                      styles.buttonText,
-                      isLastItem ? styles.addText : styles.removeText
-                    ]}>
-                      {isLastItem ? '+' : '-'}
-                    </Text>
+                    <Image
+                      source={isLastItem 
+                        ? require('@/assets/images/add.svg')
+                        : require('@/assets/images/minus.svg')
+                      }
+                      style={styles.buttonIcon}
+                      contentFit="contain"
+                    />
                   </TouchableOpacity>
                 </View>
               );
@@ -355,46 +364,54 @@ export default function teamRecruitmentForm() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
   },
   contentContainer: {
     paddingBottom: 40,
   },
   mainTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
+    width: 345,
+    lineHeight: 24,
+    fontSize: 20,
+    fontFamily: 'Pretendard-SemiBold',
+    marginTop: 20,
+    marginBottom: 12,
     color: '#000',
   },
   caption: {
+    width: 304,
+    height: 17,
     fontSize: 14,
-    fontWeight: '400', 
+    fontFamily: 'Pretendard-Regular',
+    lineHeight: 17,
+    textAlign: 'left',
     color: '#666',
-    marginBottom: 20,
+    marginBottom: 28,
   },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginTop: 20,
-    marginBottom: 10,
+    fontSize: 16,
+    fontFamily: 'Pretendard-Medium',
+    marginBottom: 16,
     color: '#000',
   },
   readOnlyText: {
     fontSize: 16,
-    color: '#555',
+    fontFamily: 'Pretendard-Regular',
+    fontColor: '#1A1A1A',
+    borderBottomColor: '#CCCCCC',
     paddingVertical: 10,
     paddingHorizontal: 12,
-    backgroundColor: '#f0f0f0',
-    borderRadius: 8,
+    borderBottomWidth: 1,
+    marginBottom: 28,
   }, 
   defaultInput: {
     height: 48,
     backgroundColor: '#fff',
-    borderWidth: 1,
+    borderBottomWidth: 1,
     borderColor: '#ddd',
-    padding: 10,
-    borderRadius: 8,
+    padding: 8,
     fontSize: 16,
+    marginBottom: 28,
   },
   multilineInput: {
     height: 100,
@@ -415,10 +432,9 @@ const styles = StyleSheet.create({
   input: {
     flex: 1, 
     backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#ddd',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
     padding: 10,
-    borderRadius: 8,
     fontSize: 16,
   },
   circleButton: {
@@ -430,21 +446,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   addButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#FFFFFF',
   },
   removeButton: {
-    backgroundColor: '#ffdddd',
+    backgroundColor: '#FFFFFF',
   },
-  buttonText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginTop: -2,
-  },
-  addText: {
-    color: '#fff',
-  },
-  removeText: {
-    color: '#ff4444',
+  buttonIcon: {
+    width: 24,
+    height: 24,
   },
   datePickerContainer: {
     gap: 10,
@@ -474,8 +483,8 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   datePickerArrow: {
-    fontSize: 12,
-    color: '#666',
+    width: 15,
+    height: 15,
   },
   modalContainer: {
     flex: 1,
