@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, ScrollView } from 'react-native';
+import React, { useRef } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, ScrollView, PanResponder, Animated } from 'react-native';
 import { Image } from 'expo-image';
 
 const colleges = [
@@ -26,6 +26,39 @@ const colleges = [
 ];
 
 export default function ButtonSheet({ visible, onClose, onSelectCollege }) {
+  const translateY = useRef(new Animated.Value(0)).current;
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: (_, gestureState) => {
+        return gestureState.dy > 5;
+      },
+      onPanResponderMove: (_, gestureState) => {
+        if (gestureState.dy > 0) {
+          translateY.setValue(gestureState.dy);
+        }
+      },
+      onPanResponderRelease: (_, gestureState) => {
+        if (gestureState.dy > 100) {
+          Animated.timing(translateY, {
+            toValue: 500,
+            duration: 200,
+            useNativeDriver: true,
+          }).start(() => {
+            onClose();
+            translateY.setValue(0);
+          });
+        } else {
+          Animated.spring(translateY, {
+            toValue: 0,
+            useNativeDriver: true,
+          }).start();
+        }
+      },
+    })
+  ).current;
+
   return (
     <Modal
       visible={visible}
@@ -34,14 +67,17 @@ export default function ButtonSheet({ visible, onClose, onSelectCollege }) {
       onRequestClose={onClose}
     >
       <View style={styles.overlay}>
-        <View style={styles.sheetContainer}>
-          <View style={styles.header}>
-            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <Text style={styles.closeText}>✕</Text>
-            </TouchableOpacity>
+        <Animated.View
+          style={[
+            styles.sheetContainer,
+            { transform: [{ translateY }] }
+          ]}
+        >
+          <View style={styles.header} {...panResponder.panHandlers}>
+            <View style={styles.dragHandle} />
           </View>
 
-          <ScrollView style={styles.content}>
+          <View style={styles.content}>
             <View style={styles.grid}>
               {colleges.map((college) => (
                 <TouchableOpacity
@@ -57,8 +93,8 @@ export default function ButtonSheet({ visible, onClose, onSelectCollege }) {
                 </TouchableOpacity>
               ))}
             </View>
-          </ScrollView>
-        </View>
+          </View>
+        </Animated.View>
       </View>
     </Modal>
   );
@@ -76,24 +112,16 @@ const styles = StyleSheet.create({
     maxHeight: '80%',
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 20,
-    borderBottomWidth: 1,
+    marginTop: 10,
+    paddingHorizontal: 10,
     borderBottomColor: '#E0E0E0',
   },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#000',
-  },
-  closeButton: {
-    padding: 5,
-  },
-  closeText: {
-    fontSize: 24,
-    color: '#666',
+  dragHandle: {
+    width: 160,
+    height: 6,
+    backgroundColor: '#D0D0D0',
+    borderRadius: 2,
   },
   content: {
     padding: 20,

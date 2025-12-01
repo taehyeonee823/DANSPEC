@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   downIcon: {
-    width: 15,
-    height: 15,
+    width: 20,
+    height: 20,
   },
 });

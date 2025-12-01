@@ -129,7 +129,7 @@ export default function LoginScreen() {
       <View style={styles.signupContainer}>
         <ThemedText style={styles.signupText}>계정이 아직 없으신가요? </ThemedText>
         <TouchableOpacity onPress={() => router.push('/verification')}>
-          <ThemedText style={styles.signupLink}>회원 가입하기</ThemedText>
+          <ThemedText style={styles.signupLink}>회원가입하기</ThemedText>
         </TouchableOpacity>
       </View>
     </ThemedView>
@@ -228,14 +228,14 @@ const styles = StyleSheet.create({
   },
   signupText: {
     color: '#000',
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: '300',
     fontFamily: 'System',
   },
   signupLink: {
     color: '#4869EC',
-    fontSize: 12,
-    fontWeight: '300',
+    fontSize: 14,
+    fontWeight: '500',
     fontFamily: 'System',
   }
 });
