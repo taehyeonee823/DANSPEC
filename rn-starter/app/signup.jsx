@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity, Text, View, Alert, Image, ScrollView } from 'react-native';
+import { StyleSheet, TextInput, TouchableOpacity, Text, View, Modal, Image, ScrollView } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 
 import { ThemedText } from '@/components/themed-text';
@@ -16,6 +16,10 @@ export default function SignUpScreen() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalTitle, setModalTitle] = useState('');
+  const [modalMessage, setModalMessage] = useState('');
+  const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
     if (params.email) setEmail(params.email);
@@ -68,15 +72,27 @@ export default function SignUpScreen() {
     '예술대학': ['문예창작과', '미술학부', '뉴뮤직학부'],
   };
 
+  const showModal = (title, message, success = false) => {
+    setModalTitle(title);
+    setModalMessage(message);
+    setIsSuccess(success);
+    setModalVisible(true);
+  };
+
+  const handleModalClose = () => {
+    setModalVisible(false);
+    if (isSuccess) {
+      router.push('/login');
+    }
+  };
+
   const handleSignup = () => {
     if (!name || !campus || !department || !major || !grade || !firstJobPreference || !secondJobPreference || !thirdJobPreference) {
-      Alert.alert('⚠️ 오류', '필수 항목들을 입력해주세요.', [{ text: '확인' }]);
+      showModal('⚠️ 오류', '필수 항목들을 입력해주세요.');
       return;
     }
 
-    Alert.alert('✅ 성공', '회원가입이 완료되었습니다.', [
-      { text: '확인', onPress: () => router.push('/login') }
-    ]);
+    showModal('✅ 성공', '회원가입이 완료되었습니다.', true);
   };
 
   return (
@@ -335,6 +351,27 @@ export default function SignUpScreen() {
     </TouchableOpacity>
 
       </ScrollView>
+
+      {/* 모달 */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={handleModalClose}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>{modalTitle}</Text>
+            <Text style={styles.modalMessage}>{modalMessage}</Text>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={handleModalClose}
+            >
+              <Text style={styles.modalButtonText}>확인</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 
@@ -347,14 +384,14 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
         padding: 20,
-        paddingBottom: 50,
+        paddingBottom: 0,
         zIndex: 900
     },
   scrollViewContent: {
     paddingTop: 85,
     paddingLeft: 30,
     paddingRight: 0,
-    paddingBottom: 150,
+    paddingBottom: 30,
   },
   subtitle: {
     fontSize: 18,
@@ -577,5 +614,41 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    width: '80%',
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#000',
+    marginBottom: 20,
+  },
+  modalMessage: {
+    fontSize: 16,
+    color: '#555',
+    textAlign: 'center',
+    marginBottom: 16,
+  },
+  modalButton: {
+    backgroundColor: '#4869EC',
+    paddingVertical: 10,
+    paddingHorizontal: 40,
+    borderRadius: 8,
+  },
+  modalButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
