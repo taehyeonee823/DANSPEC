@@ -17,22 +17,30 @@ export default function Team() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerBackground} />
+      <View
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 105,
+          backgroundColor: '#ffffff',
+          zIndex: 998,
+        }}
+      />
+      <TouchableOpacity
+        style={{ position: 'absolute', top: 60, left: 30, zIndex: 1000 }}
+        onPress={() => router.push('/Home/home')}
+      >
+        <Image
+          source={require('../../assets/images/danspecLogo.png')}
+          style={{ width: 35, height: 35 }}
+          contentFit="contain"
+        />
+      </TouchableOpacity>
+
       <View style={styles.fixedHeader}>
         <CategoryTab />
-        <View style={styles.chipsWrapper}>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.chipScrollViewContent}
-          >
-            <CategoryChips
-              categories={categories}
-              selectedCategory={selectedCategory}
-              onSelectCategory={setSelectedCategory}
-            />
-          </ScrollView>
-        </View>
       </View>
 
       <ScrollView style={styles.contentArea} contentContainerStyle={styles.scrollContent}>
@@ -47,23 +55,10 @@ export default function Team() {
           />
         ))}
       </ScrollView>
-
-      <TouchableOpacity
-        style={styles.floatingButton}
-        onPress={() => router.push('/Team/teamRecruitmentForm')}
-      >
-        <Image
-          source={require('@/assets/images/plusBotton.png')}
-          style={styles.plusIcon}
-        />
-      </TouchableOpacity>
-
       <NaviBar currentPage="team" />
-      
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -74,13 +69,13 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    height: 180,
+    height: 150,
     backgroundColor: '#FFFFFF',
     zIndex: 998,
   },
   fixedHeader: {
     position: 'absolute',
-    top: 0,
+    top: 35,
     left: 0,
     right: 0,
     backgroundColor: '#FFFFFF',
@@ -88,7 +83,7 @@ const styles = StyleSheet.create({
   },
   contentArea: {
     flex: 1,
-    marginTop: 210,
+    marginTop: 160,
   },
   scrollContent: {
     paddingBottom: 120,
@@ -96,38 +91,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginTop: 60,
+    marginTop: 80,
     marginLeft: 20,
     marginBottom: 20,
     paddingTop: 10,
     color: '#000',
     textAlign: 'left',
-  },
-  chipsWrapper: {
-    paddingTop: 15,
-    paddingLeft: 15,
-  },
-  chipScrollViewContent: {
-    paddingRight: 30,
-  },
-  floatingButton: {
-    position: 'absolute',
-    right: 20,
-    bottom: 110, 
-    width: 60,
-    height: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    zIndex: 999, 
-  },
-  plusIcon: {
-    width: 60,
-    height: 60,
-    resizeMode: 'contain',
   },
 });

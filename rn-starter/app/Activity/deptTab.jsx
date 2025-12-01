@@ -100,7 +100,7 @@ export default function DeptTab({ selectedDepartment, onSelectDepartment }) {
 
 const styles = StyleSheet.create({
   wrapper: {
-    paddingTop: 100,
+    paddingTop: 68,
     flexDirection: 'row',
   },
   scrollView: {
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   },
   tabText: {
     textAlign: 'center',
-    paddingVertical: 14,
+    paddingVertical: 10,
     fontSize: 16,
     fontWeight: '700',
   },
