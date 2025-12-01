@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, Text, View, Alert, Image, ScrollView } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -9,12 +9,20 @@ import { API_ENDPOINTS } from '@/config/api';
 
 export default function SignUpScreen() {
   const router = useRouter();
+  const params = useLocalSearchParams();
+
   const [email, setEmail] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [passwordMatch, setPasswordMatch] = useState(true);
   const [name, setName] = useState('');
+
+  useEffect(() => {
+    if (params.email) setEmail(params.email);
+    if (params.verificationCode) setVerificationCode(params.verificationCode);
+    if (params.password) setPassword(params.password);
+    if (params.confirmPassword) setConfirmPassword(params.confirmPassword);
+  }, [params]);
   const [campus, setCampus] = useState('');
   const [department, setDepartment] = useState('');
   const [showDepartmentModal, setShowDepartmentModal] = useState(false);
@@ -60,72 +68,14 @@ export default function SignUpScreen() {
     '예술대학': ['문예창작과', '미술학부', '뉴뮤직학부'],
   };
 
-  const handleCheckDuplicate = () => {
-    if (!email) {
-      Alert.alert('⚠️ 오류', '이메일을 입력하세요.', [
-        { text: '닫기', style: 'cancel' }
-      ]);
-      return;
-    }
-    if (!email.includes('@dankook.ac.kr')) {
-      Alert.alert('⚠️ 오류', '단국대학교 이메일 주소를 입력하세요.', [
-        { text: '닫기', style: 'cancel' }
-      ]);
-      return;
-    }
-    Alert.alert('✅ 확인', '4자리 인증코드를 메일로 발송하였습니다. 인증코드를 입력해주세요.', [
-      { text: '확인', style: 'default' }
-    ]);
-  };
-
-  const validatePassword = (text) => {
-    setPassword(text);
-
-    if (text.length > 0 && text.length < 7) { return; }
-
-  const hasLetter = /[a-zA-Z]/.test(text);
-
-  const hasNumber = /[0-9]/.test(text);
-
-    if (text.length >= 7 && (!hasLetter || !hasNumber)) {return;}
-
-    if (confirmPassword) {
-      setPasswordMatch(text === confirmPassword);
-    }
-  };
-
-  const handleConfirmPasswordChange = (text) => {
-    setConfirmPassword(text);
-    // 비밀번호 일치 여부 확인
-    setPasswordMatch(password === text);
-  };
-
   const handleSignup = () => {
-    if (!email || !email.includes('@dankook.ac.kr')) {
-      Alert.alert('⚠️ 오류', '단국대학교 이메일을 입력해주세요.', [{ text: '확인' }]);
-      return;
-    }
-    if (!verificationCode || !name || !campus || !department || !major || !grade || !firstJobPreference || !secondJobPreference || !thirdJobPreference) {
+    if (!name || !campus || !department || !major || !grade || !firstJobPreference || !secondJobPreference || !thirdJobPreference) {
       Alert.alert('⚠️ 오류', '필수 항목들을 입력해주세요.', [{ text: '확인' }]);
-      return;
-    }
-    if (!password || password.length < 7) {
-      Alert.alert('⚠️ 오류', '비밀번호는 7자리 이상이어야 합니다.', [{ text: '확인' }]);
-      return;
-    }
-    const hasLetter = /[a-zA-Z]/.test(password);
-    const hasNumber = /[0-9]/.test(password);
-    if (!hasLetter || !hasNumber) {
-      Alert.alert('⚠️ 오류', '비밀번호는 영문과 숫자를 포함해야 합니다.', [{ text: '확인' }]);
-      return;
-    }
-    if (!confirmPassword || password !== confirmPassword) {
-      Alert.alert('⚠️ 오류', '비밀번호가 일치하지 않습니다.', [{ text: '확인' }]);
       return;
     }
 
     Alert.alert('✅ 성공', '회원가입이 완료되었습니다.', [
-      { text: '확인', onPress: () => router.back() }
+      { text: '확인', onPress: () => router.push('/login') }
     ]);
   };
 
@@ -149,74 +99,11 @@ export default function SignUpScreen() {
           <Text style={{ fontSize: 28, color: '#000', fontWeight: 'bold' }}>←</Text>
       </TouchableOpacity>
 
-      <ScrollView style={styles.container} 
+      <ScrollView style={styles.container}
         contentContainerStyle={styles.scrollViewContent}>
       <ThemedText style={styles.subtitle}>내 정보 입력을 완료해주세요. {'\n'}드림이가 딱 맞는 활동을 추천해 드릴게요.</ThemedText>
 
-      <ThemedText style={styles.text}>* 아이디</ThemedText>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.input}
-          placeholder="단국대 이메일 주소(@dankook.ac.kr)"
-          placeholderTextColor="#999"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          autoComplete="none"
-        />
-        <TouchableOpacity style={styles.checkButton} onPress={handleCheckDuplicate}>
-          <ThemedText style={styles.checkButtonText}>인증</ThemedText>
-        </TouchableOpacity>
-      </View>
-    <ThemedText style={styles.text}>* 인증번호</ThemedText>
-    <View style={styles.inputContainer2}>
-      <TextInput
-          style={styles.input}
-          placeholder="인증번호 입력"
-          placeholderTextColor="#999"
-          value={verificationCode}
-          onChangeText={setVerificationCode}
-          keyboardType="number-pad"
-          autoCapitalize="none"
-        />
-      </View>
-    <ThemedText style={styles.text}>* 비밀번호</ThemedText>
-    <View style={styles.inputContainer3}>
-      <TextInput
-          style={styles.input}
-          placeholder="비밀번호 입력 (7자리 이상 영문 숫자 혼합)"
-          placeholderTextColor="#999"
-          value={password}
-          onChangeText={validatePassword}
-          secureTextEntry
-          autoCapitalize="none"
-          autoComplete="off"
-          textContentType="none"
-        />
-      </View>
-
-    <ThemedText style={styles.text}>* 비밀번호 재확인</ThemedText>
-    <View style={styles.inputContainer3}>
-      <TextInput
-          style={styles.input}
-          placeholder="비밀번호 재입력"
-          placeholderTextColor="#999"
-          value={confirmPassword}
-          onChangeText={handleConfirmPasswordChange}
-          secureTextEntry
-          autoCapitalize="none"
-          autoComplete="off"
-          textContentType="none"
-        />
-      </View>
-    {!passwordMatch && confirmPassword.length >= 0 && (
-      <ThemedText style={styles.errorText}>비밀번호가 일치하지 않습니다</ThemedText>
-    )}
-    {passwordMatch && (
-      <ThemedText style={styles.correctText}>비밀번호가 일치합니다</ThemedText>
-    )}
-     <ThemedText style={styles.text}>* 이름</ThemedText>
+      <ThemedText style={styles.text}>* 이름</ThemedText>
     <View style={styles.inputContainer3}>
       <TextInput
           style={styles.input}

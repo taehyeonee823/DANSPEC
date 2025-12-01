@@ -1,0 +1,288 @@
+import { useState } from 'react';
+import { StyleSheet, TextInput, TouchableOpacity, Text, View, Alert } from 'react-native';
+import { useRouter } from 'expo-router';
+
+import { ThemedText } from '@/components/themed-text';
+import { ThemedView } from '@/components/themed-view';
+
+export default function VerificationScreen() {
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [verificationCode, setVerificationCode] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordMatch, setPasswordMatch] = useState(true);
+
+  const handleCheckDuplicate = () => {
+    if (!email) {
+      Alert.alert('⚠️ 오류', '이메일을 입력하세요.', [
+        { text: '닫기', style: 'cancel' }
+      ]);
+      return;
+    }
+    if (!email.includes('@dankook.ac.kr')) {
+      Alert.alert('⚠️ 오류', '단국대학교 이메일 주소를 입력하세요.', [
+        { text: '닫기', style: 'cancel' }
+      ]);
+      return;
+    }
+    Alert.alert('✅ 확인', '6자리 인증코드를 메일로 발송하였습니다. 인증코드를 입력해주세요.', [
+      { text: '확인', style: 'default' }
+    ]);
+  };
+
+  const validatePassword = (text) => {
+    setPassword(text);
+
+    if (text.length > 0 && text.length < 7) { return; }
+
+    const hasLetter = /[a-zA-Z]/.test(text);
+    const hasNumber = /[0-9]/.test(text);
+
+    if (text.length >= 7 && (!hasLetter || !hasNumber)) { return; }
+
+    if (confirmPassword) {
+      setPasswordMatch(text === confirmPassword);
+    }
+  };
+
+  const handleConfirmPasswordChange = (text) => {
+    setConfirmPassword(text);
+    setPasswordMatch(password === text);
+  };
+
+  const handleNext = () => {
+    if (!email || !email.includes('@dankook.ac.kr')) {
+      Alert.alert('⚠️ 오류', '단국대학교 이메일을 입력해주세요.', [{ text: '확인' }]);
+      return;
+    }
+    if (!verificationCode) {
+      Alert.alert('⚠️ 오류', '인증번호를 입력해주세요.', [{ text: '확인' }]);
+      return;
+    }
+    if (!password || password.length < 7) {
+      Alert.alert('⚠️ 오류', '비밀번호는 7자리 이상이어야 합니다.', [{ text: '확인' }]);
+      return;
+    }
+    const hasLetter = /[a-zA-Z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    if (!hasLetter || !hasNumber) {
+      Alert.alert('⚠️ 오류', '비밀번호는 영문과 숫자를 포함해야 합니다.', [{ text: '확인' }]);
+      return;
+    }
+    if (!confirmPassword || password !== confirmPassword) {
+      Alert.alert('⚠️ 오류', '비밀번호가 일치하지 않습니다.', [{ text: '확인' }]);
+      return;
+    }
+
+    // 데이터를 전달하며 signup으로 이동
+    router.push({
+      pathname: '/signup',
+      params: {
+        email,
+        verificationCode,
+        password,
+        confirmPassword
+      }
+    });
+  };
+
+  return (
+    <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
+      <View style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: 105,
+        backgroundColor: '#ffffff',
+        zIndex: 998
+      }} />
+
+      <TouchableOpacity
+        style={{ position: 'absolute', top: 60, left: 20, zIndex: 999, padding: 8 }}
+        onPress={() => router.back()}
+      >
+        <Text style={{ fontSize: 28, color: '#000', fontWeight: 'bold' }}>←</Text>
+      </TouchableOpacity>
+
+      <ThemedView style={styles.container}>
+        <ThemedText style={styles.subtitle}>
+          단스펙 회원가입을 위해{'\n'}이메일과 비밀번호를 입력해 주세요.
+        </ThemedText>
+
+        <ThemedText style={styles.text}>* 아이디</ThemedText>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="단국대 이메일 주소(@dankook.ac.kr)"
+            placeholderTextColor="#999"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoComplete="none"
+          />
+          <TouchableOpacity style={styles.checkButton} onPress={handleCheckDuplicate}>
+            <ThemedText style={styles.checkButtonText}>인증 요청</ThemedText>
+          </TouchableOpacity>
+        </View>
+
+        <ThemedText style={styles.text}>* 인증번호</ThemedText>
+        <View style={styles.inputContainer2}>
+          <TextInput
+            style={styles.input}
+            placeholder="인증번호 입력"
+            placeholderTextColor="#999"
+            value={verificationCode}
+            onChangeText={setVerificationCode}
+            keyboardType="number-pad"
+            autoCapitalize="none"
+          />
+        </View>
+
+        <ThemedText style={styles.text}>* 비밀번호</ThemedText>
+        <View style={styles.inputContainer3}>
+          <TextInput
+            style={styles.input}
+            placeholder="비밀번호 입력 (7자리 이상 영문 숫자 혼합)"
+            placeholderTextColor="#999"
+            value={password}
+            onChangeText={validatePassword}
+            secureTextEntry
+            autoCapitalize="none"
+            autoComplete="off"
+            textContentType="none"
+          />
+        </View>
+
+        <ThemedText style={styles.text}>* 비밀번호 재확인</ThemedText>
+        <View style={styles.inputContainer3}>
+          <TextInput
+            style={styles.input}
+            placeholder="비밀번호 재입력"
+            placeholderTextColor="#999"
+            value={confirmPassword}
+            onChangeText={handleConfirmPasswordChange}
+            secureTextEntry
+            autoCapitalize="none"
+            autoComplete="off"
+            textContentType="none"
+          />
+        </View>
+        {!passwordMatch && confirmPassword.length > 0 && (
+          <ThemedText style={styles.errorText}>비밀번호가 일치하지 않습니다</ThemedText>
+        )}
+        {passwordMatch && confirmPassword.length > 0 && (
+          <ThemedText style={styles.correctText}>비밀번호가 일치합니다</ThemedText>
+        )}
+
+        <TouchableOpacity
+          style={styles.nextButton}
+          onPress={handleNext}
+        >
+          <ThemedText style={styles.nextButtonText}>다음</ThemedText>
+        </TouchableOpacity>
+      </ThemedView>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#ffffff',
+    paddingTop: 105,
+    paddingLeft: 30,
+    paddingRight: 30,
+  },
+  subtitle: {
+    fontSize: 18,
+    fontWeight: '500',
+    color: '#000',
+    textAlign: 'left',
+    marginTop: 10, 
+    marginBottom: 30
+  },
+  text: {
+    fontSize: 14,
+    fontWeight: '300',
+    color: '#000',
+    textAlign: 'left',
+    marginBottom: 5,
+  },
+  errorText: {
+    fontSize: 12,
+    fontWeight: '400',
+    color: '#FF3B30',
+    textAlign: 'left',
+    marginTop: -10,
+    marginBottom: 15,
+  },
+  correctText: {
+    fontSize: 12,
+    fontWeight: '400',
+    color: 'green',
+    textAlign: 'left',
+    marginTop: -10,
+    marginBottom: 15,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    marginBottom: 15,
+  },
+  inputContainer2: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '40%',
+    marginBottom: 15,
+  },
+  inputContainer3: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    marginBottom: 15,
+  },
+  input: {
+    flex: 1,
+    height: 40,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    fontSize: 16,
+    backgroundColor: '#fff',
+    marginRight: 10,
+  },
+  checkButton: {
+    backgroundColor: '#4869EC',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 25,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  checkButtonText: {
+    color: '#fff',
+    fontSize: 14,
+    marginTop: -2,
+    fontWeight: '600',
+  },
+  nextButton: {
+    width: '100%',
+    height: 50,
+    backgroundColor: '#4869EC',
+    borderRadius: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 30,
+  },
+  nextButtonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+});

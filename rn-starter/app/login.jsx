@@ -128,7 +128,7 @@ export default function LoginScreen() {
       </TouchableOpacity>
       <View style={styles.signupContainer}>
         <ThemedText style={styles.signupText}>계정이 아직 없으신가요? </ThemedText>
-        <TouchableOpacity onPress={() => router.push('/signup')}>
+        <TouchableOpacity onPress={() => router.push('/verification')}>
           <ThemedText style={styles.signupLink}>회원 가입하기</ThemedText>
         </TouchableOpacity>
       </View>

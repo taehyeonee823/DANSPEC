@@ -93,7 +93,7 @@ export default function Home() {
           </View>
         </ScrollView>
       </View>
-      <ThemedText style={styles.title}>name 님에게 딱 맞는 활동</ThemedText>
+      <ThemedText style={styles.title}>name 님을 위한 맞춤활동</ThemedText>
 
       <NaviBar currentPage="home" />
     </View>

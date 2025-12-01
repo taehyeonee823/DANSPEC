@@ -15,7 +15,7 @@ export default function Activity() {
   const [selectedDepartment, setSelectedDepartment] = useState("전체");
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(false);
-  const categories = ["전체", "공모전", "대외 활동", "교내", "자율 프로젝트"];
+  const categories = ["전체", "공모전", "대외 활동", "교내"];
 
   // 카테고리 한글 -> API 값 매핑
   const categoryMapping = {
@@ -23,7 +23,6 @@ export default function Activity() {
     "공모전": "CONTEST",
     "대외 활동": "EXTERNAL",
     "교내": "SCHOOL",
-    "자율 프로젝트": "PROJECT"
   };
 
   // API에서 데이터 가져오기

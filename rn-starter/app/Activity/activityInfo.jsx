@@ -143,7 +143,7 @@ export default function ActivityInfo() {
           {eventData.detailUrl && (
             <View style={styles.section}>
               <TouchableOpacity onPress={() => Linking.openURL(eventData.detailUrl)}>
-                <Text style={styles.urlText}>상세페이지로 가기</Text>
+                <Text style={styles.urlText}>상세 페이지로 가기</Text>
               </TouchableOpacity>
             </View>
           )}
