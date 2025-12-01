@@ -159,6 +159,9 @@ export default function ActivityInfo() {
             </View>
           )}
 
+          <View style={styles.section}>
+            <Text style={styles.headerTitle}>이 활동으로 모집중인 팀</Text>
+          </View>
 
         </View>
       </ScrollView>
@@ -332,6 +335,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#000',
     textDecorationLine: 'underline',
+    marginBottom: 16,
   },
   errorText: {
     fontSize: 16,

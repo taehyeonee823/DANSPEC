@@ -53,7 +53,26 @@ export default function My() {
         contentContainerStyle={styles.scrollViewContent}
         showsVerticalScrollIndicator={false}
       >
-        <ThemedText style={styles.title}>이곳은 마이 화면 입니다.</ThemedText>
+        {/* 프로필 박스 */}
+        <View style={styles.profileBox}>
+          <View style={styles.profileImageContainer}>
+            <Image
+              source={require('@/assets/images/user.svg')}
+              style={styles.profileImage}
+              contentFit="cover"
+            />
+          </View>
+          <View style={styles.profileInfo}>
+            <Text style={styles.profileName}>지은</Text>
+            <Text style={styles.profileInfo}>SW융합대학 통계데이터사이언스학과 3학년</Text>
+            <Text style={styles.profileJob}>희망직무: 데이터분석가 (삼성전자)</Text>
+          </View>
+        </View>
+
+ <      TouchableOpacity style={styles.button} onPress={() => router.push('')}>
+          <ThemedText style={styles.buttonText}>회원정보 수정</ThemedText>
+        </TouchableOpacity>
+
       </ScrollView>
 
       <NaviBar currentPage="my" />
@@ -75,11 +94,59 @@ const styles = StyleSheet.create({
     paddingRight: 30,
     paddingBottom: 150,
   },
-  title: {
+  profileBox: {
+    backgroundColor: '#FFFFFF',
+    marginTop: 40,
+    marginBottom: 24,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  profileImageContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    overflow: 'hidden',
+    marginRight: 16,
+    backgroundColor: '#F0F0F0',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  profileImage: {
+    width: '60%',
+    height: '60%',
+  },
+  profileInfo: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  profileName: {
     fontSize: 24,
-    fontWeight: 'bold',
-    marginTop: 30,
+    fontWeight: '700',
     color: '#000',
-    textAlign: 'left',
+    marginBottom: 6,
+  },
+  profileInfo: {
+    fontSize: 16,
+    fontWeight: '400',
+    color: '#000',
+    marginBottom: 4,
+  },
+  profileJob: {
+    fontSize: 14,
+    fontWeight: '300',
+    color: '#000',
+  },
+  button: {
+    backgroundColor: '#fff',
+    paddingVertical: 10,
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: '#A2B3F4',
+    alignItems: 'center'
+  },
+  buttonText: {
+    color: '#4869EC',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
