@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
   },
   collegeButton: {
     width: '48%',
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 10,
     marginBottom: 10,
