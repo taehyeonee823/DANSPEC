@@ -106,12 +106,12 @@ export default function VerificationScreen() {
         <Text style={{ fontSize: 28, color: '#000', fontWeight: 'bold' }}>←</Text>
       </TouchableOpacity>
 
-      <ThemedView style={styles.container}>
-        <ThemedText style={styles.subtitle}>
-          단스펙 회원가입을 위해{'\n'}이메일과 비밀번호를 입력해 주세요.
-        </ThemedText>
+      <View style={styles.container}>
+        <View style={{ height: 48 }} />
+          <Text style={styles.title}>
+            단스펙 회원가입을 위해{'\n'}이메일과 비밀번호를 입력해 주세요.
+          </Text>
 
-        <ThemedText style={styles.text}>* 아이디</ThemedText>
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
@@ -128,7 +128,7 @@ export default function VerificationScreen() {
           </TouchableOpacity>
         </View>
 
-        <ThemedText style={styles.text}>* 인증번호</ThemedText>
+
         <View style={styles.inputContainer2}>
           <TextInput
             style={styles.input}
@@ -141,7 +141,6 @@ export default function VerificationScreen() {
           />
         </View>
 
-        <ThemedText style={styles.text}>* 비밀번호</ThemedText>
         <View style={styles.inputContainer3}>
           <TextInput
             style={styles.input}
@@ -156,11 +155,10 @@ export default function VerificationScreen() {
           />
         </View>
 
-        <ThemedText style={styles.text}>* 비밀번호 재확인</ThemedText>
-        <View style={styles.inputContainer3}>
+        <View style={styles.inputContainer2}>
           <TextInput
             style={styles.input}
-            placeholder="비밀번호 재입력"
+            placeholder="새 비밀번호 확인"
             placeholderTextColor="#999"
             value={confirmPassword}
             onChangeText={handleConfirmPasswordChange}
@@ -183,7 +181,7 @@ export default function VerificationScreen() {
         >
           <ThemedText style={styles.nextButtonText}>다음</ThemedText>
         </TouchableOpacity>
-      </ThemedView>
+      </View>
     </View>
   );
 }
@@ -193,8 +191,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ffffff',
     paddingTop: 105,
-    paddingLeft: 30,
+    paddingLeft: 24,
     paddingRight: 30,
+  },
+  title: {
+    fontSize: 20,
+    fontFamily: 'Pretendard-SemiBold',
+    color: '#1A1A1A',
+    textAlign: 'left',
   },
   subtitle: {
     fontSize: 18,
@@ -206,7 +210,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 14,
-    fontWeight: '300',
+    fontFamily: 'Pretendard-Regular',
     color: '#000',
     textAlign: 'left',
     marginBottom: 5,
@@ -231,24 +235,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
-    marginBottom: 15,
+    marginTop: 56,
   },
   inputContainer2: {
     flexDirection: 'row',
     alignItems: 'center',
     width: '40%',
-    marginBottom: 15,
+    marginTop: 12,
   },
   inputContainer3: {
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
-    marginBottom: 15,
+    marginTop: 32,
   },
   input: {
     flex: 1,
     height: 40,
-    borderWidth: 1,
+    borderBottomWidth: 1,
     borderColor: '#ddd',
     borderRadius: 8,
     paddingHorizontal: 15,
@@ -257,16 +261,17 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   checkButton: {
-    backgroundColor: '#4869EC',
+    backgroundColor: '#ffffff',
     paddingHorizontal: 15,
     paddingVertical: 10,
-    borderRadius: 25,
+    borderBottomWidth: 1,
+    borderBottomColor: '#CCCCCC',
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
   },
   checkButtonText: {
-    color: '#fff',
+    color: '#1A1A1A',
     fontSize: 14,
     marginTop: -2,
     fontWeight: '600',
@@ -274,15 +279,17 @@ const styles = StyleSheet.create({
   nextButton: {
     width: '100%',
     height: 50,
-    backgroundColor: '#4869EC',
-    borderRadius: 25,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#3E6AF4',
+    borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 30,
+    marginTop: 56,
   },
   nextButtonText: {
-    color: '#fff',
+    color: '#3E6AF4',
     fontSize: 18,
-    fontWeight: 'bold',
+    fontFamily: 'Pretendard-Regular',
   },
 });

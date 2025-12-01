@@ -1,6 +1,7 @@
 import { StyleSheet, Text } from 'react-native';
-
 import { useThemeColor } from '@/hooks/use-theme-color';
+import * as Font from 'expo-font';
+import { useEffect, useState } from 'react';
 
 export function ThemedText({
   style,
@@ -10,6 +11,20 @@ export function ThemedText({
   ...rest
 }) {
   const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+  
+    useEffect(() => {
+      Font.loadAsync({
+        'Pretendard-Regular': require('../assets/fonts/Pretendard-Regular.ttf'),
+        'Pretendard-Medium': require('../assets/fonts/Pretendard-Medium.ttf'),
+        'Pretendard-SemiBold': require('../assets/fonts/Pretendard-SemiBold.ttf'),
+        'Pretendard-Bold': require('../assets/fonts/Pretendard-Bold.ttf'),
+      }).then(() => setFontsLoaded(true));
+    }, []);
+  
+    if (!fontsLoaded) {
+      return null; 
+    }
 
   return (
     <Text
@@ -38,8 +53,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   title: {
-    fontSize: 32,
-    fontWeight: 'bold',
+    fontSize: 20,
+    fontFamily: 'Pretendard-SemiBold',
     lineHeight: 32,
   },
   subtitle: {
