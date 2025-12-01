@@ -56,7 +56,7 @@ export default function ModPassword() {
           <Text style={styles.backIcon}>←</Text>
         </TouchableOpacity>
         <View style={styles.headerCenter}>
-          <Text style={styles.headerTitle}>활동 정보</Text>
+          <Text style={styles.headerTitle}>비밀번호 변경</Text>
         </View>
         <View style={styles.headerRight} />
       </View>
