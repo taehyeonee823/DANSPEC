@@ -6,6 +6,16 @@ import { useRouter } from 'expo-router';
 export default function activityApplyBox({ event, tag, title, summarizedDescription, dueDate }) {
   const router = useRouter();
 
+  // 카테고리 한글 변환
+  const getCategoryName = (category) => {
+    const categoryMap = {
+      'CONTEST': '공모전',
+      'EXTERNAL': '대외 활동',
+      'SCHOOL': '교내'
+    };
+    return categoryMap[category] || category;
+  };
+
   const handlePress = () => {
     router.push({
       pathname: './activityInfo',
@@ -21,7 +31,7 @@ export default function activityApplyBox({ event, tag, title, summarizedDescript
       onPress={handlePress}
     >
       <View style={styles.header}>
-        <Text style={styles.tag}>{tag}</Text>
+        <Text style={styles.tag}>{getCategoryName(tag)}</Text>
         <Text style={styles.dueDate}>{dueDate}</Text>
       </View>
 

@@ -7,7 +7,27 @@ export default function ActivityInfo() {
   const params = useLocalSearchParams();
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
-  const eventData = params.eventData ? JSON.parse(params.eventData) : null;
+  let eventData = params.eventData ? JSON.parse(params.eventData) : null;
+
+  // recommendedTargets가 문자열로 저장되어 있으면 파싱
+  if (eventData && eventData.recommendedTargets && typeof eventData.recommendedTargets === 'string') {
+    try {
+      eventData.recommendedTargets = JSON.parse(eventData.recommendedTargets);
+    } 
+    catch (e) {
+      console.log('recommendedTargets 파싱 실패:', e);
+    }
+  }
+
+  // 카테고리 한글 변환
+  const getCategoryName = (category) => {
+    const categoryMap = {
+      'CONTEST': '공모전',
+      'EXTERNAL': '대외 활동',
+      'SCHOOL': '교내'
+    };
+    return categoryMap[category] || category;
+  };
 
   // 마감일 계산
   const calculateDueDate = (endDate) => {
@@ -25,16 +45,6 @@ export default function ActivityInfo() {
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`;
-  };
-
-  // 기간 계산 (주 단위)
-  const calculateWeeks = (startDate, endDate) => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    const diffTime = end - start;
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    const weeks = Math.ceil(diffDays / 7);
-    return `${weeks}주`;
   };
 
   if (!eventData) {
@@ -121,21 +131,22 @@ export default function ActivityInfo() {
             </View>
           )}
 
-          {/* 상세 설명 */}
-          {eventData.description && (
-            <View style={styles.section}>
-              <TouchableOpacity
-                style={styles.expandableHeader}
-                onPress={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
-              >
-                <Text style={styles.sectionTitle}>상세 설명</Text>
-                <Text style={styles.expandIcon}>
-                  {isDescriptionExpanded ? '▼' : '▶'}
-                </Text>
-              </TouchableOpacity>
-              {isDescriptionExpanded && (
-                <Text style={styles.description}>{eventData.description}</Text>
-              )}
+          {/* 드림이 Tip */}
+          {eventData.recommendedTargets && Array.isArray(eventData.recommendedTargets) && eventData.recommendedTargets.length > 0 && (
+            <View style={styles.tipBox}>
+              <Image
+                source={require('@/assets/images/dreame.png')}
+                style={styles.dreameIcon}
+              />
+              <View style={styles.tipContent}>
+                <Text style={styles.tipTitle}>드림이 Tip</Text>
+                <Text style={styles.tipSubtitle}>이런 학생에게 추천해요!</Text>
+                <View style={styles.targetList}>
+                  {eventData.recommendedTargets.map((target, index) => (
+                    <Text key={index} style={styles.targetItem}>• {target}</Text>
+                  ))}
+                </View>
+              </View>
             </View>
           )}
 
@@ -211,7 +222,7 @@ const styles = StyleSheet.create({
   },
   dateBox: {
     borderWidth: 2,
-    borderColor: '#3E64F4',
+    borderColor: '#DAE1FB',
     borderRadius: 12,
     padding: 16,
     marginBottom: 24,
@@ -257,6 +268,45 @@ const styles = StyleSheet.create({
     width: '100%',
     height: undefined,
     aspectRatio: 1,
+  },
+  tipBox: {
+    borderWidth: 2,
+    borderColor: '#DAE1FB',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 24,
+    backgroundColor: '#F8FAFF',
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
+  dreameIcon: {
+    width: 40,
+    height: 40,
+    marginRight: 12,
+  },
+  tipContent: {
+    flex: 1,
+  },
+  tipTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#000',
+    marginBottom: 8,
+  },
+  tipSubtitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#333',
+    marginBottom: 8,
+  },
+  targetList: {
+    marginTop: 4,
+  },
+  targetItem: {
+    fontSize: 13,
+    color: '#000',
+    lineHeight: 22,
+    marginBottom: 4,
   },
   expandableHeader: {
     flexDirection: 'row',
