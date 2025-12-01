@@ -1,13 +1,13 @@
 import React, { useRef, useState } from 'react';
 import { View, Text, Pressable, Animated, StyleSheet } from 'react-native';
 
-const categories = ['전체', '공모전', '대외활동', '교내활동'];
+const categories = ['전체', '공모전', '대외활동', '교내활동', '기타'];
 
 export default function CategoryTab() {
   const [activeIndex, setActiveIndex] = useState(0);
   const underlineX = useRef(new Animated.Value(0)).current;
 
-  const tabWidth = 108;
+  const tabWidth = 86;
 
   const onPressTab = (index) => {
     setActiveIndex(index);
