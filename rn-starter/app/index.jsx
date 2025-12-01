@@ -25,7 +25,7 @@ export default function LoadingScreen() {
       />
       <ThemedText style={styles.loadingText}>DANSPEC</ThemedText>
       <ThemedText style={styles.loadingSubtext}>단국대 학생을 위한 스펙 업그레이드 네비게이터</ThemedText>
-      <ActivityIndicator size="large" color="#fff" style={styles.spinner} />
+      <ActivityIndicator size="large" color="#4869EC" style={styles.spinner} />
     </ThemedView>
   );
 }
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#215198',
+    backgroundColor: '#fff',
     padding: 30,
   },
   loadingLogo: {
@@ -46,17 +46,18 @@ const styles = StyleSheet.create({
   loadingText: {
     fontSize: 25,
     fontWeight: 'bold',
-    color: '#fff',
+    color: '#000',
     marginBottom: 15,
   },
   loadingSubtext: {
     fontSize: 16,
-    color: '#fff',
+    color: '#000',
     textAlign: 'center',
     marginBottom: 50,
     paddingHorizontal: 20,
   },
   spinner: {
     marginTop: 30,
+    color: '#000',
   },
 });
