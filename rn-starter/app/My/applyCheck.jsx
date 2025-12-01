@@ -45,43 +45,36 @@ export default function My() {
       {/* 화살표와 글씨를 한 행에 배치, 글씨 중앙 정렬 */}
       <View
         style={{
-          position: 'absolute',
-          top: 60,
-          left: 20,
-          right: 20,
+          marginTop: 70,
+          marginBottom: 10,
           flexDirection: 'row',
           alignItems: 'center',
-          zIndex: 999,
           justifyContent: 'center',
+          zIndex: 999,
+          position: 'relative',
         }}
       >
         <TouchableOpacity
           style={{
-            padding: 8,
             position: 'absolute',
-            left: 0,
+            left: 20,
+            padding: 8,
           }}
           onPress={() => router.back()}
         >
           <Text style={{ fontSize: 28, color: '#000', fontWeight: 'bold' }}>←</Text>
         </TouchableOpacity>
-        <View style={{ flex: 1, alignItems: 'center' }}>
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: '600',
-              color: '#000',
-              textAlign: 'center',
-            }}
-          >
-            멤버 관리하기
-          </Text>
-        </View>
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: '600',
+            color: '#000',
+          }}
+        >
+          멤버 관리하기
+        </Text>
       </View>
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={styles.scrollViewContent}
-      >
+      <ScrollView style={styles.container}>
         <View style={[ { flexDirection: 'row', alignItems: 'center' }]}>
           <Image
             source={require('../../assets/images/bell.png')}
@@ -138,17 +131,11 @@ export default function My() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 20,
     flex: 1,
-    backgroundColor: '#FFFFFF',
-  },
-  scrollView: {
-    flex: 1,
-  },
-  scrollViewContent: {
-    paddingTop: 70,
+    paddingTop: 10,
     paddingLeft: 30,
     paddingRight: 30,
+    backgroundColor: '#FFFFFF',
     paddingBottom: 150,
   },
   subtitle: {

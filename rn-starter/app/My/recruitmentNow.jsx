@@ -27,7 +27,7 @@ export default function RecruitmentNow() {
       <View
         style={{
           position: 'absolute',
-          top: 60,
+          top: 70,
           left: 20,
           right: 20,
           flexDirection: 'row',
@@ -49,7 +49,7 @@ export default function RecruitmentNow() {
         <View style={{ flex: 1, alignItems: 'center' }}>
           <Text
             style={{
-              fontSize: 18,
+              fontSize: 20,
               fontWeight: '600',
               color: '#000',
               textAlign: 'center',
@@ -60,7 +60,7 @@ export default function RecruitmentNow() {
         </View>
       </View>
 
-      <View style={{ position: 'absolute', top: 95, left: 30, zIndex: 999 }}>
+      <View style={{ position: 'absolute', top: 115, left: 30, zIndex: 999 }}>
         <Text style={styles.title}>현재 모집중</Text>
       </View>
 
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollViewContent: {
-    paddingTop: 140,
+    paddingTop: 160,
     paddingLeft: 30,
     paddingRight: 30,
     paddingBottom: 150,

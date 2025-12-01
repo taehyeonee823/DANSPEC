@@ -50,15 +50,24 @@ export default function ModPassword() {
     <View style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity
-          style={styles.backButton}
+          style={{
+            position: 'absolute',
+            left: 20,
+            padding: 8,
+          }}
           onPress={() => router.back()}
         >
-          <Text style={styles.backIcon}>←</Text>
+          <Text style={{ fontSize: 28, color: '#000', fontWeight: 'bold' }}>←</Text>
         </TouchableOpacity>
-        <View style={styles.headerCenter}>
-          <Text style={styles.headerTitle}>비밀번호 변경</Text>
-        </View>
-        <View style={styles.headerRight} />
+        <Text
+          style={{
+            fontSize: 20,
+            fontWeight: '600',
+            color: '#000',
+          }}
+        >
+          비밀번호 변경
+        </Text>
       </View>
       
       <View style={styles.content}>
@@ -139,30 +148,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   header: {
-    paddingTop: 60,
-    paddingHorizontal: 20,
+    marginTop: 70,
+    marginBottom: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
-  },
-  backIcon: {
-    fontSize: 28,
-    color: '#000',
-    fontWeight: 'bold',
-  },
-    headerCenter: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#000',
-  },
-  headerRight: {
-    width: 29,
+    justifyContent: 'center',
+    position: 'relative',
   },
   content: {
     flex: 1,
