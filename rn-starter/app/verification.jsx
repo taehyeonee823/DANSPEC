@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity, Text, View, Alert } from 'react-native';
+import { StyleSheet, TextInput, TouchableOpacity, Text, View, Modal } from 'react-native';
 import { useRouter } from 'expo-router';
 
 import { ThemedText } from '@/components/themed-text';
@@ -12,23 +12,43 @@ export default function VerificationScreen() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordMatch, setPasswordMatch] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalTitle, setModalTitle] = useState('');
+  const [modalMessage, setModalMessage] = useState('');
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const showModal = (title, message, success = false) => {
+    setModalTitle(title);
+    setModalMessage(message);
+    setIsSuccess(success);
+    setModalVisible(true);
+  };
+
+  const handleModalClose = () => {
+    setModalVisible(false);
+    if (isSuccess) {
+      router.push({
+        pathname: '/signup',
+        params: {
+          email,
+          verificationCode,
+          password,
+          confirmPassword
+        }
+      });
+    }
+  };
 
   const handleCheckDuplicate = () => {
     if (!email) {
-      Alert.alert('⚠️ 오류', '이메일을 입력하세요.', [
-        { text: '닫기', style: 'cancel' }
-      ]);
+      showModal('⚠️ 오류', '이메일을 입력하세요.');
       return;
     }
     if (!email.includes('@dankook.ac.kr')) {
-      Alert.alert('⚠️ 오류', '단국대학교 이메일 주소를 입력하세요.', [
-        { text: '닫기', style: 'cancel' }
-      ]);
+      showModal('⚠️ 오류', '단국대학교 이메일 주소를 입력하세요.');
       return;
     }
-    Alert.alert('✅ 확인', '6자리 인증코드를 메일로 발송하였습니다. 인증코드를 입력해주세요.', [
-      { text: '확인', style: 'default' }
-    ]);
+    showModal('✅ 확인', '6자리 인증코드를 메일로 발송하였습니다. 인증코드를 입력해주세요.');
   };
 
   const validatePassword = (text) => {
@@ -53,38 +73,30 @@ export default function VerificationScreen() {
 
   const handleNext = () => {
     if (!email || !email.includes('@dankook.ac.kr')) {
-      Alert.alert('⚠️ 오류', '단국대학교 이메일을 입력해주세요.', [{ text: '확인' }]);
+      showModal('⚠️ 오류', '단국대학교 이메일을 입력해주세요.');
       return;
     }
     if (!verificationCode) {
-      Alert.alert('⚠️ 오류', '인증번호를 입력해주세요.', [{ text: '확인' }]);
+      showModal('⚠️ 오류', '인증번호를 입력해주세요.');
       return;
     }
     if (!password || password.length < 7) {
-      Alert.alert('⚠️ 오류', '비밀번호는 7자리 이상이어야 합니다.', [{ text: '확인' }]);
+      showModal('⚠️ 오류', '비밀번호는 7자리 이상이어야 합니다.');
       return;
     }
     const hasLetter = /[a-zA-Z]/.test(password);
     const hasNumber = /[0-9]/.test(password);
     if (!hasLetter || !hasNumber) {
-      Alert.alert('⚠️ 오류', '비밀번호는 영문과 숫자를 포함해야 합니다.', [{ text: '확인' }]);
+      showModal('⚠️ 오류', '비밀번호는 영문과 숫자를 포함해야 합니다.');
       return;
     }
     if (!confirmPassword || password !== confirmPassword) {
-      Alert.alert('⚠️ 오류', '비밀번호가 일치하지 않습니다.', [{ text: '확인' }]);
+      showModal('⚠️ 오류', '비밀번호가 일치하지 않습니다.');
       return;
     }
 
     // 데이터를 전달하며 signup으로 이동
-    router.push({
-      pathname: '/signup',
-      params: {
-        email,
-        verificationCode,
-        password,
-        confirmPassword
-      }
-    });
+    showModal('', '', true);
   };
 
   return (
@@ -184,6 +196,27 @@ export default function VerificationScreen() {
           <ThemedText style={styles.nextButtonText}>다음</ThemedText>
         </TouchableOpacity>
       </ThemedView>
+
+      {/* 모달 */}
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={handleModalClose}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            {modalTitle && <Text style={styles.modalTitle}>{modalTitle}</Text>}
+            {modalMessage && <Text style={styles.modalMessage}>{modalMessage}</Text>}
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={handleModalClose}
+            >
+              <Text style={styles.modalButtonText}>확인</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -284,5 +317,41 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    width: '80%',
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#000',
+    marginBottom: 20,
+  },
+  modalMessage: {
+    fontSize: 16,
+    color: '#555',
+    textAlign: 'center',
+    marginBottom: 16,
+  },
+  modalButton: {
+    backgroundColor: '#4869EC',
+    paddingVertical: 10,
+    paddingHorizontal: 40,
+    borderRadius: 8,
+  },
+  modalButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });

@@ -69,8 +69,20 @@ export default function My() {
           </View>
         </View>
 
- <      TouchableOpacity style={styles.button} onPress={() => router.push('')}>
-          <ThemedText style={styles.buttonText}>회원정보 수정</ThemedText>
+        <TouchableOpacity style={styles.button} onPress={() => router.push('')}>
+          <Text style={styles.buttonText}>회원정보 수정</Text>
+        </TouchableOpacity>
+
+        <View style={styles.divider} />
+
+        <Text style={styles.setting}>계정 설정</Text>
+
+        <TouchableOpacity onPress={() => router.push('./modPassword')}>
+          <Text style={styles.modPassword}>비밀번호 변경</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => router.push('../login')}>
+          <Text style={styles.logout}>로그아웃</Text>
         </TouchableOpacity>
 
       </ScrollView>
@@ -148,5 +160,30 @@ const styles = StyleSheet.create({
     color: '#4869EC',
     fontSize: 16,
     fontWeight: '600',
+  },
+  divider: {
+    height: 8,
+    backgroundColor: '#D9D9D9',
+    marginTop: 30,
+    marginBottom: 15,
+    marginLeft: -30,
+    marginRight: -30,
+  },
+  setting: {
+    fontSize: 22,
+    fontWeight: '500',
+    color: '#000',
+    marginBottom: 20,
+  },
+  modPassword: {
+    fontSize: 16,
+    fontWeight: '400',
+    color: '#4869EC',
+    marginBottom: 10,
+  },
+  logout: {
+    fontSize: 16,
+    fontWeight: '400',
+    color: '#FF0000',
   },
 });
