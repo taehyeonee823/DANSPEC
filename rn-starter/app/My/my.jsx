@@ -40,8 +40,8 @@ export default function My() {
         >
           <Image
             source={hasNotification
-              ? require('../../assets/images/notificationBell.png')
-              : require('../../assets/images/bell.png')
+              ? require('../../assets/images/notificationBell.svg')
+              : require('../../assets/images/bell.svg')
             }
             style={{ width: 33, height: 33 }}
             contentFit="contain"
