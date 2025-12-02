@@ -72,11 +72,7 @@ export default function ModPassword() {
       </View>
           <Image
             source={require('../../assets/images/lock.svg')}
-<<<<<<< HEAD
-            style={{ width: 180, height: 180, marginTop: 10, marginBottom: 10, alignSelf: 'center' }}
-=======
             style={{ width: 180, height: 180, marginTop: 10, marginBottom: 48, alignSelf: 'center' }}
->>>>>>> sub
             contentFit="contain"
           />
       
