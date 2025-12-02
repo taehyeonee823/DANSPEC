@@ -422,7 +422,7 @@ const styles = StyleSheet.create({
   readOnlyText: {
     fontSize: 16,
     fontFamily: 'Pretendard-Regular',
-    color: '#1A1A1A',
+    color: '#1A1A1A', // fontColor -> color로 수정
     borderBottomColor: '#CCCCCC',
     paddingVertical: 10,
     paddingHorizontal: 12,
