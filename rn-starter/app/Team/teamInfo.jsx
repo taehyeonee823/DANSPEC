@@ -1,13 +1,13 @@
 import React from "react";
 import { Text, View, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpacity, Image } from "react-native";
 import { useRouter } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Button from '../../components/Button';
-import MultiplelineInput from '../../components/MultiplelineInput';
-import SinglelineInput from '../../components/SinglelineInput';
 import teamInfoData from './teamInfo.json'; 
 
-export default function Index() {
+export default function TeamInfo() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
 
   // teamInfo.json dummy data에서 팀장 정보 추출
   const teamLeaderTitle = teamInfoData[0].title;
@@ -29,10 +29,18 @@ export default function Index() {
           <Text style={{ fontSize: 28, color: '#000', fontWeight: 'bold' }}>←</Text>
         </TouchableOpacity>
 
-        <KeyboardAvoidingView behavior="height" style={{ flex: 1, marginTop: 110 }}>
+        <KeyboardAvoidingView 
+          behavior="height" 
+          style={{ 
+            flex: 1, 
+            marginTop: 110,
+            paddingBottom: insets.bottom
+          }}>
           
-          <ScrollView style={styles.container}
-              contentContainerStyle={styles.contentContainer}>
+          <ScrollView 
+            style={styles.container}
+            contentContainerStyle={styles.contentContainer}
+            showsVerticalScrollIndicator={true}>
             <Text style={styles.mainTitle}>{teamLeaderTitle}</Text>
 
             <Text style={styles.sectionTitle}>연결된 활동 / 공모전</Text>
@@ -78,93 +86,34 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         padding: 20,
-        paddingBottom: 50,
+        paddingBottom: 20,
         zIndex: 900
-    },
-    // **새로운 스타일 추가: 팀 정보 박스**
-    teamInfoBox: {
-        marginHorizontal: 20,
-        marginTop: 20,
-        padding: 15,
-        backgroundColor: '#f9f9f9', // 배경색 변경
-        borderRadius: 10,
-        borderWidth: 1,
-        borderColor: '#e0e0e0',
-        marginBottom: 10,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.1,
-        shadowRadius: 1,
-        elevation: 2,
     },
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 8,
     },
-    status: {
-        fontSize: 14,
-        fontWeight: 'bold',
-        paddingHorizontal: 8,
-        paddingVertical: 3,
-        borderRadius: 5,
-    },
-    dueDate: {
-        fontSize: 14,
-        color: '#666',
-    },
-    title: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 5,
-        color: '#333',
-    },
-    description: {
-        fontSize: 14,
-        color: '#555',
-        marginBottom: 8,
-    },
-    tag: {
-        fontSize: 12,
-        color: '#999',
-        marginBottom: 10,
-    },
-    divider: {
-        height: 1,
-        backgroundColor: '#eee',
-        marginVertical: 10,
-    },
-    details: {
-        flexDirection: 'column',
-    },
-    detailText: {
-        fontSize: 14,
-        color: '#444',
-        marginBottom: 3,
-    },
     // 기존 스타일 유지
     mainTitle: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#000',
-        marginBottom: 20,
+        fontSize: 20,
+        fontFamily: 'Pretendard-SemiBold',
+        color: '#1A1A1A',
     },
     sectionTitle: {
         fontSize: 16,
-        fontWeight: '600',
-        color: '#333',
-        marginBottom: 5,
-        marginTop: 15,
+        fontFamily: 'Pretendard-Medium',
+        color: '#1A1A1A',
+        marginBottom: 16,
+        marginTop: 28,
     },
     readOnlyText: {
         fontSize: 16,
         color: '#666',
-        paddingVertical: 10,
-        paddingHorizontal: 15,
-        backgroundColor: '#f5f5f5',
-        borderRadius: 5,
-        borderWidth: 1,
+        paddingVertical: 8,
+        paddingHorizontal: 8,
+        backgroundColor: '#FFFFFF',
+        borderBottomWidth: 1,
         borderColor: '#eee',
-        marginBottom: 10,
     },
 });
