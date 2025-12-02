@@ -34,7 +34,7 @@ export default function My() {
       <TouchableOpacity
           style={{ position: 'absolute', top: 60, right: 30, zIndex: 999 }}
           onPress={() => {
-            router.push('/My/recruitmentNow');
+            router.push('./notificationScreen');
           }}
         >
           <Image
