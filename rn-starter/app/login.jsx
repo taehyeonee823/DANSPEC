@@ -146,6 +146,10 @@ const styles = StyleSheet.create({
     width: '40%',
     marginTop: -150,
     marginBottom: -100,
+    shadowColor: 'rgba(0, 0, 0, 0.25)',
+    shadowOpacity: 1,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 4 },
   },
   inputContainer: {
     position: 'relative',

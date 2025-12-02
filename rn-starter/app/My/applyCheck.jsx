@@ -76,7 +76,7 @@ export default function My() {
       <ScrollView style={styles.container}>
         <View style={[ { flexDirection: 'row', alignItems: 'center' }]}>
           <Image
-            source={require('../../assets/images/bell.png')}
+            source={require('../../assets/images/bell.svg')}
             style={{ width: 20, height: 20, marginRight: 5 }}
           />
           <Text style={styles.subtitle}>받은 요청</Text>

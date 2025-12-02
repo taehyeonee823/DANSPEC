@@ -69,6 +69,11 @@ export default function ModPassword() {
           비밀번호 변경
         </Text>
       </View>
+          <Image
+            source={require('../../assets/images/lock.svg')}
+            style={{ width: 180, height: 180, marginTop: 10, marginBottom: 10, alignSelf: 'center' }}
+            contentFit="contain"
+          />
       
       <View style={styles.content}>
         <View style={styles.inputGroup}>
