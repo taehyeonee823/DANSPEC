@@ -12,6 +12,7 @@ export default function ModPassword() {
   const [modalTitle, setModalTitle] = useState('');
   const [modalMessage, setModalMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
+  const [focusedInput, setFocusedInput] = useState(null);
 
   const showModal = (title, message, success = false) => {
     setModalTitle(title);
@@ -71,46 +72,53 @@ export default function ModPassword() {
       </View>
           <Image
             source={require('../../assets/images/lock.svg')}
+<<<<<<< HEAD
             style={{ width: 180, height: 180, marginTop: 10, marginBottom: 10, alignSelf: 'center' }}
+=======
+            style={{ width: 180, height: 180, marginTop: 10, marginBottom: 48, alignSelf: 'center' }}
+>>>>>>> sub
             contentFit="contain"
           />
       
       <View style={styles.content}>
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>현재 비밀번호</Text>
           <TextInput
             style={styles.input}
-            placeholder="현재 비밀번호를 입력"
+            placeholder={focusedInput === 'current' ? '' : '현재 비밀번호'}
             placeholderTextColor="#999"
             secureTextEntry
             value={currentPassword}
             onChangeText={setCurrentPassword}
+            onFocus={() => setFocusedInput('current')}
+            onBlur={() => setFocusedInput(null)}
             autoCapitalize="none"
           />
         </View>
 
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>새 비밀번호</Text>
           <TextInput
             style={styles.input}
-            placeholder="새 비밀번호 입력 (영문, 숫자 혼합 7자 이상)"
+            placeholder={focusedInput === 'new' ? '' : '새 비밀번호 (영문, 숫자 혼합 7자 이상)'}
             placeholderTextColor="#999"
             secureTextEntry
             value={newPassword}
             onChangeText={setNewPassword}
+            onFocus={() => setFocusedInput('new')}
+            onBlur={() => setFocusedInput(null)}
             autoCapitalize="none"
           />
         </View>
 
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>새 비밀번호 확인</Text>
           <TextInput
             style={styles.input}
-            placeholder="새 비밀번호 재입력"
+            placeholder={focusedInput === 'confirm' ? '' : '새 비밀번호 확인'}
             placeholderTextColor="#999"
             secureTextEntry
             value={confirmPassword}
             onChangeText={setConfirmPassword}
+            onFocus={() => setFocusedInput('confirm')}
+            onBlur={() => setFocusedInput(null)}
             autoCapitalize="none"
           />
         </View>
@@ -154,7 +162,7 @@ const styles = StyleSheet.create({
   },
   header: {
     marginTop: 70,
-    marginBottom: 10,
+    marginBottom: 32,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -166,35 +174,31 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   inputGroup: {
-    marginBottom: 24,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#000',
-    marginBottom: 8,
+    marginBottom: 16,
   },
   input: {
     height: 40,
-    borderWidth: 1,
+    borderBottomWidth: 1,
     borderColor: '#D9D9D9',
-    borderRadius: 8,
     paddingHorizontal: 16,
-    fontSize: 16,
+    fontSize: 14,
+    fontFamily: 'Pretendard-Medium',
     backgroundColor: '#FFFFFF',
-    color: '#000',
+    color: '#1A1A1A',
   },
   button: {
-    backgroundColor: '#4869EC',
+    backgroundColor: '#FFFFFF',
     paddingVertical: 16,
     borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#3E6AF4',
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 48,
   },
   buttonText: {
-    color: '#FFFFFF',
+    color: '#3E6AF4',
     fontSize: 16,
-    fontWeight: '600',
+    fontFamily: 'Pretendard-Regular',
   },
   modalOverlay: {
     flex: 1,

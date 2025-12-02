@@ -1,71 +1,47 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Text } from 'react-native';
-import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context'; 
 import NaviBar from '../naviBar';
 import RecruitmentCard from './recruitmentCard';
 import teamData from '../Team/teamApplyBoxDemo.json';
+import AlarmTab from './alarmTab';
 
 export default function RecruitmentNow() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
-      <View
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: 140,
-          backgroundColor: '#ffffff',
-          zIndex: 998,
-        }}
-      />
-
-      <View
-        style={{
-          position: 'absolute',
-          top: 70,
-          left: 20,
-          right: 20,
-          flexDirection: 'row',
-          alignItems: 'center',
-          zIndex: 999,
-          justifyContent: 'center',
-        }}
-      >
+    <View style={[styles.mainContainer, { paddingTop: insets.top }]}>
+      <View style={styles.headerBar}>
         <TouchableOpacity
-          style={{
-            padding: 8,
-            position: 'absolute',
-            left: 0,
-          }}
+          style={styles.backButton}
           onPress={() => router.back()}
         >
-          <Text style={{ fontSize: 28, color: '#000', fontWeight: 'bold' }}>←</Text>
+          <Text style={styles.backButtonText}>←</Text>
         </TouchableOpacity>
-        <View style={{ flex: 1, alignItems: 'center' }}>
-          <Text
-            style={{
-              fontSize: 20,
-              fontWeight: '600',
-              color: '#000',
-              textAlign: 'center',
-            }}
-          >
-            팀 관리하기
-          </Text>
+        <Text style={styles.screenTitle}>
+          수신함
+        </Text>
+      </View>
+
+      <View style={styles.fixedAlarmTab}>
+        <AlarmTab />
+      </View>
+
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollViewContent}
+      >
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>현재 모집중</Text>
         </View>
-      </View>
 
-      <View style={{ position: 'absolute', top: 115, left: 30, zIndex: 999 }}>
-        <Text style={styles.title}>현재 모집중</Text>
-      </View>
-
-      <ScrollView style={styles.container} contentContainerStyle={styles.scrollViewContent}>
         {teamData.map((team) => (
-          <RecruitmentCard key={team.id} {...team} />
+          <RecruitmentCard 
+            key={team.id} 
+            {...team} 
+          />
         ))}
       </ScrollView>
 
@@ -75,27 +51,54 @@ export default function RecruitmentNow() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    paddingTop: 20,
+  mainContainer: {
     flex: 1,
     backgroundColor: '#FFFFFF',
+  },
+  
+  headerBar: {
+    height: 44, 
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#ffffff',
+    paddingHorizontal: 10,
+  },
+  backButton: {
+    padding: 8,
+    position: 'absolute', 
+    left: 20,
+    zIndex: 1,
+  },
+  backButtonText: {
+    fontSize: 28,
+    color: '#000',
+    fontWeight: 'bold',
+  },
+  screenTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#000',
+    textAlign: 'center',
+  },
+  fixedAlarmTab: {
+    backgroundColor: '#FFFFFF',
+    zIndex: 10, 
   },
   scrollView: {
     flex: 1,
   },
   scrollViewContent: {
-    paddingTop: 160,
-    paddingLeft: 30,
-    paddingRight: 30,
-    paddingBottom: 150,
+    paddingBottom: 100, 
+  },
+  titleContainer: {
+    paddingHorizontal: 24,
+    paddingVertical: 10,
   },
   title: {
     fontSize: 20,
     fontWeight: '600',
     color: '#000',
     textAlign: 'left',
-    paddingTop: 20,
-    marginBottom: 10,
   },
-
 });
