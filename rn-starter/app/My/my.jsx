@@ -3,7 +3,6 @@ import { View, StyleSheet, ScrollView, TouchableOpacity, Text } from 'react-nati
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import NaviBar from '../naviBar';
-import { ThemedText } from '@/components/themed-text';
 
 export default function My() {
   const router = useRouter();

@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, Text, View, Modal, Image, ScrollView } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
 import { API_ENDPOINTS } from '@/config/api';
 
 
@@ -117,9 +115,9 @@ export default function SignUpScreen() {
 
       <ScrollView style={styles.container}
         contentContainerStyle={styles.scrollViewContent}>
-      <ThemedText style={styles.subtitle}>내 정보 입력을 완료해주세요. {'\n'}드림이가 딱 맞는 활동을 추천해 드릴게요.</ThemedText>
+      <Text style={styles.subtitle}>내 정보 입력을 완료해주세요. {'\n'}드림이가 딱 맞는 활동을 추천해 드릴게요.</Text>
 
-      <ThemedText style={styles.text}>* 이름</ThemedText>
+      <Text style={styles.text}>* 이름</Text>
     <View style={styles.inputContainer3}>
       <TextInput
           style={styles.input}
@@ -130,7 +128,7 @@ export default function SignUpScreen() {
         />
       </View>
 
-    <ThemedText style={styles.text}>* 소속 캠퍼스</ThemedText>
+    <Text style={styles.text}>* 소속 캠퍼스</Text>
     <View style={styles.campusButtonContainer}>
       <TouchableOpacity
         style={[
@@ -143,11 +141,11 @@ export default function SignUpScreen() {
           setMajor('');
         }}
       >
-        <ThemedText style={[
+        <Text style={[
           styles.campusButtonText,
           campus === '죽전' && styles.campusButtonTextSelected
         ]}> 죽전
-        </ThemedText>
+        </Text>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -161,15 +159,15 @@ export default function SignUpScreen() {
           setMajor('');
         }}
       >
-        <ThemedText style={[
+        <Text style={[
           styles.campusButtonText,
           campus === '천안' && styles.campusButtonTextSelected
         ]}> 천안
-        </ThemedText>
+        </Text>
       </TouchableOpacity>
     </View>
 
-    <ThemedText style={styles.text}>* 소속 학과</ThemedText>
+    <Text style={styles.text}>* 소속 학과</Text>
         <View style={styles.majorContainer}>
           <View style={styles.majorWrapper}>
             <TouchableOpacity
@@ -180,15 +178,15 @@ export default function SignUpScreen() {
                 }
               }}
             >
-              <ThemedText style={[
+              <Text style={[
                 styles.departmentSelectorText,
                 !department && styles.departmentPlaceholder
               ]}>
                 {department || '단과대학 선택'}
-              </ThemedText>
-              <ThemedText style={styles.dropdownIcon}>
+              </Text>
+              <Text style={styles.dropdownIcon}>
                 {showDepartmentModal ? '▲' : '▼'}
-              </ThemedText>
+              </Text>
             </TouchableOpacity>
 
             {showDepartmentModal && campus && (
@@ -203,11 +201,11 @@ export default function SignUpScreen() {
                       setMajor(''); // 단과대학 변경 시 학과 초기화
                     }}
                   >
-                    <ThemedText style={styles.departmentOptionText}>
+                    <Text style={styles.departmentOptionText}>
                       {item}
-                    </ThemedText>
+                    </Text>
                     {department === item && (
-                      <ThemedText style={styles.checkmark}>✓</ThemedText>
+                      <Text style={styles.checkmark}>✓</Text>
                     )}
                   </TouchableOpacity>
                 ))}
@@ -225,15 +223,15 @@ export default function SignUpScreen() {
                 }
               }}
             >
-              <ThemedText style={[
+              <Text style={[
                 styles.departmentSelectorText,
                 !major && styles.departmentPlaceholder
               ]}>
                 {major || '학과 선택'}
-              </ThemedText>
-              <ThemedText style={styles.dropdownIcon}>
+              </Text>
+              <Text style={styles.dropdownIcon}>
                 {showMajorModal ? '▲' : '▼'}
-              </ThemedText>
+              </Text>
             </TouchableOpacity>
 
             {showMajorModal && department && (
@@ -247,11 +245,11 @@ export default function SignUpScreen() {
                       setShowMajorModal(false);
                     }}
                   >
-                    <ThemedText style={styles.departmentOptionText}>
+                    <Text style={styles.departmentOptionText}>
                       {item}
-                    </ThemedText>
+                    </Text>
                     {major === item && (
-                      <ThemedText style={styles.checkmark}>✓</ThemedText>
+                      <Text style={styles.checkmark}>✓</Text>
                     )}
                   </TouchableOpacity>
                 ))}
@@ -259,21 +257,21 @@ export default function SignUpScreen() {
             )}
           </View>
         </View>
-    <ThemedText style={styles.text}>* 학년</ThemedText>
+    <Text style={styles.text}>* 학년</Text>
     <View style={styles.gradeContainer}>
       <TouchableOpacity
         style={styles.gradeSelector}
         onPress={() => setShowGradeModal(!showGradeModal)}
       >
-        <ThemedText style={[
+        <Text style={[
           styles.departmentSelectorText,
           !grade && styles.departmentPlaceholder
         ]}>
           {grade || '학년 선택'}
-        </ThemedText>
-        <ThemedText style={styles.dropdownIcon}>
+        </Text>
+        <Text style={styles.dropdownIcon}>
           {showGradeModal ? '▲' : '▼'}
-        </ThemedText>
+        </Text>
       </TouchableOpacity>
 
       {showGradeModal && (
@@ -287,18 +285,18 @@ export default function SignUpScreen() {
                 setShowGradeModal(false);
               }}
             >
-              <ThemedText style={styles.departmentOptionText}>
+              <Text style={styles.departmentOptionText}>
                 {item}
-              </ThemedText>
+              </Text>
               {grade === item && (
-                <ThemedText style={styles.checkmark}>✓</ThemedText>
+                <Text style={styles.checkmark}>✓</Text>
               )}
             </TouchableOpacity>
           ))}
         </ScrollView>
       )}
     </View>
-    <ThemedText style={styles.text}>* 희망 직무 1순위</ThemedText>
+    <Text style={styles.text}>* 희망 직무 1순위</Text>
     <View style={styles.inputContainer3}>
       <TextInput
           style={styles.input}
@@ -308,7 +306,7 @@ export default function SignUpScreen() {
           onChangeText={setFirstJobPreference}
         />
       </View>
-      <ThemedText style={styles.text}>* 희망 직무 2순위</ThemedText>
+      <Text style={styles.text}>* 희망 직무 2순위</Text>
     <View style={styles.inputContainer3}>
       <TextInput
           style={styles.input}
@@ -318,7 +316,7 @@ export default function SignUpScreen() {
           onChangeText={setSecondJobPreference}
         />
       </View>
-      <ThemedText style={styles.text}>* 희망 직무 3순위</ThemedText>
+      <Text style={styles.text}>* 희망 직무 3순위</Text>
     <View style={styles.inputContainer3}>
       <TextInput
           style={styles.input}
@@ -329,7 +327,7 @@ export default function SignUpScreen() {
         />
       </View>
 
-    <ThemedText style={styles.text}>간단 소개</ThemedText>
+    <Text style={styles.text}>간단 소개</Text>
     <View style={styles.inputContainer3}>
       <TextInput
         style={[styles.input, styles.introInput]}
@@ -347,7 +345,7 @@ export default function SignUpScreen() {
       style={styles.signupButton}
       onPress={handleSignup}
     >
-      <ThemedText style={styles.signupButtonText}>가입하기</ThemedText>
+      <Text style={styles.signupButtonText}>가입하기</Text>
     </TouchableOpacity>
 
       </ScrollView>

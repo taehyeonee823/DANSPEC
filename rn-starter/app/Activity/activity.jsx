@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Image, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 import NaviBar from '../naviBar';
 import CategoryChips from '@/components/CategoryChips';
-import { ThemedText } from '@/components/themed-text';
 import { ScrollView } from 'react-native-gesture-handler';
 import ActivityApplyBox from './activityApplyBox';
 import DeptTab from './deptTab';
@@ -136,7 +135,7 @@ export default function Activity() {
         </View>
 
         {loading ? (
-          <ThemedText style={styles.loadingText}>로딩 중...</ThemedText>
+          <Text style={styles.loadingText}>로딩 중...</Text>
         ) : events.length > 0 ? (
           events.map((event) => (
             <ActivityApplyBox
@@ -149,7 +148,7 @@ export default function Activity() {
             />
           ))
         ) : (
-          <ThemedText style={styles.emptyText}>검색 결과가 없습니다.</ThemedText>
+          <Text style={styles.emptyText}>검색 결과가 없습니다.</Text>
         )}
       </ScrollView>
 

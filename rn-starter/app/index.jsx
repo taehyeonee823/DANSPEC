@@ -1,9 +1,6 @@
 import { useEffect } from 'react';
-import { StyleSheet, Image, ActivityIndicator } from 'react-native';
+import { StyleSheet, Image, ActivityIndicator, View, Text } from 'react-native';
 import { useRouter } from 'expo-router';
-
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
 
 export default function LoadingScreen() {
   const router = useRouter();
@@ -17,16 +14,16 @@ export default function LoadingScreen() {
   }, []);
 
   return (
-    <ThemedView style={styles.loadingContainer}>
+    <View style={styles.loadingContainer}>
       <Image
         source={require('@/assets/images/danspecLogo.png')}
         style={styles.loadingLogo}
         resizeMode="contain"
       />
-      <ThemedText style={styles.loadingText}>DANSPEC</ThemedText>
-      <ThemedText style={styles.loadingSubtext}>단국대 학생을 위한 스펙 업그레이드 네비게이터</ThemedText>
+      <Text style={styles.loadingText}>DANSPEC</Text>
+      <Text style={styles.loadingSubtext}>단국대 학생을 위한 스펙 업그레이드 네비게이터</Text>
       <ActivityIndicator size="large" color="#4869EC" style={styles.spinner} />
-    </ThemedView>
+    </View>
   );
 }
 

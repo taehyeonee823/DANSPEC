@@ -1,7 +1,6 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { Image } from 'expo-image';
-import { ThemedText } from '@/components/themed-text';
 import { useRouter } from 'expo-router';
 
 export default function recruitmentConfirmed() {
@@ -26,8 +25,8 @@ export default function recruitmentConfirmed() {
           contentFit="contain"
           tintColor="#3E6AF4"
         />
-        <ThemedText style={styles.title}>등록 완료</ThemedText>
-        <ThemedText style={styles.text}>모집글이 성공적으로 등록되었습니다!{"\n"}알림 기능을 통해 지원 현황을 빠르게 확인해 보세요.</ThemedText>
+        <Text style={styles.title}>등록 완료</Text>
+        <Text style={styles.text}>모집글이 성공적으로 등록되었습니다!{"\n"}알림 기능을 통해 지원 현황을 빠르게 확인해 보세요.</Text>
     </View>
   );
 }

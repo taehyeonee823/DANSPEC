@@ -1,7 +1,6 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { Image } from 'expo-image';
-import { ThemedText } from '@/components/themed-text';
 import { useRouter } from 'expo-router';
 
 export default function ApplyConfirmed() {
@@ -26,8 +25,8 @@ export default function ApplyConfirmed() {
           contentFit="contain"
           tintColor="#3E6AF4"
         />
-        <ThemedText style={styles.title}>변경 완료</ThemedText>
-        <ThemedText style={styles.text}>비밀번호 변경이 완료되었습니다!{"\n"}이용을 위해 재로그인 해주세요.</ThemedText>
+        <Text style={styles.title}>변경 완료</Text>
+        <Text style={styles.text}>비밀번호 변경이 완료되었습니다!{"\n"}이용을 위해 재로그인 해주세요.</Text>
     </View>
   );
 }

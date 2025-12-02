@@ -2,9 +2,6 @@ import { useState } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, Text, View, Modal } from 'react-native';
 import { useRouter } from 'expo-router';
 
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-
 export default function VerificationScreen() {
   const router = useRouter();
   const [email, setEmail] = useState('');
@@ -136,7 +133,7 @@ export default function VerificationScreen() {
             autoComplete="none"
           />
           <TouchableOpacity style={styles.checkButton} onPress={handleCheckDuplicate}>
-            <ThemedText style={styles.checkButtonText}>인증 요청</ThemedText>
+            <Text style={styles.checkButtonText}>인증 요청</Text>
           </TouchableOpacity>
         </View>
 
@@ -181,17 +178,17 @@ export default function VerificationScreen() {
           />
         </View>
         {!passwordMatch && confirmPassword.length > 0 && (
-          <ThemedText style={styles.errorText}>비밀번호가 일치하지 않습니다</ThemedText>
+          <Text style={styles.errorText}>비밀번호가 일치하지 않습니다</Text>
         )}
         {passwordMatch && confirmPassword.length > 0 && (
-          <ThemedText style={styles.correctText}>비밀번호가 일치합니다</ThemedText>
+          <Text style={styles.correctText}>비밀번호가 일치합니다</Text>
         )}
 
         <TouchableOpacity
           style={styles.nextButton}
           onPress={handleNext}
         >
-          <ThemedText style={styles.nextButtonText}>다음</ThemedText>
+          <Text style={styles.nextButtonText}>다음</Text>
         </TouchableOpacity>
       </View>
 
