@@ -1,9 +1,7 @@
 import { useState } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity, Alert, Image, View } from 'react-native';
+import { StyleSheet, TextInput, TouchableOpacity, Alert, Image, View, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
 import { API_ENDPOINTS } from '@/config/api';
 
 export default function LoginScreen() {
@@ -69,7 +67,7 @@ export default function LoginScreen() {
   };
 
   return (
-    <ThemedView style={styles.container}>
+    <View style={styles.container}>
       <Image
         source={require('@/assets/images/danspecLogo.png')}
         style={styles.logo}
@@ -97,7 +95,7 @@ export default function LoginScreen() {
           )}
         </View>
         {emailError && (
-          <ThemedText style={styles.errorText}>유효한 단국대학교 이메일을 입력하세요.</ThemedText>
+          <Text style={styles.errorText}>유효한 단국대학교 이메일을 입력하세요.</Text>
         )}
       </View>
 
@@ -120,19 +118,19 @@ export default function LoginScreen() {
         <View style={styles.checkbox}>
           {autoLogin && <View style={styles.checkboxChecked} />}
         </View>
-        <ThemedText style={styles.autoLoginText}>자동 로그인</ThemedText>
+        <Text style={styles.autoLoginText}>자동 로그인</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.button} onPress={() => router.push('/Home/home')}>
-        <ThemedText style={styles.buttonText}>로그인</ThemedText>
+        <Text style={styles.buttonText}>로그인</Text>
       </TouchableOpacity>
       <View style={styles.signupContainer}>
-        <ThemedText style={styles.signupText}>계정이 아직 없으신가요? </ThemedText>
+        <Text style={styles.signupText}>계정이 아직 없으신가요? </Text>
         <TouchableOpacity onPress={() => router.push('/verification')}>
-          <ThemedText style={styles.signupLink}>회원가입하기</ThemedText>
+          <Text style={styles.signupLink}>회원가입하기</Text>
         </TouchableOpacity>
       </View>
-    </ThemedView>
+    </View>
   );
 }
 

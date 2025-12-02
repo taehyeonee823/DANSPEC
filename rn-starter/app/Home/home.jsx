@@ -3,7 +3,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { View, StyleSheet, ScrollView, Image, Dimensions, TouchableOpacity, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 import NaviBar from '../naviBar';
-import { ThemedText } from '@/components/themed-text';
 
 const { width } = Dimensions.get('window');
 
@@ -109,7 +108,7 @@ export default function Home() {
           </View>
         </ScrollView>
       </View>
-      <ThemedText style={styles.title}>name 님을 위한 맞춤활동</ThemedText>
+      <Text style={styles.title}>name 님을 위한 맞춤활동</Text>
 
       <NaviBar currentPage="home" />
     </View>
