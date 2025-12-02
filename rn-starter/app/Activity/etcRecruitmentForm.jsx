@@ -229,9 +229,11 @@ export default function etcteamRecruitmentForm() {
               </TouchableOpacity>
             </View>
             
+            {/* 모집 기간 섹션 (제목 통일) */}
+            <Text style={[styles.sectionTitle, { marginTop: 0 }]}>모집 기간</Text>
             <View style={styles.datePickerContainer}>
               <View style={styles.datePickerRow}>
-                <Text style={styles.sectionTitle}>모집 시작일</Text>
+                <Text style={styles.dateLabel}>시작일</Text>
                 <TouchableOpacity
                   style={styles.datePickerButton}
                   onPress={openStartDatePicker}
@@ -246,7 +248,7 @@ export default function etcteamRecruitmentForm() {
               </View>
               
               <View style={styles.datePickerRow}>
-                <Text style={styles.sectionTitle}>모집 종료일</Text>
+                <Text style={styles.dateLabel}>종료일</Text>
                 <TouchableOpacity
                   style={styles.datePickerButton}
                   onPress={openEndDatePicker}
@@ -261,6 +263,7 @@ export default function etcteamRecruitmentForm() {
               </View>
             </View>
 
+            {/* 시작일 DatePicker Modal (iOS 전용) */}
             <Modal
               visible={showStartDatePicker}
               transparent={true}
