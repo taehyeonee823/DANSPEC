@@ -159,6 +159,20 @@ export default function ActivityInfo() {
             </View>
           )}
 
+          {/* 지원하기 */}
+          <View style={styles.section}>
+            <TouchableOpacity 
+              onPress={() => router.push({
+                pathname: '/Team/teamRecruitmentForm',
+                params: {
+                  activityTitle: eventData.title 
+                }
+              })}
+            >
+              <Text style={styles.urlText}>이 활동으로 팀 만들기</Text>
+            </TouchableOpacity>
+          </View>
+
           <View style={styles.section}>
             <Text style={styles.headerTitle}>이 활동으로 모집중인 팀</Text>
           </View>

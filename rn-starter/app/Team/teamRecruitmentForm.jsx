@@ -1,33 +1,20 @@
 import React, { useState } from "react";
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { View, Text, ScrollView, KeyboardAvoidingView, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import Button from '../../components/Button';
 
 // 선택 가능한 활동/공모전 목록 (dummy data)
-const activityOptions = [
-  "단국대 X 데이터 분석 캠프",
-  "캡스톤 디자인 프로젝트",
-  "교내 창업 경진대회",
-  "AI 개발 공모전",
-  "SW 해커톤",
-];
+
 
 export default function teamRecruitmentForm() {
   const router = useRouter();
+  const params = useLocalSearchParams();
+  const activityTitle = params.activityTitle;
   const [titleInfo, setTitleInfo] = useState("");
   const [traitInfo, setTraitInfo] = useState("");
   const [introductionInfo, setIntroductionInfo] = useState("");
+  const [inputs, setInputs] = useState([{id: Date.now(), value: ''}]);
   
-  const [selectedActivity, setSelectedActivity] = useState(null); 
-  const [isPickerOpen, setIsPickerOpen] = useState(false); 
-  const [inputs, setInputs] = useState([{id: Date.now(), value: ''}])
-
-  // 드롭다운 항목 선택 핸들러
-  const handleActivitySelect = (activity) => {
-    setSelectedActivity(activity);
-    setIsPickerOpen(false); 
-  };
-
   const handleChange = (text, id) => {
     const newInputs = inputs.map((item) => {
       if (item.id === id) {
@@ -58,7 +45,7 @@ export default function teamRecruitmentForm() {
 
     const newRecruitment = {
       title: titleInfo,
-      tag: selectedActivity,
+      tag: activityTitle || "기타",
       description: introductionInfo,
       name: teamLeaderName,
       department: "SW융합대학",
@@ -97,31 +84,7 @@ export default function teamRecruitmentForm() {
             <Text style={styles.caption}>공모전·교내·대외 활동별로 함께할 팀원을 모집해보세요.</Text>
 
             <Text style={styles.sectionTitle}>연결할 활동 / 공모전</Text>
-            <View style={styles.pickerContainer}>
-              <TouchableOpacity 
-                style={styles.pickerField}
-                onPress={() => setIsPickerOpen(!isPickerOpen)}
-              >
-                <Text style={selectedActivity ? styles.pickerValue : styles.pickerPlaceholder}>
-                  {selectedActivity || "활동/공모전을 선택해주세요."}
-                </Text>
-                <Text style={styles.arrow}>{isPickerOpen ? '▲' : '▼'}</Text>
-              </TouchableOpacity>
-
-              {isPickerOpen && (
-                <View style={styles.pickerList}>
-                  {activityOptions.map((activity) => (
-                    <TouchableOpacity
-                      key={activity}
-                      style={styles.pickerItem}
-                      onPress={() => handleActivitySelect(activity)}
-                    >
-                      <Text style={styles.pickerItemText}>{activity}</Text>
-                    </TouchableOpacity>
-                  ))}
-                </View>
-              )}
-            </View>
+            <Text style={styles.readOnlyText}>{activityTitle}</Text>
 
             <Text style={styles.sectionTitle}>제목</Text>
             <TextInput
