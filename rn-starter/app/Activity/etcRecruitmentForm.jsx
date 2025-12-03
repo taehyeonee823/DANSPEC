@@ -11,6 +11,7 @@ export default function etcteamRecruitmentForm() {
   const [traitInfo, setTraitInfo] = useState("");
   const [introductionInfo, setIntroductionInfo] = useState("");
   const [inputs, setInputs] = useState([{id: Date.now(), value: ''}]);
+  const [recruitCount, setRecruitCount] = useState(1);
   
   // 모집 날짜 관련 state
   const getTodayStart = () => {
@@ -196,12 +197,33 @@ export default function etcteamRecruitmentForm() {
             <Text style={styles.sectionTitle}>학년</Text>
             <Text style={styles.readOnlyText}>3학년</Text>
             <Text style={styles.sectionTitle}>모집 인원</Text>
+            <View style={styles.counterContainer}>
+              <TouchableOpacity
+                style={styles.counterButton}
+                onPress={() => setRecruitCount(Math.max(1, recruitCount - 1))}
+              >
+                <Image
+                  source={require('@/assets/images/minus.svg')}
+                  style={styles.counterIcon}
+                  contentFit="contain"
+                />
+              </TouchableOpacity>
+              <Text style={styles.counterText}>{recruitCount}명</Text>
+              <TouchableOpacity
+                style={styles.counterButton}
+                onPress={() => setRecruitCount(recruitCount + 1)}
+              >
+                <Image
+                  source={require('@/assets/images/add.svg')}
+                  style={styles.counterIcon}
+                  contentFit="contain"
+                />
+              </TouchableOpacity>
+            </View>
             
-            {/* 모집 기간 섹션 (제목 통일) */}
-            <Text style={[styles.sectionTitle, { marginTop: 0 }]}>모집 기간</Text>
             <View style={styles.datePickerContainer}>
               <View style={styles.datePickerRow}>
-                <Text style={styles.dateLabel}>시작일</Text>
+                <Text style={styles.sectionTitle}>모집 시작일</Text>
                 <TouchableOpacity
                   style={styles.datePickerButton}
                   onPress={openStartDatePicker}
@@ -216,7 +238,7 @@ export default function etcteamRecruitmentForm() {
               </View>
               
               <View style={styles.datePickerRow}>
-                <Text style={styles.dateLabel}>종료일</Text>
+                <Text style={styles.sectionTitle}>모집 종료일</Text>
                 <TouchableOpacity
                   style={styles.datePickerButton}
                   onPress={openEndDatePicker}
@@ -231,7 +253,6 @@ export default function etcteamRecruitmentForm() {
               </View>
             </View>
 
-            {/* 시작일 DatePicker Modal (iOS 전용) */}
             <Modal
               visible={showStartDatePicker}
               transparent={true}
@@ -517,5 +538,31 @@ const styles = StyleSheet.create({
   iosPicker: {
     width: '100%',
     height: 200,
+  },
+  counterContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 28,
+    paddingHorizontal: 24,
+    gap: 20,
+  },
+  counterButton: {
+    width: 36,
+    height: 36,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+  },
+  counterIcon: {
+    width: 24,
+    height: 24,
+  },
+  counterText: {
+    fontSize: 18,
+    fontFamily: 'Pretendard-Medium',
+    color: '#000',
+    minWidth: 50,
+    textAlign: 'center',
   },
 });
