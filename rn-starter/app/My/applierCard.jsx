@@ -92,7 +92,7 @@ export default function Applier({id, name, grade, campus, college, major, introd
           <View style={styles.modalContainer}>
             
             <Image
-             source={require('@/assets/images/oCircle.png')}
+             source={require('@/assets/images/oCircle.svg')}
               style={styles.logo1}
               contentFit="contain"
             />
@@ -134,7 +134,7 @@ export default function Applier({id, name, grade, campus, college, major, introd
           <View style={styles.modalContainer}>
 
             <Image
-             source={require('@/assets/images/xCircle.png')}
+             source={require('@/assets/images/xCircle.svg')}
               style={styles.logo1}
               contentFit="contain"
             />

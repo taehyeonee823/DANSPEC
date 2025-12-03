@@ -63,7 +63,7 @@ export default function teamRecruitmentForm() {
     //   body: JSON.stringify(newRecruitment)
     // });
 
-    router.push('/recruitmentConfirmed');
+    router.push('../Activity/recruitmentConfirmed');
   };
 
   const teamLeaderName = "김단국";
@@ -151,6 +151,7 @@ export default function teamRecruitmentForm() {
             <Button
               title="등록하기"
               onPress={saveRecruitment}
+              
             />
           </ScrollView>
         </KeyboardAvoidingView>
