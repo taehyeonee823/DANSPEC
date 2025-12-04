@@ -5,7 +5,7 @@ import { Image } from 'expo-image';
 import DateTimePicker from '@react-native-community/datetimepicker'; 
 import Button from '../../components/Button';
 
-export default function etcteamRecruitmentForm() {
+export default function teamRecruitmentForm() {
   const router = useRouter();
   const params = useLocalSearchParams();
   
