@@ -25,8 +25,8 @@ export default function ApplyConfirmed() {
           contentFit="contain"
           tintColor="#3E6AF4"
         />
-        <Text style={styles.title}>변경 완료</Text>
-        <Text style={styles.text}>회원정보 변경이 완료되었습니다!{"\n"}이용을 위해 재로그인 해주세요.</Text>
+        <Text style={styles.title}>수정 완료</Text>
+        <Text style={styles.text}>회원정보 수정이 완료되었습니다!{"\n"}이용을 위해 재로그인 해주세요.</Text>
     </View>
   );
 }
