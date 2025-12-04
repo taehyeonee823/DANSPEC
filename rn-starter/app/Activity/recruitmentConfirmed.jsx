@@ -44,20 +44,21 @@ const styles = StyleSheet.create({
   },
   confirm: {
     marginTop: 300,
-    width: 80,
-    height: 80,
+    width: 100,
+    height: 100,
   },
   title: {
-    fontSize: 20,
+    fontSize: 28,
     fontFamily: 'Pretendard-SemiBold',
-    marginTop: 16,
+    marginTop: 35,
     textAlign: 'center',
     color: '#000',
   },
    text: {
-    fontSize: 14,
-    fontFamily: 'Pretendard-SemiBold',
-    marginTop: 24,
+    fontSize: 18,
+    fontWeight: '500',
+    marginTop: 20,
+    paddingTop: 10,
     textAlign: 'center',
     color: '#000',
   }

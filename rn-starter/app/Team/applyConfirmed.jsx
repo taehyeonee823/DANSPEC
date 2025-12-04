@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
+    fontFamily: 'Pretendard-SemiBold',
     fontWeight: 'bold',
     marginTop: 35,
     paddingTop: 10,
