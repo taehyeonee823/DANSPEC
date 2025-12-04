@@ -152,28 +152,32 @@ export default function ActivityInfo() {
 
           {/* 상세페이지 URL */}
           {eventData.detailUrl && (
-            <View style={styles.section}>
-              <TouchableOpacity onPress={() => Linking.openURL(eventData.detailUrl)}>
-                <Text style={styles.urlText}>상세 페이지로 가기</Text>
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity
+              style={styles.buttonBox}
+              onPress={() => Linking.openURL(eventData.detailUrl)}
+            >
+              <Text style={styles.buttonText}>상세 페이지 보기</Text>
+            </TouchableOpacity>
           )}
 
-          {/* 지원하기 */}
-          <View style={styles.section}>
-            <TouchableOpacity 
-              onPress={() => router.push({
-                pathname: '/Team/teamRecruitmentForm',
-                params: {
-                  activityTitle: eventData.title 
-                }
-              })}
-            >
-              <Text style={styles.urlText}>이 활동으로 팀 만들기</Text>
-            </TouchableOpacity>
-          </View>
+          {/* 이 활동으로 팀 만들기 */}
+          <TouchableOpacity
+            style={styles.primaryButtonBox}
+            onPress={() => router.push({
+              pathname: '/Team/teamRecruitmentForm',
+              params: {
+                activityTitle: eventData.title
+              }
+            })}
+          >
+            <Text style={styles.primaryButtonText}>이 활동으로 팀 만들기</Text>
+          </TouchableOpacity>
 
-          <View style={styles.section}>
+          <View style={styles.sectionWithIcon}>
+            <Image
+              source={require('@/assets/images/pin.png')}
+              style={styles.pinIcon}
+            />
             <Text style={styles.headerTitle}>이 활동으로 모집중인 팀</Text>
           </View>
 
@@ -350,6 +354,44 @@ const styles = StyleSheet.create({
     color: '#000',
     textDecorationLine: 'underline',
     marginBottom: 16,
+  },
+  buttonBox: {
+    borderWidth: 2,
+    borderColor: '#DAE1FB',
+    borderRadius: 12,
+    padding: 10,
+    marginBottom: 20,
+    backgroundColor: '#F8FAFF',
+    alignItems: 'center',
+  },
+  buttonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#000',
+  },
+  primaryButtonBox: {
+    borderWidth: 0,
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 16,
+    backgroundColor: '#4869EC',
+    alignItems: 'center',
+  },
+  primaryButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#FFFFFF',
+  },
+  sectionWithIcon: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  pinIcon: {
+    width: 20,
+    height: 20,
+    marginRight: 8,
+    tintColor: '#000',
   },
   errorText: {
     fontSize: 16,
