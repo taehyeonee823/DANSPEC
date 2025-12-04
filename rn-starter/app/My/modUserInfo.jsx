@@ -359,7 +359,7 @@ export default function SignUpScreen() {
       style={styles.signupButton}
       onPress={handleSignup}
     >
-      <Text style={styles.signupButtonText}>변경하기</Text>
+      <Text style={styles.signupButtonText}>수정하기</Text>
     </TouchableOpacity>
 
       </ScrollView>
