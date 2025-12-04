@@ -77,7 +77,7 @@ export default function My() {
         <View style={[ { flexDirection: 'row', alignItems: 'center' }]}>
           <Image
             source={require('../../assets/images/bell.svg')}
-            style={{ width: 20, height: 20, marginRight: 5 }}
+            style={{ width: 20, height: 20, marginRight: 5, tintColor: '#000000' }}
           />
           <Text style={styles.subtitle}>받은 요청</Text>
         </View>
