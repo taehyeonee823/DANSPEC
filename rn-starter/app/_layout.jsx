@@ -36,6 +36,7 @@ export default function RootLayout() {
           <Stack.Screen name="Team/teamApplicationForm" />
           <Stack.Screen name="Team/applyConfirmed" />
           <Stack.Screen name="Activity/recruitmentConfirmed" />
+          <Stack.Screen name="My/notificationScreen" />
           <Stack.Screen name="Team/teamRecruitmentForm" />
           <Stack.Screen name="Team/teamInfo" />
           <Stack.Screen name="Team/team" />

@@ -16,7 +16,7 @@ export default function RecruitmentNow() {
       <View style={styles.headerBar}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => router.back()}
+          onPress={() => router.push('/My/my')}
         >
           <Text style={styles.backButtonText}>←</Text>
         </TouchableOpacity>
