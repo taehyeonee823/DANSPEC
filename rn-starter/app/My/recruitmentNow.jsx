@@ -1,15 +1,23 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Text } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useSafeAreaInsets } from 'react-native-safe-area-context'; 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import NaviBar from '../naviBar';
 import RecruitmentCard from './recruitmentCard';
+import ApplyResultCard from './applyResult';
 import teamData from '../Team/teamApplyBoxDemo.json';
 import AlarmTab from './alarmTab';
 
 export default function RecruitmentNow() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const [activeTab, setActiveTab] = React.useState(0);
+
+  // 알림 데모 데이터 (실제로는 백엔드 서버에서 받아와야 함)
+  const notificationData = [
+    { id: 1, type: 'accepted', teamName: '[데분캠프] 데이터 분석 1팀', timeAgo: '5분 전' },
+    { id: 2, type: 'rejected', teamName: '[데분캠프] 데이터 분석 2팀', timeAgo: '30분 전' },
+  ];
 
   return (
     <View style={[styles.mainContainer, { paddingTop: insets.top }]}>
@@ -26,24 +34,41 @@ export default function RecruitmentNow() {
       </View>
 
       <View style={styles.fixedAlarmTab}>
-        <AlarmTab />
+        <AlarmTab onTabChange={setActiveTab} />
       </View>
 
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollViewContent}
-      >
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>현재 모집중</Text>
-        </View>
+      {activeTab === 0 && (
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollViewContent}
+        >
 
-        {teamData.map((team) => (
-          <RecruitmentCard 
-            key={team.id} 
-            {...team} 
-          />
-        ))}
-      </ScrollView>
+          {notificationData.map((notification) => (
+            <ApplyResultCard
+              key={notification.id}
+              {...notification}
+            />
+          ))}
+        </ScrollView>
+      )}
+
+      {activeTab === 1 && (
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollViewContent}
+        >
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>현재 모집중</Text>
+          </View>
+
+          {teamData.map((team) => (
+            <RecruitmentCard
+              key={team.id}
+              {...team}
+            />
+          ))}
+        </ScrollView>
+      )}
 
       <NaviBar currentPage="my" />
     </View>
@@ -89,7 +114,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollViewContent: {
-    paddingBottom: 100, 
+    paddingTop: 20,
+    paddingBottom: 100,
   },
   titleContainer: {
     paddingHorizontal: 24,

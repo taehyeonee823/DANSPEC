@@ -3,7 +3,7 @@ import { View, Text, Pressable, Animated, StyleSheet, Dimensions } from 'react-n
 
 const categories = ['알림', '가입 요청'];
 
-export default function CategoryTab() {
+export default function CategoryTab({ onTabChange }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const underlineX = useRef(new Animated.Value(0)).current;
 
@@ -16,6 +16,10 @@ export default function CategoryTab() {
       toValue: index * tabWidth,
       useNativeDriver: false,
     }).start();
+
+    if (onTabChange) {
+      onTabChange(index);
+    }
   };
 
   return (
