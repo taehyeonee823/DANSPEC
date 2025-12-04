@@ -68,7 +68,7 @@ export default function My() {
           </View>
         </View>
 
-        <TouchableOpacity style={styles.button} onPress={() => router.push('')}>
+        <TouchableOpacity style={styles.button} onPress={() => router.push('./modUserInfo')}>
           <Text style={styles.buttonText}>회원정보 수정</Text>
         </TouchableOpacity>
 

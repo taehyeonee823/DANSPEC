@@ -93,7 +93,15 @@ export default function VerificationScreen() {
     }
 
     // 데이터를 전달하며 signup으로 이동
-    showModal('', '', true);
+    router.push({
+      pathname: '/signup',
+      params: {
+        email,
+        verificationCode,
+        password,
+        confirmPassword
+      }
+    });
   };
 
   return (
@@ -164,7 +172,7 @@ export default function VerificationScreen() {
           />
         </View>
 
-        <View style={styles.inputContainer2}>
+        <View style={styles.inputContainer3}>
           <TextInput
             style={styles.input}
             placeholder="새 비밀번호 확인"
@@ -250,16 +258,16 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: '#FF3B30',
     textAlign: 'left',
-    marginTop: -10,
-    marginBottom: 15,
+    marginTop: 20,
+    marginLeft: 15
   },
   correctText: {
     fontSize: 12,
     fontWeight: '400',
     color: 'green',
     textAlign: 'left',
-    marginTop: -10,
-    marginBottom: 15,
+    marginTop: 20,
+    marginLeft: 15
   },
   inputContainer: {
     flexDirection: 'row',
@@ -277,7 +285,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
-    marginTop: 32,
+    marginTop: 30,
+    marginBottom: -15
   },
   input: {
     flex: 1,
