@@ -199,7 +199,7 @@ export default function etcteamRecruitmentForm() {
                 <Text style={styles.collegeText}>SW융합대학</Text>
               </View>
               <View style={styles.majorBox}>
-                <Text style={styles.majorText}>통계</Text>
+                <Text style={styles.majorText}>통계데이터사이언스학과</Text>
               </View>
             </View>
             <Text style={styles.sectionTitle}>학년</Text>
