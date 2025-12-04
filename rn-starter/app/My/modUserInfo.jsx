@@ -616,16 +616,18 @@ const styles = StyleSheet.create({
   signupButton: {
     width: '90%',
     height: 50,
-    backgroundColor: '#4869EC',
-    borderRadius: 25,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#3E6AF4',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 20,
   },
   signupButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
+    color: '#3E6AF4',
+    fontSize: 16,
+    fontFamily: 'Pretendard-Regular',
   },
   modalOverlay: {
     flex: 1,
