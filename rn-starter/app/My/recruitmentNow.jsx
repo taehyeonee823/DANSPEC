@@ -67,6 +67,11 @@ export default function RecruitmentNow() {
               {...team}
             />
           ))}
+
+           <View style={styles.titleContainer}>
+            <Text style={styles.title}>마감</Text>
+          </View>
+
         </ScrollView>
       )}
 
