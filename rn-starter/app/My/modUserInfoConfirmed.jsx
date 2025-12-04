@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
+    fontFamily: 'Pretendard-SemiBold',
     marginTop: 35,
     paddingTop: 10,
     textAlign: 'center',
