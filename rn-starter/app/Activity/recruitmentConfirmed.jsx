@@ -20,7 +20,7 @@ export default function recruitmentConfirmed() {
           />
         </TouchableOpacity>
         <Image
-          source={require('@/assets/images/confirm.svg')}
+          source={require('@/assets/images/Check circle.svg')}
           style={styles.confirm}
           contentFit="contain"
           tintColor="#3E6AF4"
@@ -44,22 +44,20 @@ const styles = StyleSheet.create({
   },
   confirm: {
     marginTop: 300,
-    width: 100,
-    height: 100,
+    width: 80,
+    height: 80,
   },
   title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    marginTop: 35,
-    paddingTop: 10,
+    fontSize: 20,
+    fontFamily: 'Pretendard-SemiBold',
+    marginTop: 16,
     textAlign: 'center',
     color: '#000',
   },
    text: {
-    fontSize: 18,
-    fontWeight: '500',
-    marginTop: 20,
-    paddingTop: 10,
+    fontSize: 14,
+    fontFamily: 'Pretendard-SemiBold',
+    marginTop: 24,
     textAlign: 'center',
     color: '#000',
   }

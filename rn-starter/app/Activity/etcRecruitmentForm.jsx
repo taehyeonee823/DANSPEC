@@ -147,14 +147,15 @@ export default function etcteamRecruitmentForm() {
     const newRecruitment = {
       title: titleInfo,
       tag: "기타",
-      description: introductionInfo,
       name: teamLeaderName,
       department: "SW융합대학",
       grade: "3학년",
-      role: roles,
-      trait: traitInfo,
+      recruitCount: recruitCount,
       startDate: formatDate(startDate),
       endDate: formatDate(endDate),
+      role: roles,
+      trait: traitInfo,
+      description: introductionInfo,
     };
 
     console.log("저장할 데이터:", newRecruitment);
@@ -193,7 +194,14 @@ export default function etcteamRecruitmentForm() {
             <Text style={styles.sectionTitle}>팀장 이름</Text>
             <Text style={styles.readOnlyText}>{teamLeaderName}</Text>
             <Text style={styles.sectionTitle}>학과</Text>
-            <Text style={styles.readOnlyText}>SW융합대학</Text>
+            <View style={styles.departmentRow}>
+              <View style={styles.collegeBox}>
+                <Text style={styles.collegeText}>SW융합대학</Text>
+              </View>
+              <View style={styles.majorBox}>
+                <Text style={styles.majorText}>통계</Text>
+              </View>
+            </View>
             <Text style={styles.sectionTitle}>학년</Text>
             <Text style={styles.readOnlyText}>3학년</Text>
             <Text style={styles.sectionTitle}>모집 인원</Text>
@@ -411,12 +419,50 @@ const styles = StyleSheet.create({
   readOnlyText: {
     fontSize: 16,
     fontFamily: 'Pretendard-Regular',
-    color: '#1A1A1A', // fontColor -> color로 수정
+    color: '#1A1A1A',
     borderBottomColor: '#CCCCCC',
     paddingVertical: 10,
     paddingHorizontal: 12,
     borderBottomWidth: 1,
     marginBottom: 28,
+    flex: 1,
+  },
+  departmentRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 20,
+    marginBottom: 28,
+  },
+  collegeBox: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: '#3E6AF433',
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  collegeText: {
+    fontSize: 14,
+    fontFamily: 'Pretendard-Medium',
+    color: '#A6A6A6',
+  },
+  majorBox: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#3E6AF433',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  majorText: {
+    fontSize: 14,
+    fontFamily: 'Pretendard-Medium',
+    color: '#A6A6A6',
   }, 
   defaultInput: {
     height: 48,
@@ -441,7 +487,7 @@ const styles = StyleSheet.create({
   inputRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 28,
   },
   input: {
     flex: 1, 

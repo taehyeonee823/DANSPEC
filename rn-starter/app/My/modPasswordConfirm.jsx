@@ -20,7 +20,7 @@ export default function ApplyConfirmed() {
           />
         </TouchableOpacity>
         <Image
-          source={require('@/assets/images/confirm.svg')}
+          source={require('@/assets/images/Check circle.svg')}
           style={styles.confirm}
           contentFit="contain"
           tintColor="#3E6AF4"
