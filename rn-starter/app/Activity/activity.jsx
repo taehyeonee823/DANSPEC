@@ -137,16 +137,23 @@ export default function Activity() {
         {loading ? (
           <Text style={styles.loadingText}>로딩 중...</Text>
         ) : events.length > 0 ? (
-          events.map((event) => (
-            <ActivityApplyBox
-              key={event.id}
-              event={event}
-              tag={event.category}
-              dueDate={calculateDueDate(event.endDate)}
-              title={event.title}
-              summarizedDescription={event.summarizedDescription}
-            />
-          ))
+          events.map((event) => {
+            const dueDate = calculateDueDate(event.endDate);
+            // 마감된 카드는 렌더링하지 않음
+            if (dueDate === '마감') {
+              return null;
+            }
+            return (
+              <ActivityApplyBox
+                key={event.id}
+                event={event}
+                tag={event.category}
+                dueDate={dueDate}
+                title={event.title}
+                summarizedDescription={event.summarizedDescription}
+              />
+            );
+          })
         ) : (
           <Text style={styles.emptyText}>검색 결과가 없습니다.</Text>
         )}
@@ -176,6 +183,7 @@ const styles = StyleSheet.create({
   },
   contentArea: {
     marginTop: 30,
+    marginBottom: 90,
     flex: 1, 
   },
   title: {
