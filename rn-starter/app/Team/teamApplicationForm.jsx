@@ -92,13 +92,13 @@ const styles = StyleSheet.create({
     },
     mainTitle: {
         fontSize: 24,
-        fontWeight: 'bold',
+        fontFamily: 'Pretendard-Bold',
         color: '#000',
         marginBottom: 20,
     },
     sectionTitle: {
         fontSize: 16,
-        fontWeight: '600',
+        fontFamily: 'Pretendard-SemiBold',
         color: '#333',
         marginBottom: 5,
         marginTop: 15,
@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
     readOnlyText: {
         fontSize: 16,
         color: '#666',
+        fontFamily: 'Pretendard-Medium',
         paddingVertical: 10,
         paddingHorizontal: 15,
         backgroundColor: '#f5f5f5',

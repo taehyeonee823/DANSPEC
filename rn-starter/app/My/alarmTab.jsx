@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingVertical: 12,
     fontSize: 16,
-    fontWeight: '700',
+    fontFamily: 'Pretendard-Regular'
   },
   active: {
     color: '#000',

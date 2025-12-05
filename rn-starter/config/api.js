@@ -36,5 +36,10 @@ export const API_ENDPOINTS = {
 
   SEARCH_EVENTS: (college, category) =>
     `${EVENT_SERVER_URL}/api/events/search?college=${encodeURIComponent(college)}&category=${encodeURIComponent(category)}`,
+
+  // 팀 모집 관련 API
+  CREATE_TEAM: `${EVENT_SERVER_URL}/api/teams`,
+  GET_TEAMS: (myPosts) =>
+    `${EVENT_SERVER_URL}/api/teams?myPosts=${myPosts}`,
 };
 

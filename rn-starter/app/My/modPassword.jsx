@@ -38,7 +38,7 @@ export default function ModPassword() {
       showModal('⚠️ 알림', '새 비밀번호가 일치하지 않습니다.');
       return;
     }
-
+    
     if (newPassword.length < 7) {
       showModal('⚠️ 알림', '비밀번호는 7자 이상이어야 합니다.');
       return;

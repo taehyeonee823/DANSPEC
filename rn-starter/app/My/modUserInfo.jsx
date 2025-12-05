@@ -8,6 +8,7 @@ import { API_ENDPOINTS } from '@/config/api';
 export default function SignUpScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
+  const [focusedInput, setFocusedInput] = useState(null);
 
   const [email, setEmail] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
@@ -132,13 +133,11 @@ export default function SignUpScreen() {
         contentContainerStyle={styles.scrollViewContent}>
 
       <Text style={styles.text}>* 이름</Text>
-    <View style={styles.inputContainer3}>
-      <TextInput
-          style={styles.input}
-          placeholder="이름을 입력해 주세요"
-          placeholderTextColor="#999"
-          value={name}
-          onChangeText={setName}
+      <View style={styles.inputGroup}>
+        <TextInput
+          style={[styles.input, styles.disabledInput]}
+          value={name || "김단국"}
+          editable={false}
         />
       </View>
 
@@ -311,44 +310,54 @@ export default function SignUpScreen() {
       )}
     </View>
     <Text style={styles.text}>* 희망 직무 1순위</Text>
-    <View style={styles.inputContainer3}>
+    <View style={styles.inputGroup}>
       <TextInput
-          style={styles.input}
-          placeholder="희망 직무를 입력해주세요"
-          placeholderTextColor="#999"
-          value={firstJobPreference}
-          onChangeText={setFirstJobPreference}
-        />
-      </View>
-      <Text style={styles.text}>* 희망 직무 2순위</Text>
-    <View style={styles.inputContainer3}>
+        style={styles.input}
+        placeholder={focusedInput === 'job1' ? '' : '희망 직무 입력'}
+        placeholderTextColor="#999"
+        value={firstJobPreference}
+        onChangeText={setFirstJobPreference}
+        onFocus={() => setFocusedInput('job1')}
+        onBlur={() => setFocusedInput(null)}
+      />
+    </View>
+
+    <Text style={styles.text}>* 희망 직무 2순위</Text>
+    <View style={styles.inputGroup}>
       <TextInput
-          style={styles.input}
-          placeholder="희망 직무를 입력해주세요"
-          placeholderTextColor="#999"
-          value={secondJobPreference}
-          onChangeText={setSecondJobPreference}
-        />
-      </View>
-      <Text style={styles.text}>* 희망 직무 3순위</Text>
-    <View style={styles.inputContainer3}>
+        style={styles.input}
+        placeholder={focusedInput === 'job2' ? '' : '희망 직무 입력'}
+        placeholderTextColor="#999"
+        value={secondJobPreference}
+        onChangeText={setSecondJobPreference}
+        onFocus={() => setFocusedInput('job2')}
+        onBlur={() => setFocusedInput(null)}
+      />
+    </View>
+
+    <Text style={styles.text}>* 희망 직무 3순위</Text>
+    <View style={styles.inputGroup}>
       <TextInput
-          style={styles.input}
-          placeholder="희망 직무를 입력해주세요"
-          placeholderTextColor="#999"
-          value={thirdJobPreference}
-          onChangeText={setThirdJobPreference}
-        />
-      </View>
+        style={styles.input}
+        placeholder={focusedInput === 'job3' ? '' : '희망 직무 입력'}
+        placeholderTextColor="#999"
+        value={thirdJobPreference}
+        onChangeText={setThirdJobPreference}
+        onFocus={() => setFocusedInput('job3')}
+        onBlur={() => setFocusedInput(null)}
+      />
+    </View>
 
     <Text style={styles.text}>간단 소개</Text>
-    <View style={styles.inputContainer3}>
+    <View style={styles.inputGroup}>
       <TextInput
         style={[styles.input, styles.introInput]}
-        placeholder="자신을 소개해주세요 한 줄이면 충분합니다!"
+        placeholder={focusedInput === 'intro' ? '' : '자신을 소개해주세요 한 줄이면 충분합니다!'}
         placeholderTextColor="#999"
         value={introduction}
         onChangeText={setIntroduction}
+        onFocus={() => setFocusedInput('intro')}
+        onBlur={() => setFocusedInput(null)}
         multiline
         numberOfLines={4}
         textAlignVertical="top"
@@ -402,7 +411,7 @@ const styles = StyleSheet.create({
   scrollViewContent: {
     paddingTop: 10,
     paddingLeft: 30,
-    paddingRight: 0,
+    paddingRight: 30,
     paddingBottom: 30,
   },
   subtitle: {
@@ -436,50 +445,26 @@ const styles = StyleSheet.create({
     marginTop: -10,
     marginBottom: 15,
   },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '90%',
-    marginBottom: 15,
-  },
-  inputContainer2: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '40%',
-    marginBottom: 15,
-  },
-  inputContainer3: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '90%',
-    marginBottom: 15,
+  inputGroup: {
+    marginBottom: 16,
   },
   input: {
-    flex: 1,
-    height: 40,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    paddingHorizontal: 15,
-    fontSize: 16,
-    backgroundColor: '#fff',
-    marginRight: 10,
+    height: 35,
+    borderBottomWidth: 1,
+    borderColor: '#D9D9D9',
+    paddingHorizontal: 16,
+    fontSize: 14,
+    fontFamily: 'Pretendard-Medium',
+    backgroundColor: '#FFFFFF',
+    color: '#1A1A1A',
   },
   introInput: {
-    height: 100,
-    paddingTop: 12,
-    paddingBottom: 12,
+    height: 35,
+    paddingTop: 10,
   },
-  input2: {
-    flex: 1,
-    height: 40,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    paddingHorizontal: 15,
-    fontSize: 16,
-    backgroundColor: '#fff',
-    marginRight: 10,
+  disabledInput: {
+    backgroundColor: '#F5F5F5',
+    color: '#999',
   },
   checkButton: {
     backgroundColor: '#007AFF',
@@ -498,7 +483,7 @@ const styles = StyleSheet.create({
   },
   campusButtonContainer: {
     flexDirection: 'row',
-    width: '90%',
+    width: '100%',
     marginBottom: 15,
     gap: 10,
   },
@@ -527,7 +512,7 @@ const styles = StyleSheet.create({
   },
   majorContainer: {
     flexDirection: 'row',
-    width: '90%',
+    width: '100%',
     gap: 10,
     marginBottom: 15,
   },
@@ -594,7 +579,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    width: '45%',
+    width: '50%',
     height: 45,
     borderWidth: 1,
     borderColor: '#ddd',
@@ -614,7 +599,7 @@ const styles = StyleSheet.create({
     maxHeight: 150,
   },
   signupButton: {
-    width: '90%',
+    width: '100%',
     height: 50,
     backgroundColor: '#FFFFFF',
     borderRadius: 8,

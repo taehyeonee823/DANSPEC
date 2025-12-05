@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
     },
     // 기존 스타일 유지
     mainTitle: {
-        fontSize: 20,
+        fontSize: 24,
         fontFamily: 'Pretendard-SemiBold',
         color: '#1A1A1A',
     },
