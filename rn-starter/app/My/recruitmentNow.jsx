@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Text } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useSafeAreaInsets } from 'react-native-safe-area-context'; 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import NaviBar from '../naviBar';
 import RecruitmentCard from './recruitmentCard';
 import teamData from '../Team/teamApplyBoxDemo.json';
@@ -10,6 +10,7 @@ import AlarmTab from './alarmTab';
 export default function RecruitmentNow() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const [activeTab, setActiveTab] = React.useState(0);
 
   return (
     <View style={[styles.mainContainer, { paddingTop: insets.top }]}>
@@ -26,24 +27,39 @@ export default function RecruitmentNow() {
       </View>
 
       <View style={styles.fixedAlarmTab}>
-        <AlarmTab />
+        <AlarmTab onTabChange={setActiveTab} />
       </View>
 
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollViewContent}
-      >
-        <View style={styles.titleContainer}>
-          <Text style={styles.title}>현재 모집중</Text>
-        </View>
+      {activeTab === 0 && (
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollViewContent}
+        >
+        </ScrollView>
+      )}
 
-        {teamData.map((team) => (
-          <RecruitmentCard 
-            key={team.id} 
-            {...team} 
-          />
-        ))}
-      </ScrollView>
+      {activeTab === 1 && (
+        <ScrollView
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollViewContent}
+        >
+          <View style={styles.titleContainer}>
+            <Text style={styles.title}>현재 모집중</Text>
+          </View>
+
+          {teamData.map((team) => (
+            <RecruitmentCard
+              key={team.id}
+              {...team}
+            />
+          ))}
+
+           <View style={styles.titleContainer}>
+            <Text style={styles.title}>마감</Text>
+          </View>
+
+        </ScrollView>
+      )}
 
       <NaviBar currentPage="my" />
     </View>
@@ -89,7 +105,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollViewContent: {
-    paddingBottom: 100, 
+    paddingTop: 20,
+    paddingBottom: 100,
   },
   titleContainer: {
     paddingHorizontal: 24,

@@ -36,7 +36,7 @@ export default function CategoryTab() {
       toValue: index * tabWidth,
       useNativeDriver: false,
     }).start();
-    
+
     // 알림 탭(index 0)을 누르면 notificationScreen으로 이동
     if (index === 0) {
       if (pathname !== '/My/notificationScreen') {
