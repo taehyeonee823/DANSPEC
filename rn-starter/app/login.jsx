@@ -179,6 +179,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: '#FF0000',
+    fontFamily: 'Pretendard-Medium',
     fontSize: 12,
     marginTop: -10,
     marginLeft: 5,
@@ -208,7 +209,7 @@ const styles = StyleSheet.create({
   autoLoginText: {
     color: '#000',
     fontSize: 12,
-    fontFamily: 'System',
+    fontFamily: 'Pretendard-Medium',
   },
   button: {
     width: '100%',
@@ -221,7 +222,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 18,
-    fontWeight: '600',
+    fontFamily: 'Pretendard-SemiBold',
   },
   signupContainer: {
     flexDirection: 'row',
@@ -232,12 +233,11 @@ const styles = StyleSheet.create({
     color: '#000',
     fontSize: 14,
     fontWeight: '300',
-    fontFamily: 'System',
+    fontFamily: 'Pretendard-Regular',
   },
   signupLink: {
     color: '#4869EC',
     fontSize: 14,
-    fontWeight: '500',
-    fontFamily: 'System',
+    fontFamily: 'Pretendard-Regular',
   }
 });

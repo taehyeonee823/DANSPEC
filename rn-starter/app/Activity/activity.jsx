@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontFamily: 'Pretendard-Bold',
     marginTop: 100,   
     marginLeft: 20,
     marginBottom: 20, 
@@ -207,12 +207,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 40,
     fontSize: 16,
+    fontFamily: 'Pretendard-SemiBold',
     color: '#666',
   },
   emptyText: {
     textAlign: 'center',
     marginTop: 40,
     fontSize: 16,
+    fontFamily: 'Pretendard-SemiBold',
     color: '#999',
   },
   floatingButton: {

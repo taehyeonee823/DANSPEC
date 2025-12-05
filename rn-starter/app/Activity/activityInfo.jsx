@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 20,
-    fontWeight: '600',
+    fontFamily: 'Pretendard-SemiBold',
     color: '#000',
   },
   headerRight: {
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontFamily: 'Pretendard-Bold',
     color: '#000',
     marginBottom: 24,
     lineHeight: 30,
@@ -266,12 +266,13 @@ const styles = StyleSheet.create({
   },
   dateBoxLabel: {
     fontSize: 12,
+    fontFamily: 'Pretendard-SemiBold',
     color: '#666',
     marginBottom: 2,
   },
   dateBoxValue: {
     fontSize: 13,
-    fontWeight: '600',
+    fontFamily: 'Pretendard-SemiBold',
     color: '#000',
     marginTop: 3,
   },
@@ -310,13 +311,13 @@ const styles = StyleSheet.create({
   },
   tipTitle: {
     fontSize: 16,
-    fontWeight: '700',
+    fontFamily: 'Pretendard-Bold',
     color: '#000',
     marginBottom: 8,
   },
   tipSubtitle: {
     fontSize: 14,
-    fontWeight: '600',
+    fontFamily: 'Pretendard-SemiBold',
     color: '#333',
     marginBottom: 8,
   },
@@ -325,6 +326,7 @@ const styles = StyleSheet.create({
   },
   targetItem: {
     fontSize: 13,
+    fontFamily: 'Pretendard-Regular',
     color: '#000',
     lineHeight: 22,
     marginBottom: 4,
@@ -337,7 +339,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: '600',
+    fontFamily: 'Pretendard-SemiBold',
     color: '#000',
   },
   expandIcon: {
@@ -351,6 +353,7 @@ const styles = StyleSheet.create({
   },
   urlText: {
     fontSize: 16,
+    fontFamily: 'Pretendard-Regular',
     color: '#000',
     textDecorationLine: 'underline',
     marginBottom: 16,
@@ -366,7 +369,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 16,
-    fontWeight: '600',
+    fontFamily: 'Pretendard-SemiBold',
     color: '#000',
   },
   primaryButtonBox: {
@@ -379,7 +382,7 @@ const styles = StyleSheet.create({
   },
   primaryButtonText: {
     fontSize: 16,
-    fontWeight: '600',
+    fontFamily: 'Pretendard-SemiBold',
     color: '#FFFFFF',
   },
   sectionWithIcon: {
@@ -395,6 +398,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 16,
+    fontFamily: 'Pretendard-SemiBold',
     color: '#999',
     textAlign: 'center',
     marginTop: 40,

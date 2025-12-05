@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   },
   status: {
     fontSize: 12,
-    fontWeight: '600',
+    fontFamily: 'Pretendard-Medium',
     color: 'green',
     backgroundColor: '#E8EFFF',
     paddingHorizontal: 8,
@@ -52,18 +52,20 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontFamily: 'Pretendard-SemiBold',
     color: '#000',
     marginBottom: 8,
   },
   description: {
     fontSize: 14,
+    fontFamily: 'Pretendard-Medium',
     color: '#666',
     marginBottom: 8,
     lineHeight: 20,
   },
   tag: {
     fontSize: 12,
+    fontFamily: 'Pretendard-Regular',
     color: '#3E6AF4',
   },
 });

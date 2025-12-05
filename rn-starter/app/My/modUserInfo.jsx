@@ -416,15 +416,15 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 18,
-    fontWeight: '500',
+    fontFamily: 'Pretendard-Medium',
     color: '#000',
     textAlign: 'left',
     marginTop: 30,
     marginBottom: 20
   },
    text: {
-    fontSize: 14,
-    fontWeight: '300',
+    fontSize: 16,
+    fontFamily: 'Pretendard-Medium',
     color: '#000',
     textAlign: 'left',
     marginBottom: 5,
@@ -629,12 +629,13 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 20,
-    fontWeight: '600',
+    fontFamily: 'Pretendard-SemiBold',
     color: '#000',
     marginBottom: 20,
   },
   modalMessage: {
     fontSize: 16,
+    fontFamily: 'Pretendard-Regular',
     color: '#555',
     textAlign: 'center',
     marginBottom: 16,

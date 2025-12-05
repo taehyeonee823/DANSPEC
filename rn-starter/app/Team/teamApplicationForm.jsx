@@ -92,13 +92,13 @@ const styles = StyleSheet.create({
     },
     mainTitle: {
         fontSize: 24,
-        fontFamily: 'Pretendard-Bold',
+        fontFamily: 'Pretendard-SemiBold',
         color: '#000',
         marginBottom: 20,
     },
     sectionTitle: {
         fontSize: 16,
-        fontFamily: 'Pretendard-SemiBold',
+        fontFamily: 'Pretendard-Medium',
         color: '#333',
         marginBottom: 5,
         marginTop: 15,

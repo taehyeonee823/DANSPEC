@@ -10,7 +10,6 @@ import AlarmTab from './alarmTab';
 export default function RecruitmentNow() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const [activeTab, setActiveTab] = React.useState(0);
 
   return (
     <View style={[styles.mainContainer, { paddingTop: insets.top }]}>
@@ -27,39 +26,29 @@ export default function RecruitmentNow() {
       </View>
 
       <View style={styles.fixedAlarmTab}>
-        <AlarmTab onTabChange={setActiveTab} />
+        <AlarmTab />
       </View>
 
-      {activeTab === 0 && (
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={styles.scrollViewContent}
-        >
-        </ScrollView>
-      )}
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollViewContent}
+      >
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>현재 모집중</Text>
+        </View>
 
-      {activeTab === 1 && (
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={styles.scrollViewContent}
-        >
-          <View style={styles.titleContainer}>
-            <Text style={styles.title}>현재 모집중</Text>
-          </View>
+        {teamData.map((team) => (
+          <RecruitmentCard
+            key={team.id}
+            {...team}
+          />
+        ))}
 
-          {teamData.map((team) => (
-            <RecruitmentCard
-              key={team.id}
-              {...team}
-            />
-          ))}
+         <View style={styles.titleContainer}>
+          <Text style={styles.title}>마감</Text>
+        </View>
 
-           <View style={styles.titleContainer}>
-            <Text style={styles.title}>마감</Text>
-          </View>
-
-        </ScrollView>
-      )}
+      </ScrollView>
 
       <NaviBar currentPage="my" />
     </View>
@@ -93,7 +82,7 @@ const styles = StyleSheet.create({
   },
   screenTitle: {
     fontSize: 20,
-    fontWeight: '600',
+    fontFamily: 'Pretendard-SemiBold',
     color: '#000',
     textAlign: 'center',
   },
@@ -114,7 +103,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: '600',
+    fontFamily: 'Pretendard-SemiBold',
     color: '#000',
     textAlign: 'left',
   },

@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
   },
   navText: {
     fontSize: 12,
+    fontFamily: 'Pretendard-Medium',
     color: '#333333',
   },
   nowNavText: {

@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
   statusText: {
     color: '#306339',
     fontSize: 12,
+    fontFamily: 'Pretendard-Regular',
     fontWeight: '600',
   },
   dueDate: {
@@ -66,7 +67,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Pretendard-Bold',
     color: '#000',
     marginBottom: 8,
   },

@@ -46,12 +46,13 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 25,
-    fontWeight: 'bold',
+    fontFamily: 'Pretendard-Bold',
     color: '#000',
     marginBottom: 15,
   },
   loadingSubtext: {
     fontSize: 16,
+    fontFamily: 'Pretendard-Regular',
     color: '#000',
     textAlign: 'center',
     marginBottom: 50,

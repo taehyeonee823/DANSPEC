@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
         borderLeftColor: '#ddd' 
     },
     itemTitle: { 
-        fontWeight: 'bold', 
+        fontFamily: 'Pretendard-SemiBold',
         marginBottom: 3 
     },
     message: { 

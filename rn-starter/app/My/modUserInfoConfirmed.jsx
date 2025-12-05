@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
   },
    text: {
     fontSize: 18,
-    fontWeight: '500',
+    fontFamily: 'Pretendard-Regular',
     marginTop: 20,
     paddingTop: 10,
     textAlign: 'center',

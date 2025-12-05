@@ -38,7 +38,7 @@ export default function ModPassword() {
       showModal('⚠️ 알림', '새 비밀번호가 일치하지 않습니다.');
       return;
     }
-    
+
     if (newPassword.length < 7) {
       showModal('⚠️ 알림', '비밀번호는 7자 이상이어야 합니다.');
       return;
@@ -211,12 +211,13 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 20,
-    fontWeight: '600',
+    fontFamily: 'Pretendard-SemiBold',
     color: '#000',
     marginBottom: 20,
   },
   modalMessage: {
     fontSize: 16,
+    fontFamily: 'Pretendard-Regular',
     color: '#555',
     textAlign: 'center',
     marginBottom: 16,

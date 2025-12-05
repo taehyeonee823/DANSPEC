@@ -628,12 +628,13 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 20,
-    fontWeight: '600',
+    fontFamily: 'Pretendard-SemiBold',
     color: '#000',
     marginBottom: 20,
   },
   modalMessage: {
     fontSize: 16,
+    fontFamily: 'Pretendard-Regular',
     color: '#555',
     textAlign: 'center',
     marginBottom: 16,

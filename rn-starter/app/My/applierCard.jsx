@@ -180,17 +180,20 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 20,
+    fontFamily: 'Pretendard-SemiBold',
     fontWeight: '600',
     color: '#000',
   },
   college: {
     fontSize: 14,
+    fontFamily: 'Pretendard-Medium',
     color: '#666',
     marginTop: 10,
     marginBottom: 15,
   },
   row: {
     flexDirection: 'row',
+    fontFamily: 'Pretendard-Medium',
     marginBottom: 10,
   },
   label: {
@@ -201,18 +204,19 @@ const styles = StyleSheet.create({
   introduction: {
     flex: 1,
     fontSize: 13,
-    fontWeight: '300',
+    fontFamily: 'Pretendard-regular',
     color: '#222',
   },
   description: {
     flex: 1,
     fontSize: 13,
-    fontWeight: '300',
+    fontFamily: 'Pretendard-regular',
     color: '#222',
     lineHeight: 18,
   },
   toggleText: {
     fontSize: 12,
+    fontFamily: 'Pretendard-regular',
     color: '#007AFF',
     textAlign: 'center',
     marginTop: 8,
@@ -232,7 +236,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 12,
-    fontWeight: '600',
+    fontFamily: 'Pretendard-regular',
   },
   modalOverlay: {
     flex: 1,
@@ -254,6 +258,7 @@ const styles = StyleSheet.create({
   },
   modalMessage: {
     fontSize: 14,
+    fontFamily: 'Pretendard-Medium',
     color: '#000',
     marginBottom: 16,
     textAlign: 'center',
@@ -281,12 +286,12 @@ const styles = StyleSheet.create({
   modalCancelButtonText: {
     color: '#333',
     fontSize: 14,
-    fontWeight: '600',
+    fontFamily: 'Pretendard-SemiBold',
   },
   modalConfirmButtonText: {
     color: '#fff',
     fontSize: 14,
-    fontWeight: '600',
+    fontFamily: 'Pretendard-SemiBold',
   },
   logo1: {
     width: 60,

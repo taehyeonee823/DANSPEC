@@ -132,19 +132,19 @@ const styles = StyleSheet.create({
   },
   profileName: {
     fontSize: 24,
-    fontWeight: '700',
+    fontFamily: 'Pretendard-SemiBold',
     color: '#000',
     marginBottom: 6,
   },
   profileInfo: {
     fontSize: 16,
-    fontWeight: '400',
+    fontFamily: 'Pretendard-Medium',
     color: '#000',
     marginBottom: 4,
   },
   profileJob: {
     fontSize: 14,
-    fontWeight: '300',
+    fontFamily: 'Pretendard-Regular',
     color: '#000',
   },
   button: {
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#4869EC',
     fontSize: 16,
-    fontWeight: '600',
+    fontFamily: 'Pretendard-Medium'
   },
   divider: {
     height: 8,
@@ -176,13 +176,13 @@ const styles = StyleSheet.create({
   },
   modPassword: {
     fontSize: 16,
-    fontWeight: '400',
+    fontFamily: 'Pretendard-Regular',
     color: '#4869EC',
     marginBottom: 10,
   },
   logout: {
     fontSize: 16,
-    fontWeight: '400',
+    fontFamily: 'Pretendard-Regular',
     color: '#FF0000',
   },
 });

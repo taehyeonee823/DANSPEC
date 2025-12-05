@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
   collegeName: {
     flex: 1,
     fontSize: 14,
-    fontWeight: '500',
+    fontFamily: 'Pretendard-Medium',
     color: '#000',
     textAlign: 'center',
   },

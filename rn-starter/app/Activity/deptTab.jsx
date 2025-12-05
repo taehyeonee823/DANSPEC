@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingVertical: 10,
     fontSize: 16,
-    fontWeight: '700',
+    fontFamily: 'Pretendard-SemiBold',
   },
   active: {
     color: '#000',

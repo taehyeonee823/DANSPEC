@@ -145,17 +145,18 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 11,
-    fontWeight: '600',
+    fontFamily: 'Pretendard-Regular',
   },
   slideTitle: {
     marginLeft:20,
     fontSize: 22,
-    fontWeight: '600',
+    fontFamily: 'Pretendard-SemiBold',
     color: '#000',
   },
   sub: {
     marginLeft:20,
     fontSize: 14,
+    fontFamily: 'Pretendard-Medium',
     color: '#000',
     lineHeight: 20,
   },
@@ -175,7 +176,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: '600',
+    fontFamily: 'Pretendard-SemiBold',
     marginTop: 10,
     marginLeft: 20,
     paddingTop: 10,
