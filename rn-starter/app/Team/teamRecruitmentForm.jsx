@@ -4,6 +4,7 @@ import { View, Text, ScrollView, KeyboardAvoidingView, TouchableOpacity, StyleSh
 import { Image } from 'expo-image';
 import DateTimePicker from '@react-native-community/datetimepicker'; 
 import Button from '../../components/Button';
+import MultiplelineInput from '../../components/MultiplelineInput';
 
 export default function teamRecruitmentForm() {
   const router = useRouter();
@@ -204,7 +205,7 @@ export default function teamRecruitmentForm() {
                 <Text style={styles.collegeText}>SW융합대학</Text>
               </View>
               <View style={styles.majorBox}>
-                <Text style={styles.majorText}>통계</Text>
+                <Text style={styles.majorText}>통계데이터사이언스</Text>
               </View>
             </View>
             <Text style={styles.sectionTitle}>학년</Text>
@@ -367,12 +368,10 @@ export default function teamRecruitmentForm() {
             />
 
             <Text style={styles.sectionTitle}>진행 방식 및 한 줄 소개</Text>
-            <TextInput
-                style={styles.multilineInput}
+            <MultiplelineInput
                 value={introductionInfo}
                 onChangeText={setIntroductionInfo}
-                placeholder="모집글에 대한 소개를 상세하게 작성해주세요."
-                multiline={true}
+                placeholder="모집글에 대한 소개를 상세하게 작성해주세요." 
             />
             <View style={{ height: 20 }} />
             <Button
@@ -477,16 +476,6 @@ const styles = StyleSheet.create({
     padding: 8,
     fontSize: 16,
     marginBottom: 28,
-  },
-  multilineInput: {
-    height: 100,
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#ddd',
-    padding: 10,
-    borderRadius: 8,
-    fontSize: 16,
-    textAlignVertical: 'top',
   },
 
   inputRow: {

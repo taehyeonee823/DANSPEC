@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TextInput, StyleSheet } from 'react-native';
 
 const MultilineInput = ({ 
@@ -7,16 +7,21 @@ const MultilineInput = ({
     placeholder,
     style
 }) => {
+    const [isFocused, setIsFocused] = useState(false);
+    const hasValue = value && value.trim().length > 0;
+
     return (
         <TextInput 
             style={[styles.input, style]}
-            placeholder={placeholder} 
-            placeholderTextColor="#999"
+            placeholder={isFocused || hasValue ? '' : placeholder} 
+            placeholderTextColor="#CCCCCC"
             value={value}
             onChangeText={onChangeText}
             multiline={true} 
             numberOfLines={4}
             textAlignVertical="top"
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
         />
     );
 };
@@ -30,7 +35,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         paddingTop: 15,
         paddingBottom: 15,
-        fontSize: 12,
+        fontSize: 16,
+        fontFamily: 'Pretendard-Medium',
         backgroundColor: '#fff',
         marginBottom: 20, 
     },
