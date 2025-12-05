@@ -4,7 +4,6 @@ import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import NaviBar from '../naviBar';
 import RecruitmentCard from './recruitmentCard';
-import ApplyResultCard from './applyResult';
 import teamData from '../Team/teamApplyBoxDemo.json';
 import AlarmTab from './alarmTab';
 
@@ -12,12 +11,6 @@ export default function RecruitmentNow() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const [activeTab, setActiveTab] = React.useState(0);
-
-  // 알림 데모 데이터 (실제로는 백엔드 서버에서 받아와야 함)
-  const notificationData = [
-    { id: 1, type: 'accepted', teamName: '[데분캠프] 데이터 분석 1팀', timeAgo: '5분 전' },
-    { id: 2, type: 'rejected', teamName: '[데분캠프] 데이터 분석 2팀', timeAgo: '30분 전' },
-  ];
 
   return (
     <View style={[styles.mainContainer, { paddingTop: insets.top }]}>
@@ -42,13 +35,6 @@ export default function RecruitmentNow() {
           style={styles.scrollView}
           contentContainerStyle={styles.scrollViewContent}
         >
-
-          {notificationData.map((notification) => (
-            <ApplyResultCard
-              key={notification.id}
-              {...notification}
-            />
-          ))}
         </ScrollView>
       )}
 
