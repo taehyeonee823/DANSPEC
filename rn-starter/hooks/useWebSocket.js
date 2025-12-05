@@ -16,27 +16,42 @@ export const useWebSocket = (userId) => {
         // 백엔드 없이 3초마다 새로운 가짜 알림을 생성하여 상태에 주입
         const mockInterval = setInterval(() => {
             setNotifications(prevNotifs => {
-                // 이미 3개 이상이면 더 이상 추가하지 않음
                 if (prevNotifs.length >= 3) {
                     clearInterval(mockInterval);
                     return prevNotifs;
                 }
-                
-                const mockNotification = {
-                    id: Date.now(), // 고유 ID 역할
-                    title: `[MOCK] 새 알림이 도착했어요! (${prevNotifs.length + 1}번째)`,
-                    message: '백엔드가 준비될 때까지 클라이언트 UI를 테스트하세요.',
-                    timestamp: Date.now(),
-                    read: false, // 기본적으로 읽지 않은 상태
-                };
-                
+
+                let mockNotification;
+                if (prevNotifs.length === 0) {
+                    mockNotification = {
+                        id: Date.now(),
+                        title: `[MOCK] 가입 되었습니다! (1번째)`,
+                        message: '축하합니다. 가입이 승인되었습니다.',
+                        timestamp: Date.now(),
+                        read: false,
+                    };
+                } else if (prevNotifs.length === 1) {
+                    mockNotification = {
+                        id: Date.now() + 1,
+                        title: `[MOCK] 가입 되었습니다! (2번째)`,
+                        message: '축하합니다. 가입이 승인되었습니다.',
+                        timestamp: Date.now(),
+                        read: false,
+                    };
+                } else {
+                    mockNotification = {
+                        id: Date.now() + 2,
+                        title: `[MOCK] 가입이 거절되었습니다.`,
+                        message: '죄송합니다. 가입이 거절되었습니다.',
+                        timestamp: Date.now(),
+                        read: false,
+                    };
+                }
+
                 const newNotifs = [mockNotification, ...prevNotifs];
-                
-                // 3개가 되면 interval 멈춤
                 if (newNotifs.length >= 3) {
                     clearInterval(mockInterval);
                 }
-                
                 return newNotifs;
             });
         }, 3000); 
