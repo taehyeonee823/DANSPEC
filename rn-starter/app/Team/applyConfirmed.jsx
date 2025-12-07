@@ -8,25 +8,24 @@ export default function ApplyConfirmed() {
 
   return (
     <View style={styles.container}>
-        <TouchableOpacity
-          style={{ position: 'absolute', top: 60, right: 20, zIndex: 999, padding: 8 }}
-          onPress={() => router.push('/Team/team')}
-        >
-          <Image
-            source={require('@/assets/images/cancel.svg')}
-            style={styles.cancel}
-            contentFit="contain"
-            tintColor="#000"
-          />
-        </TouchableOpacity>
-        <Image
-          source={require('@/assets/images/confirm.svg')}
-          style={styles.confirm}
-          contentFit="contain"
-          tintColor="#3E6AF4"
-        />
-        <Text style={styles.title}>신청 완료</Text>
-        <Text style={styles.text}>신청이 완료되었습니다!{"\n"}새로운 모집글을 더 둘러 보세요.</Text>
+      <TouchableOpacity
+        style={{ position: 'absolute', top: 60, right: 20, zIndex: 999, padding: 8 }}
+        onPress={() => router.push('/Team/team')}
+      >
+      <Image
+        source={require('@/assets/images/cancel.svg')}
+        style={styles.cancel}
+        contentFit="contain"
+        tintColor="#000"
+      />
+      </TouchableOpacity>
+      <Image
+        source={require('@/assets/images/Check circle.svg')}
+        style={styles.confirm}
+        contentFit="contain"
+      />
+      <Text style={styles.title}>신청 완료</Text>
+      <Text style={styles.text}>신청이 완료되었습니다!{"\n"}새로운 모집글을 더 둘러 보세요.</Text>
     </View>
   );
 }
@@ -35,7 +34,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'center',
   },
   cancel: {
@@ -43,24 +42,21 @@ const styles = StyleSheet.create({
     height: 30,
   },
   confirm: {
-    marginTop: 300,
     width: 100,
     height: 100,
   },
   title: {
-    fontSize: 28,
+    fontSize: 25,
     fontFamily: 'Pretendard-SemiBold',
-    fontWeight: 'bold',
-    marginTop: 35,
+    marginTop: 16,
     paddingTop: 10,
     textAlign: 'center',
     color: '#000',
   },
    text: {
-    fontSize: 18,
-    fontWeight: '500',
-    marginTop: 20,
-    paddingTop: 10,
+    fontSize: 16,
+    fontFamily: 'Pretendard-Medium',
+    marginTop: 24,
     textAlign: 'center',
     color: '#000',
   }
