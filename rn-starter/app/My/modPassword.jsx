@@ -183,18 +183,16 @@ const styles = StyleSheet.create({
     color: '#1A1A1A',
   },
   button: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#3E6AF4',
     paddingVertical: 16,
     borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#3E6AF4',
     alignItems: 'center',
     marginTop: 48,
   },
   buttonText: {
-    color: '#3E6AF4',
+    color: '#FFFFFF',
     fontSize: 16,
-    fontFamily: 'Pretendard-Regular',
+    fontFamily: 'Pretendard-SemiBold',
   },
   modalOverlay: {
     flex: 1,
