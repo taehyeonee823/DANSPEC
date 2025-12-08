@@ -2,7 +2,6 @@ import React from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import NaviBar from '../naviBar';
 import RecruitmentCard from './recruitmentCard';
 import teamData from '../Team/teamApplyBoxDemo.json';
 import AlarmTab from './alarmTab';
@@ -60,8 +59,6 @@ export default function RecruitmentNow() {
         ))}
 
       </ScrollView>
-
-      <NaviBar currentPage="my" />
     </View>
   );
 }

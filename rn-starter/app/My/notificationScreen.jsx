@@ -146,6 +146,7 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: '#000',
         textAlign: 'center',
+        fontFamily: 'Pretendard-SemiBold',
     },
     fixedAlarmTab: {
         backgroundColor: '#FFFFFF',
@@ -201,18 +202,21 @@ const styles = StyleSheet.create({
         fontSize: 14, 
         marginLeft: 25,
         color: '#333',
+        fontFamily: 'Pretendard-Regular',
     },
     time: {
         position: 'absolute',
         top: 10,
         right: 15,
         fontSize: 12,
-        color: '#999'
+        color: '#999',
+        fontFamily: 'Pretendard-Regular',
     },
     empty: { 
         textAlign: 'center', 
         marginTop: 50, 
-        color: '#aaa' 
+        color: '#aaa',
+        fontFamily: 'Pretendard-Regular',
     },
     deleteButton: {
         backgroundColor: '#FF3B30',
@@ -225,7 +229,7 @@ const styles = StyleSheet.create({
     },
     deleteButtonText: {
         color: '#FFFFFF',
-        fontWeight: '600',
+        fontFamily: 'Pretendard-SemiBold',
         fontSize: 16,
     }
 });

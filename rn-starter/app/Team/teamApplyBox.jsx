@@ -40,8 +40,8 @@ const styles = StyleSheet.create({
   status: {
     fontSize: 12,
     fontFamily: 'Pretendard-Medium',
-    color: 'green',
-    backgroundColor: '#E8EFFF',
+    color: '#166534',
+    backgroundColor: '#DCFCE6',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 15,
