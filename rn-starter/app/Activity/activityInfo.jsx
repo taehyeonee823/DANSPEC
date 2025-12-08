@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, ScrollView, Image, Linking } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, ScrollView, Dimensions,Image, Linking } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 
 export default function ActivityInfo() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+  const width = Dimensions.get('window').width;
 
   let eventData = params.eventData ? JSON.parse(params.eventData) : null;
 
@@ -123,10 +124,9 @@ export default function ActivityInfo() {
           {/* 이미지 */}
           {eventData.imageUrl && (
             <View style={styles.imageSection}>
-              <Image
+              <AutoHeightImage
                 source={{ uri: eventData.imageUrl }}
-                style={styles.eventImage}
-                resizeMode="contain"
+                width={width - 40}
               />
             </View>
           )}
@@ -404,3 +404,28 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
 });
+
+const AutoHeightImage = ({ source, width, style }) => {
+  const [height, setHeight] = React.useState(0);
+
+  React.useEffect(() => {
+    if (source?.uri) {
+      // 웹 이미지(URL) 크기 계산
+      Image.getSize(source.uri, (w, h) => {
+        setHeight(h * (width / w));
+      });
+    } else {
+      // 로컬 파일 크기 계산
+      const { width: w, height: h } = Image.resolveAssetSource(source);
+      setHeight(h * (width / w));
+    }
+  }, [source, width]);
+
+  return (
+    <Image
+      source={source}
+      style={[style, { width: width, height: height }]}
+      resizeMode="contain"
+    />
+  );
+};
