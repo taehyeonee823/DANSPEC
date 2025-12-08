@@ -23,7 +23,6 @@ export default function ApplyConfirmed() {
           source={require('@/assets/images/Check circle.svg')}
           style={styles.confirm}
           contentFit="contain"
-          tintColor="#3E6AF4"
         />
         <Text style={styles.title}>변경 완료</Text>
         <Text style={styles.text}>비밀번호 변경이 완료되었습니다!{"\n"}이용을 위해 재로그인 해주세요.</Text>
@@ -35,7 +34,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'center',
   },
   cancel: {
@@ -43,24 +42,20 @@ const styles = StyleSheet.create({
     height: 30,
   },
   confirm: {
-    marginTop: 300,
     width: 100,
     height: 100,
   },
   title: {
+    fontSize: 25,
     fontFamily: 'Pretendard-SemiBold',
-    fontSize: 28,
-    fontWeight: 'bold',
-    marginTop: 35,
-    paddingTop: 10,
+    marginTop: 16,
     textAlign: 'center',
     color: '#000',
   },
    text: {
-    fontSize: 18,
-    fontFamily: 'Pretendard-Regular',
-    marginTop: 20,
-    paddingTop: 10,
+    fontSize: 16,
+    fontFamily: 'Pretendard-Medium',
+    marginTop: 24,
     textAlign: 'center',
     color: '#000',
   }

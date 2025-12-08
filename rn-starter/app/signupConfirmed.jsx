@@ -24,8 +24,8 @@ export default function ApplyConfirmed() {
           style={styles.confirm}
           contentFit="contain"
         />
-        <Text style={styles.title}>수정 완료</Text>
-        <Text style={styles.text}>내 정보 수정이 완료되었습니다!{"\n"}서비스를 이용하려면 재로그인 해주세요.</Text>
+        <Text style={styles.title}>회원가입 완료</Text>
+        <Text style={styles.text}>회원가입이 완료되었습니다!{"\n"}로그인하고 단스펙의 다양한 서비스를 만나보세요.</Text>
     </View>
   );
 }

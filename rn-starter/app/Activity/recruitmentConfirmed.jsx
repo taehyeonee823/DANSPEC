@@ -49,7 +49,6 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontFamily: 'Pretendard-SemiBold',
     marginTop: 16,
-    paddingTop: 10,
     textAlign: 'center',
     color: '#000',
   },
