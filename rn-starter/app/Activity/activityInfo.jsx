@@ -178,7 +178,7 @@ export default function ActivityInfo() {
               source={require('@/assets/images/pin.png')}
               style={styles.pinIcon}
             />
-            <Text style={styles.headerTitle}>이 활동으로 모집중인 팀</Text>
+            <Text style={styles.headerTitle}>이 활동으로 모집 중인 팀</Text>
           </View>
 
         </View>

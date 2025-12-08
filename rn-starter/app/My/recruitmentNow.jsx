@@ -10,9 +10,24 @@ export default function RecruitmentNow() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
-  // 팀을 상태별로 필터링
-  const activeTeams = teamData.filter(team => team.status !== "마감");
-  const closedTeams = teamData.filter(team => team.status === "마감");
+  // status 계산 함수
+  const today = new Date();
+  const getStatus = (dueDate) => {
+    if (dueDate === '상시 모집') return '팀 모집 중';
+    const due = new Date(dueDate);
+    if (!isNaN(due) && due < new Date(today.getFullYear(), today.getMonth(), today.getDate())) {
+      return '마감';
+    }
+    return '팀 모집 중';
+  };
+
+  // status를 동적으로 계산하여 분류
+  const activeTeams = teamData
+    .map(team => ({ ...team, status: getStatus(team.dueDate) }))
+    .filter(team => team.status !== '마감');
+  const closedTeams = teamData
+    .map(team => ({ ...team, status: getStatus(team.dueDate) }))
+    .filter(team => team.status === '마감');
 
   return (
     <View style={[styles.mainContainer, { paddingTop: insets.top }]}>
@@ -37,7 +52,7 @@ export default function RecruitmentNow() {
         contentContainerStyle={styles.scrollViewContent}
       >
         <View style={styles.titleContainer}>
-          <Text style={styles.title}>현재 모집중</Text>
+          <Text style={styles.title}>현재 모집 중</Text>
         </View>
 
         {activeTeams.map((team) => (

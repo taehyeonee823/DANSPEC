@@ -2,16 +2,37 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 
-export default function teamApplyBox({ status, dueDate, title, description, tag }) {
+export default function teamApplyBox({ dueDate, title, description, tag }) {
   const router = useRouter();
+
+  // status 계산 로직
+  let status = '팀 모집 중';
+  if (dueDate === '상시 모집') {
+    status = '팀 모집 중';
+  } else {
+    const today = new Date();
+    const due = new Date(dueDate);
+    // dueDate가 오늘 이전이면 '마감'
+    if (!isNaN(due) && due < new Date(today.getFullYear(), today.getMonth(), today.getDate())) {
+      status = '마감';
+    }
+  }
+
+  const isClosed = status === '마감';
+  const statusStyle = [
+    styles.status,
+    isClosed && {
+      backgroundColor: '#F9CBCB',
+      color: '#F00',
+    },
+  ];
 
   return (
     <TouchableOpacity style={styles.card} onPress={() => router.push('/Team/teamInfo')}>
       <View style={styles.header}>
-        <Text style={styles.status}>{status}</Text>
+        <Text style={statusStyle}>{status}</Text>
         <Text style={styles.dueDate}>{dueDate}</Text>
       </View>
-
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.description}>{description}</Text>
       <Text style={styles.tag}>{tag}</Text>

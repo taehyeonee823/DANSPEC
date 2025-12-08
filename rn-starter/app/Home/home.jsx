@@ -163,8 +163,8 @@ const styles = StyleSheet.create({
   logo1: {
     width: 150,
     height: 150,
-    marginLeft: 30,
-    marginRight: 20,
+    marginLeft: 10,
+    marginRight: 10,
     opacity: 0.8
   },
   logo2: {
