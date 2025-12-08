@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { View, Text, ScrollView, KeyboardAvoidingView, TouchableOpacity, StyleSheet, TextInput, Alert } from 'react-native';
 import { Image } from 'expo-image';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Button from '../../components/Button';
 import DateRangePicker from '../../components/DateRangePicker';
 import { API_ENDPOINTS } from '@/config/api';
@@ -9,6 +10,8 @@ import { API_ENDPOINTS } from '@/config/api';
 export default function teamRecruitmentForm() {
   const router = useRouter();
   const params = useLocalSearchParams();
+    const insets = useSafeAreaInsets();
+  
   
   const getTodayStart = () => {
     const date = new Date();
@@ -137,7 +140,7 @@ export default function teamRecruitmentForm() {
           <Text style={{ fontSize: 28, color: '#000', fontWeight: 'bold' }}>←</Text>
         </TouchableOpacity>
 
-        <KeyboardAvoidingView behavior="height" style={{ flex: 1, marginTop: 110 }}>
+        <KeyboardAvoidingView behavior="height" style={{ flex: 1, marginTop: 110, paddingBottom: insets.bottom }}>
           <ScrollView style={styles.container}
               contentContainerStyle={styles.contentContainer}>
             <Text style={styles.mainTitle}>팀 모집글 작성하기</Text>
@@ -167,7 +170,12 @@ export default function teamRecruitmentForm() {
               </View>
             </View>
             <Text style={styles.sectionTitle}>학년</Text>
-            <Text style={styles.readOnlyText}>3학년</Text>
+            <View style={styles.departmentRow}>
+              <View style={styles.collegeBox}>
+                <Text style={styles.collegeText}>3학년</Text>
+              </View>
+              <Text style={styles.emptyBox}></Text>
+            </View>
             <Text style={styles.sectionTitle}>모집 인원</Text>
             <View style={styles.counterContainer}>
               <TouchableOpacity
@@ -240,7 +248,7 @@ export default function teamRecruitmentForm() {
                 style={styles.defaultInput}
                 value={traitInfo}
                 onChangeText={setTraitInfo}
-                placeholder="팀이 선호하는 인재상에 대해 작성해주세요."
+                placeholder="팀이 선호하는 인재상에 대해 작성해주세요"
             />
 
             <Text style={styles.sectionTitle}>진행 방식 및 한 줄 소개</Text>
@@ -248,7 +256,7 @@ export default function teamRecruitmentForm() {
                 style={styles.multilineInput}
                 value={introductionInfo}
                 onChangeText={setIntroductionInfo}
-                placeholder="모집글에 대한 소개를 상세하게 작성해주세요."
+                placeholder="모집글에 대한 소개를 상세하게 작성해주세요"
                 multiline={true}
             />
             <View style={{ height: 20 }} />
@@ -336,6 +344,17 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#3E6AF433',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyBox: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
   },

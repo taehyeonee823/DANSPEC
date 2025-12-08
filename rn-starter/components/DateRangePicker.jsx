@@ -113,7 +113,7 @@ const DateRangePicker = ({
             <Text style={styles.datePickerText}>{formatDate(startDate)}</Text>
           </View>
           <Image
-            source={require('@/assets/images/down.svg')}
+            source={require('@/assets/images/calendar.svg')}
             style={styles.datePickerArrow}
             contentFit="contain"
           />
@@ -130,7 +130,7 @@ const DateRangePicker = ({
             <Text style={styles.datePickerText}>{formatDate(endDate)}</Text>
           </View>
           <Image
-            source={require('@/assets/images/down.svg')}
+            source={require('@/assets/images/calendar.svg')}
             style={styles.datePickerArrow}
             contentFit="contain"
           />
@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
     height: 48,
     backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: '#3E6AF433',
     paddingHorizontal: 12,
     borderRadius: 8,
   },
@@ -225,15 +225,15 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 15, // 화살표 아이콘 크기만큼 오른쪽 여백 추가
+    marginRight: 15, 
   },
   datePickerText: {
     fontSize: 16,
     color: '#000',
   },
   datePickerArrow: {
-    width: 15,
-    height: 15,
+    width: 24,
+    height: 24,
   },
   modalContainer: {
     flex: 1,
