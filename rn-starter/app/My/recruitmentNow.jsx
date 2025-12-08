@@ -11,6 +11,10 @@ export default function RecruitmentNow() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
 
+  // 팀을 상태별로 필터링
+  const activeTeams = teamData.filter(team => team.status !== "마감");
+  const closedTeams = teamData.filter(team => team.status === "마감");
+
   return (
     <View style={[styles.mainContainer, { paddingTop: insets.top }]}>
       <View style={styles.headerBar}>
@@ -37,7 +41,7 @@ export default function RecruitmentNow() {
           <Text style={styles.title}>현재 모집중</Text>
         </View>
 
-        {teamData.map((team) => (
+        {activeTeams.map((team) => (
           <RecruitmentCard
             key={team.id}
             {...team}
@@ -47,6 +51,13 @@ export default function RecruitmentNow() {
          <View style={styles.titleContainer}>
           <Text style={styles.title}>마감</Text>
         </View>
+
+        {closedTeams.map((team) => (
+          <RecruitmentCard
+            key={team.id}
+            {...team}
+          />
+        ))}
 
       </ScrollView>
 
@@ -102,7 +113,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   title: {
-    fontSize: 20,
+    fontSize: 15,
     fontFamily: 'Pretendard-SemiBold',
     color: '#000',
     textAlign: 'left',
