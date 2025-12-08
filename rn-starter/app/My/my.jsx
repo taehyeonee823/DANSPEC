@@ -63,7 +63,7 @@ export default function My() {
           </View>
           <View style={styles.profileInfo}>
             <Text style={styles.profileName}>지은</Text>
-            <Text style={styles.profileInfo}>SW융합대학 통계데이터사이언스학과 3학년</Text>
+            <Text style={styles.profileInfo}>SW융합대학 {"\n"}통계데이터사이언스학과 3학년</Text>
             <Text style={styles.profileJob}>희망직무: 데이터분석가 (삼성전자)</Text>
           </View>
         </View>
@@ -72,16 +72,41 @@ export default function My() {
           <Text style={styles.buttonText}>회원정보 수정</Text>
         </TouchableOpacity>
 
+        <View style={styles.report}>
+          <Image
+            source={require('../../assets/images/dreame.png')}
+            style={styles.dreame}
+            contentFit="contain"
+          />
+          <Text style={styles.reportText}>드림이 리포트</Text>
+        </View>
+
         <View style={styles.divider} />
 
         <Text style={styles.setting}>계정 설정</Text>
 
-        <TouchableOpacity onPress={() => router.push('./modPassword')}>
+        <TouchableOpacity
+          style={styles.modPasswordContainer}
+          onPress={() => router.push('./modPassword')}
+        >
           <Text style={styles.modPassword}>비밀번호 변경</Text>
+          <Image
+            source={require('../../assets/images/right.svg')}
+            style={styles.rightIcon}
+            contentFit="contain"
+          />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => router.push('../login')}>
+        <TouchableOpacity
+          style={styles.modPasswordContainer}
+          onPress={() => router.push('../login')}
+        >
           <Text style={styles.logout}>로그아웃</Text>
+          <Image
+            source={require('../../assets/images/right.svg')}
+            style={styles.rightIcon}
+            contentFit="contain"
+          />
         </TouchableOpacity>
 
       </ScrollView>
@@ -140,7 +165,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Pretendard-Medium',
     color: '#000',
-    marginBottom: 4,
+    marginBottom: 6,
   },
   profileJob: {
     fontSize: 14,
@@ -170,19 +195,45 @@ const styles = StyleSheet.create({
   },
   setting: {
     fontSize: 22,
-    fontWeight: '500',
+    fontFamily: 'Pretendard-SemiBold',
     color: '#000',
     marginBottom: 20,
   },
+  modPasswordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
   modPassword: {
-    fontSize: 16,
+    fontSize: 17,
     fontFamily: 'Pretendard-Regular',
-    color: '#4869EC',
-    marginBottom: 10,
+    color: '#000',
+  },
+  rightIcon: {
+    width: 20,
+    height: 20,
   },
   logout: {
     fontSize: 16,
     fontFamily: 'Pretendard-Regular',
-    color: '#FF0000',
+    color: '#000',
+  },
+  report: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 30,
+    marginBottom: 20,
+  },
+  reportText: {
+    fontSize: 22,
+    fontFamily: 'Pretendard-SemiBold',
+    color: '#000',
+  },
+  dreame: {
+    width: 40,
+    height: 40,
+    marginRight: 10,
+    opacity: 1,
   },
 });
