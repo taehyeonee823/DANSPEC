@@ -25,24 +25,24 @@ export const useWebSocket = (userId) => {
                 if (prevNotifs.length === 0) {
                     mockNotification = {
                         id: Date.now(),
-                        title: `[MOCK] 가입 되었습니다! (1번째)`,
-                        message: '축하합니다. 가입이 승인되었습니다.',
+                        title: `가입승인`,
+                        message: '[데분 캠프]데이터 분석 1팀 모집 가입이 승인되었습니다!',
                         timestamp: Date.now(),
                         read: false,
                     };
                 } else if (prevNotifs.length === 1) {
                     mockNotification = {
                         id: Date.now() + 1,
-                        title: `[MOCK] 가입 되었습니다! (2번째)`,
-                        message: '축하합니다. 가입이 승인되었습니다.',
+                        title: `가입승인`,
+                        message: '[데분 캠프]데이터 분석 2팀 모집 가입이 승인되었습니다!',
                         timestamp: Date.now(),
                         read: false,
                     };
                 } else {
                     mockNotification = {
                         id: Date.now() + 2,
-                        title: `[MOCK] 가입이 거절되었습니다.`,
-                        message: '죄송합니다. 가입이 거절되었습니다.',
+                        title: `가입거절`,
+                        message: '[데분 캠프]데이터 분석 3팀 모집 가입이 거절되었습니다!',
                         timestamp: Date.now(),
                         read: false,
                     };

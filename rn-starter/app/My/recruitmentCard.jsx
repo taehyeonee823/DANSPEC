@@ -34,14 +34,14 @@ export default function RecruitmentCard({ id, status, dueDate, title, capacity }
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#fff',
     borderRadius: 12,
     padding: 12,
     marginLeft: 24,
     marginRight: 24,
     marginBottom: 16,
-    borderWidth: 3,
-    borderColor: '#A2B4F4',
+    borderWidth: 1,
+    borderColor: '#999',
   },
   header: {
     flexDirection: 'row',
