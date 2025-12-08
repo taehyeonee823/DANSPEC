@@ -253,7 +253,7 @@ export default function teamRecruitmentForm() {
             />
             <View style={{ height: 20 }} />
             <Button
-              title="등록하기"
+              title="변경하기"
               onPress={saveRecruitment}
             />
           </ScrollView>
