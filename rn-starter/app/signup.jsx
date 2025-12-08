@@ -90,7 +90,7 @@ export default function SignUpScreen() {
       return;
     }
 
-    showModal('✅ 성공', '회원가입이 완료되었습니다.', true);
+    router.push('/signupConfirmed');
   };
 
   return (
