@@ -3,15 +3,14 @@ import { View, Text, Pressable, Animated, StyleSheet, Dimensions } from 'react-n
 
 const categories = ['모든 모집글', '내가 쓴 모집글', '내가 쓴 지원글'];
 
-export default function CategoryTab() {
-  const [activeIndex, setActiveIndex] = useState(0);
+export default function CategoryTab({ activeIndex, onChangeIndex }) {
   const underlineX = useRef(new Animated.Value(0)).current;
 
   const screenWidth = Dimensions.get('window').width;
   const tabWidth = screenWidth / categories.length;
 
   const onPressTab = (index) => {
-    setActiveIndex(index);
+    onChangeIndex(index);
     Animated.spring(underlineX, {
       toValue: index * tabWidth,
       useNativeDriver: false,
