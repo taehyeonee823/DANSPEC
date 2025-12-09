@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Text, Modal } from 'react-native';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import NaviBar from '../naviBar';
@@ -7,6 +7,7 @@ import NaviBar from '../naviBar';
 export default function My() {
   const router = useRouter();
   const [hasNotification, setHasNotification] = useState(false); // 알림 여부 상태
+  const [showLogoutModal, setShowLogoutModal] = useState(false); // 로그아웃 모달 상태
 
   return (
     <View style={styles.container}>
@@ -99,7 +100,7 @@ export default function My() {
 
         <TouchableOpacity
           style={styles.modPasswordContainer}
-          onPress={() => router.push('../login')}
+          onPress={() => setShowLogoutModal(true)}
         >
           <Text style={styles.logout}>로그아웃</Text>
           <Image
@@ -110,6 +111,42 @@ export default function My() {
         </TouchableOpacity>
 
       </ScrollView>
+
+      {/* 로그아웃 확인 모달 */}
+      <Modal
+        visible={showLogoutModal}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setShowLogoutModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Image
+              source={require('../../assets/images/alert.svg')}
+              style={styles.alertIcon}
+              contentFit="contain"
+            />
+            <Text style={styles.modalTitle}>로그아웃 하시겠습니까?</Text>
+            <View style={styles.modalButtonContainer}>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.cancelButton]}
+                onPress={() => setShowLogoutModal(false)}
+              >
+                <Text style={styles.cancelButtonText}>취소</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.logoutButton]}
+                onPress={() => {
+                  setShowLogoutModal(false);
+                  router.push('../login');
+                }}
+              >
+                <Text style={styles.logoutButtonText}>로그아웃</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
 
       <NaviBar currentPage="my" />
     </View>
@@ -235,5 +272,58 @@ const styles = StyleSheet.create({
     height: 40,
     marginRight: 10,
     opacity: 1,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    width: '80%',
+    alignItems: 'center',
+  },
+  alertIcon: {
+    width: 48,
+    height: 48,
+    flexShrink: 0,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontFamily: 'Pretendard-SemiBold',
+    color: '#000',
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  modalButtonContainer: {
+    flexDirection: 'row',
+    gap: 12,
+    width: '100%',
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cancelButton: {
+    backgroundColor: '#F0F0F0',
+  },
+  cancelButtonText: {
+    fontSize: 16,
+    fontFamily: 'Pretendard-Medium',
+    color: '#666',
+  },
+  logoutButton: {
+    backgroundColor: '#3E6AF4',
+  },
+  logoutButtonText: {
+    fontSize: 16,
+    fontFamily: 'Pretendard-Medium',
+    color: '#FFFFFF',
   },
 });
