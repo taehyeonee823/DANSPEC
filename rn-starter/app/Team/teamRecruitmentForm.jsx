@@ -31,6 +31,12 @@ export default function teamRecruitmentForm() {
   const [inputs, setInputs] = useState([{id: Date.now(), value: ''}]);
   const [recruitCount, setRecruitCount] = useState(1);
   
+  // 포커스 상태 (placeholder 숨김용)
+  const [isTitleFocused, setIsTitleFocused] = useState(false);
+  const [focusedRoleId, setFocusedRoleId] = useState(null);
+  const [isTraitFocused, setIsTraitFocused] = useState(false);
+  const [isIntroFocused, setIsIntroFocused] = useState(false);
+  
   // 모집 날짜 관련 state
   const [startDate, setStartDate] = useState(getTodayStart());
   const [endDate, setEndDate] = useState(getTomorrowStart());
@@ -163,7 +169,10 @@ export default function teamRecruitmentForm() {
                 style={styles.defaultInput}
                 value={titleInfo}
                 onChangeText={setTitleInfo}
-                placeholder="제목을 입력해주세요" 
+                placeholder={isTitleFocused ? '' : "제목을 입력해주세요"}
+                placeholderTextColor="#CCCCCC"
+                onFocus={() => setIsTitleFocused(true)}
+                onBlur={() => setIsTitleFocused(false)}
             />
 
             <Text style={styles.sectionTitle}>팀장 이름</Text>
@@ -227,9 +236,12 @@ export default function teamRecruitmentForm() {
                 <View key={item.id} style={styles.inputRow}>
                   <TextInput
                     style={styles.input}
-                    placeholder={`모집 역할 #${index + 1} (예: 기획자)`}
+                    placeholder={focusedRoleId === item.id ? '' : `모집 역할 #${index + 1} (예: 기획자)`}
+                    placeholderTextColor="#CCCCCC"
                     value={item.value}
                     onChangeText={(text) => handleChange(text, item.id)}
+                    onFocus={() => setFocusedRoleId(item.id)}
+                    onBlur={() => setFocusedRoleId(null)}
                   />
                   <TouchableOpacity
                     onPress={() => isLastItem ? addInput() : removeInput(item.id)}
@@ -256,14 +268,19 @@ export default function teamRecruitmentForm() {
                 style={styles.defaultInput}
                 value={traitInfo}
                 onChangeText={setTraitInfo}
-                placeholder="팀이 선호하는 인재상에 대해 작성해주세요"
+                placeholder={isTraitFocused ? '' : "팀이 선호하는 인재상에 대해 작성해주세요"}
+                placeholderTextColor="#CCCCCC"
+                onFocus={() => setIsTraitFocused(true)}
+                onBlur={() => setIsTraitFocused(false)}
             />
 
             <Text style={styles.sectionTitle}>진행 방식 및 한 줄 소개</Text>
             <MultilineInput
                 value={introductionInfo}
                 onChangeText={setIntroductionInfo}
-                placeholder="모집글에 대한 소개를 상세하게 작성해주세요"
+                placeholder={isIntroFocused ? '' : "모집글에 대한 소개를 상세하게 작성해주세요"}
+                onFocus={() => setIsIntroFocused(true)}
+                onBlur={() => setIsIntroFocused(false)}
             />
             <View style={{ height: 20 }} />
             <Button
@@ -293,6 +310,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     textAlign: 'center',
     marginBottom: 28,
+    fontFamily: 'Pretendard-SemiBold',
   },
   mainTitle: {
     width: 345,
@@ -446,4 +464,3 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-//하단 safe area 지우기

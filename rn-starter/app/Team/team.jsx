@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import NaviBar from '../naviBar';
 import CategoryChips from '@/components/CategoryChips';
 import TeamApplyBox from './teamApplyBox';
-import teamData from './teamApplyBoxDemo.json';
+import teamData from './teamApplyBoxDemo.json'; 
 import CategoryTab from './categoryTab';
 
 export default function Team() {

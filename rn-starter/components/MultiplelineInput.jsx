@@ -5,15 +5,20 @@ const MultilineInput = ({
     value, 
     onChangeText, 
     placeholder,
-    style
+    style,
+    onFocus,
+    onBlur,
+    placeholderTextColor = "#CCCCCC",
 }) => {
     return (
         <TextInput 
             style={styles.input}
             placeholder={placeholder} 
-            placeholderTextColor="#CCCCCC"
+            placeholderTextColor={placeholderTextColor}
             value={value}
             onChangeText={onChangeText}
+            onFocus={onFocus}
+            onBlur={onBlur}
             multiline={true} 
             numberOfLines={4}
             textAlignVertical="top"
