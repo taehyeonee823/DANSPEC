@@ -67,16 +67,22 @@ export default function Team() {
       </View>
 
       <ScrollView style={styles.contentArea} contentContainerStyle={styles.scrollContent}>
-        {activeTabIndex === 0 && displayedTeams.map((team) => (
-          <TeamApplyBox
-            key={team.id}
-            status={team.status}
-            dueDate={team.dueDate}
-            title={team.title}
-            description={team.description}
-            tag={`연결된 활동: ${team.tag}`}
-          />
-        ))}
+        {activeTabIndex === 0 && displayedTeams.map((team) => {
+          const isMine = team.manager === "지은";
+          const navigateToModify = () =>
+            router.push(`/Team/teamInfoModify?id=${team.id}&title=${encodeURIComponent(team.title)}`);
+          return (
+            <TeamApplyBox
+              key={team.id}
+              status={team.status}
+              dueDate={team.dueDate}
+              title={team.title}
+              description={team.description}
+              tag={`연결된 활동: ${team.tag}`}
+              onPress={isMine ? navigateToModify : undefined}
+            />
+          );
+        })}
         {activeTabIndex === 1 && displayedTeams
           .filter((team) => team.manager === "지은")
           .map((team) => (
@@ -87,6 +93,7 @@ export default function Team() {
               title={team.title}
               description={team.description}
               tag={`연결된 활동: ${team.tag}`}
+              onPress={() => router.push(`/Team/teamInfoModify?id=${team.id}&title=${encodeURIComponent(team.title)}`)}
             />
           ))}
       </ScrollView>

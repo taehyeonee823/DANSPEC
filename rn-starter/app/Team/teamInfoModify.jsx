@@ -1,23 +1,30 @@
 import React from "react";
 import { Text, View, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpacity, Image } from "react-native";
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Button from '../../components/Button';
 import teamInfoData from './teamInfo.json'; 
 
 export default function TeamInfo() {
   const router = useRouter();
+  const params = useLocalSearchParams();
   const insets = useSafeAreaInsets();
 
-  // teamInfo.json dummy data에서 팀장 정보 추출
-  const teamLeaderTitle = teamInfoData[0].title;
-  const teamLeaderTag = teamInfoData[0].tag;
-  const teamLeaderDescription = teamInfoData[0].description;
-  const teamLeaderName = teamInfoData[0].name; 
-  const teamLeaderGrade = teamInfoData[0].grade;
-  const teamLeaderDepartment = teamInfoData[0].department;
-  const teamLeaderRole = teamInfoData[0].role.join(", ");
-  const teamLeaderTrait = teamInfoData[0].trait;
+  // 선택된 팀 정보 조회 (기본값: 첫 번째)
+  const teamId = params.id ? Number(params.id) : teamInfoData[0]?.id;
+  const teamTitleParam = params.title;
+  const team =
+    teamInfoData.find((item) => item.id === teamId) ||
+    (teamTitleParam ? teamInfoData.find((item) => item.title === teamTitleParam) : undefined) ||
+    teamInfoData[0];
+  const teamLeaderTitle = team?.title;
+  const teamLeaderTag = team?.tag;
+  const teamLeaderDescription = team?.description;
+  const teamLeaderName = team?.name; 
+  const teamLeaderGrade = team?.grade;
+  const teamLeaderDepartment = team?.department;
+  const teamLeaderRole = team?.role?.join(", ");
+  const teamLeaderTrait = team?.trait;
   
 
   return (
@@ -30,7 +37,7 @@ export default function TeamInfo() {
         </TouchableOpacity>
         <TouchableOpacity
           style={{ position: 'absolute', top:60, right: 20, zIndex: 999, padding: 8 }}
-          onPress={() => router.push('/Team/teamRecruitModify')}
+          onPress={() => router.push('/Team/teamRecruitmentFormModify')}
         >
           <Text style={{ fontSize: 18, color: '#000', fontWeight: 'bold' }}>수정하기</Text>
         </TouchableOpacity>

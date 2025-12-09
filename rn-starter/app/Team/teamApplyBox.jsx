@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 
-export default function teamApplyBox({ dueDate, title, description, tag }) {
+export default function teamApplyBox({ dueDate, title, description, tag, onPress }) {
   const router = useRouter();
 
   // status 계산 로직
@@ -27,8 +27,16 @@ export default function teamApplyBox({ dueDate, title, description, tag }) {
     },
   ];
 
+  const handlePress = () => {
+    if (onPress) {
+      onPress();
+      return;
+    }
+    router.push('/Team/teamInfo');
+  };
+
   return (
-    <TouchableOpacity style={styles.card} onPress={() => router.push('/Team/teamInfo')}>
+    <TouchableOpacity style={styles.card} onPress={handlePress}>
       <View style={styles.header}>
         <Text style={statusStyle}>{status}</Text>
         <Text style={styles.dueDate}>{dueDate}</Text>

@@ -140,7 +140,7 @@ export default function teamRecruitmentForm() {
         <KeyboardAvoidingView behavior="height" style={{ flex: 1, marginTop: 110 }}>
           <ScrollView style={styles.container}
               contentContainerStyle={styles.contentContainer}>
-            <Text style={styles.mainTitle}>팀 모집글 작성하기</Text>
+            <Text style={styles.mainTitle}>팀 모집글 수정하기</Text>
             <Text style={styles.caption}>공모전·교내·대외 활동별로 함께할 팀원을 모집해보세요.</Text>
             
             {/* 고정 정보 섹션 */}
