@@ -5,14 +5,14 @@ import { Image } from 'expo-image';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Button from '../../components/Button';
 import DateRangePicker from '../../components/DateRangePicker';
+import MultilineInput from '../../components/MultiplelineInput';
 import { API_ENDPOINTS } from '@/config/api';
 
 export default function teamRecruitmentForm() {
   const router = useRouter();
   const params = useLocalSearchParams();
-    const insets = useSafeAreaInsets();
-  
-  
+  const insets = useSafeAreaInsets();
+   
   const getTodayStart = () => {
     const date = new Date();
     date.setHours(0, 0, 0, 0);
@@ -36,7 +36,6 @@ export default function teamRecruitmentForm() {
   // 모집 날짜 관련 state
   const [startDate, setStartDate] = useState(getTodayStart());
   const [endDate, setEndDate] = useState(getTomorrowStart());
-
 
   // 역할 입력 핸들러
   const handleChange = (text, id) => {
@@ -84,6 +83,14 @@ export default function teamRecruitmentForm() {
       Alert.alert('알림', '최소 한 개 이상의 역할을 입력해주세요.');
       return;
     }
+    if (!traitInfo.trim()) {
+      Alert.alert('알림', '특성을 입력해주세요.');
+      return;
+    }
+    if (!introductionInfo.trim()) {
+      Alert.alert('알림', '진행 방식 및 한 줄 소개를 입력해주세요.');
+      return;
+    }
 
     // 백엔드 API 형식에 맞게 데이터 구성
     const newRecruitment = {
@@ -129,6 +136,7 @@ export default function teamRecruitmentForm() {
     }
   };
 
+  //전역에서 팀장 이름, 학과, 학년 끌고 올 예정
   const teamLeaderName = "김단국";
 
   return (
@@ -137,7 +145,11 @@ export default function teamRecruitmentForm() {
           style={{ position: 'absolute', top:60, left: 8, zIndex: 999, padding: 8 }}
           onPress={() => router.back()}
         >
-          <Text style={{ fontSize: 28, color: '#000', fontWeight: 'bold' }}>←</Text>
+          <Image
+            source={require('@/assets/images/left.svg')}
+            style={{ width: 30, height: 30 }}
+            contentFit="contain"
+          />
         </TouchableOpacity>
 
         <KeyboardAvoidingView behavior="height" style={{ flex: 1, marginTop: 110, paddingBottom: insets.bottom }}>
@@ -145,10 +157,8 @@ export default function teamRecruitmentForm() {
               contentContainerStyle={styles.contentContainer}>
             <Text style={styles.mainTitle}>팀 모집글 작성하기</Text>
             <Text style={styles.caption}>공모전·교내·대외 활동별로 함께할 팀원을 모집해보세요.</Text>
-            
-            {/* 고정 정보 섹션 */}
             <Text style={styles.sectionTitle}>연결할 활동 / 공모전</Text>
-            <Text style={styles.readOnlyText}>{activityTitle}</Text>
+            <Text style={styles.connectBox}>{activityTitle}</Text>
 
             <Text style={styles.sectionTitle}>제목</Text>
             <TextInput
@@ -166,7 +176,7 @@ export default function teamRecruitmentForm() {
                 <Text style={styles.collegeText}>SW융합대학</Text>
               </View>
               <View style={styles.majorBox}>
-                <Text style={styles.majorText}>통계</Text>
+                <Text style={styles.majorText}>통계데이터사이언스</Text>
               </View>
             </View>
             <Text style={styles.sectionTitle}>학년</Text>
@@ -252,12 +262,10 @@ export default function teamRecruitmentForm() {
             />
 
             <Text style={styles.sectionTitle}>진행 방식 및 한 줄 소개</Text>
-            <TextInput
-                style={styles.multilineInput}
+            <MultilineInput
                 value={introductionInfo}
                 onChangeText={setIntroductionInfo}
                 placeholder="모집글에 대한 소개를 상세하게 작성해주세요"
-                multiline={true}
             />
             <View style={{ height: 20 }} />
             <Button
@@ -277,6 +285,16 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingBottom: 40,
+  },
+  connectBox:{
+    flex: 1,
+    borderWidth: 1,
+    borderColor: '#3E6AF433',
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    textAlign: 'center',
+    marginBottom: 28,
   },
   mainTitle: {
     width: 345,
@@ -306,9 +324,9 @@ const styles = StyleSheet.create({
   // readOnlyText 스타일 수정 (fontColor 제거, color로 통일)
   readOnlyText: {
     fontSize: 16,
-    fontFamily: 'Pretendard-Regular',
-    color: '#1A1A1A',
-    borderBottomColor: '#CCCCCC',
+    fontFamily: 'Pretendard-Medium',
+    color: '#A6A6A6',
+    borderBottomColor: '#1A1A1A',
     paddingVertical: 10,
     paddingHorizontal: 12,
     borderBottomWidth: 1,
@@ -367,20 +385,10 @@ const styles = StyleSheet.create({
     height: 48,
     backgroundColor: '#fff',
     borderBottomWidth: 1,
-    borderColor: '#ddd',
+    borderColor: '#1A1A1A',
     padding: 8,
     fontSize: 16,
     marginBottom: 28,
-  },
-  multilineInput: {
-    height: 100,
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#ddd',
-    padding: 10,
-    borderRadius: 8,
-    fontSize: 16,
-    textAlignVertical: 'top',
   },
 
   inputRow: {
@@ -392,7 +400,7 @@ const styles = StyleSheet.create({
     flex: 1, 
     backgroundColor: '#fff',
     borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
+    borderBottomColor: '#1A1A1A',
     padding: 10,
     fontSize: 16,
   },
@@ -418,7 +426,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 28,
     paddingHorizontal: 24,
     gap: 20,
   },

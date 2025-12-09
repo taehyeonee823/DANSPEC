@@ -104,7 +104,7 @@ const DateRangePicker = ({
   return (
     <View style={styles.datePickerContainer}>
       <View>
-        <Text style={[styles.sectionTitle, labelStyle]}>모집 시작일</Text>
+        <Text style={ styles.sectionTitle }>모집 시작날짜</Text>
         <TouchableOpacity
           style={styles.datePickerButton}
           onPress={openStartDatePicker}
@@ -121,7 +121,7 @@ const DateRangePicker = ({
       </View>
 
       <View>
-        <Text style={[styles.sectionTitle, labelStyle]}>모집 종료일</Text>
+        <Text style={ styles.sectionTitle }>모집 마감날짜</Text>
         <TouchableOpacity
           style={styles.datePickerButton}
           onPress={openEndDatePicker}
@@ -209,6 +209,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Pretendard-Medium',
     marginBottom: 16,
+    marginTop: 28,
     color: '#000',
   },
   datePickerButton: {
@@ -220,12 +221,13 @@ const styles = StyleSheet.create({
     borderColor: '#3E6AF433',
     paddingHorizontal: 12,
     borderRadius: 8,
+    marginBottom: 0,
   },
   datePickerTextContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 15, 
+    marginRight: 15,
   },
   datePickerText: {
     fontSize: 16,

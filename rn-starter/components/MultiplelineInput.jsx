@@ -9,9 +9,9 @@ const MultilineInput = ({
 }) => {
     return (
         <TextInput 
-            style={[styles.input, style]}
+            style={styles.input}
             placeholder={placeholder} 
-            placeholderTextColor="#999"
+            placeholderTextColor="#CCCCCC"
             value={value}
             onChangeText={onChangeText}
             multiline={true} 
@@ -25,12 +25,12 @@ const styles = StyleSheet.create({
     input: {
         minHeight: 100,
         borderWidth: 1,
-        borderColor: '#ddd',
+        borderColor: '#3E6AF433',
         borderRadius: 8,
         paddingHorizontal: 15,
         paddingTop: 15,
         paddingBottom: 15,
-        fontSize: 12,
+        fontSize: 16,
         backgroundColor: '#fff',
         marginBottom: 20, 
     },
