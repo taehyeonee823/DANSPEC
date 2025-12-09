@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { View, Text, ScrollView, KeyboardAvoidingView, TouchableOpacity, StyleSheet, TextInput, Alert } from 'react-native';
 import { Image } from 'expo-image';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Button from '../../components/Button';
 import DateRangePicker from '../../components/DateRangePicker';
 import MultilineInput from '../../components/MultiplelineInput';
@@ -11,7 +10,6 @@ import { API_ENDPOINTS } from '@/config/api';
 export default function teamRecruitmentForm() {
   const router = useRouter();
   const params = useLocalSearchParams();
-  const insets = useSafeAreaInsets();
    
   const getTodayStart = () => {
     const date = new Date();
@@ -152,7 +150,7 @@ export default function teamRecruitmentForm() {
           />
         </TouchableOpacity>
 
-        <KeyboardAvoidingView behavior="height" style={{ flex: 1, marginTop: 110, paddingBottom: insets.bottom }}>
+        <KeyboardAvoidingView behavior="height" style={{ flex: 1, marginTop: 110 }}>
           <ScrollView style={styles.container}
               contentContainerStyle={styles.contentContainer}>
             <Text style={styles.mainTitle}>팀 모집글 작성하기</Text>
@@ -448,3 +446,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+//하단 safe area 지우기
