@@ -151,6 +151,8 @@ export default function Activity() {
                 dueDate={dueDate}
                 title={event.title}
                 summarizedDescription={event.summarizedDescription}
+                startDate={event.startDate}
+                endDate={event.endDate}
               />
             );
           })

@@ -1,9 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
+import { Image } from 'expo-image';
 
 
-export default function activityApplyBox({ event, tag, title, summarizedDescription, dueDate }) {
+export default function activityApplyBox({ event, tag, title, summarizedDescription, dueDate, startDate, endDate }) {
   const router = useRouter();
 
   // 카테고리 한글 변환
@@ -37,6 +38,17 @@ export default function activityApplyBox({ event, tag, title, summarizedDescript
 
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.summarizedDescription}>{summarizedDescription}</Text>
+      <View style={styles.dateTagWrapper}>
+        <View style={styles.dateTag}>
+        <Image
+          source={require('@/assets/images/calendar.svg')}
+          style={{ width: 18, height: 18, marginRight: 4 }}
+          contentFit="contain"
+          tintColor="#FFFFFF"
+        />
+        <Text style={styles.dateTagText}>{startDate} ~ {endDate}</Text>
+        </View>
+      </View>
     </TouchableOpacity>
   );
 }
@@ -67,6 +79,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 15,
+  },
+  dateTagWrapper: {
+    flexDirection: 'row',
+    gap: 8,
+    marginTop: 4,
+  },
+  dateTag: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    fontFamily: 'Pretendard-Medium',
+    backgroundColor: '#3E64F4',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#3E64F4',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  dateTagText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontFamily: 'Pretendard-Medium',
   },
   dueDate: {
     fontSize: 12,

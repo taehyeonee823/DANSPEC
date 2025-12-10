@@ -311,6 +311,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 28,
     fontFamily: 'Pretendard-SemiBold',
+    color: '#A6A6A6',
   },
   mainTitle: {
     width: 345,

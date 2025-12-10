@@ -76,8 +76,8 @@ export default function ButtonSheet({ visible, onClose, onSelectCollege }) {
           <View style={styles.header} {...panResponder.panHandlers}>
             <View style={styles.dragHandle} />
           </View>
-
           <View style={styles.content}>
+            <Text style={{fontSize: 20, fontFamily: 'Pretendard-SemiBold', marginBottom: 12}}>단과대</Text>
             <View style={styles.grid}>
               {colleges.map((college) => (
                 <TouchableOpacity
