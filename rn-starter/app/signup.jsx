@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity, Text, View, Modal, Image, ScrollView } from 'react-native';
+import { StyleSheet, TextInput, TouchableOpacity, Text, View, Modal, ScrollView } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import { Image } from 'expo-image';
 
 import { API_ENDPOINTS } from '@/config/api';
 

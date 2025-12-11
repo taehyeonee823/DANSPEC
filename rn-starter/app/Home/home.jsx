@@ -56,7 +56,7 @@ export default function Home() {
                 <View style={styles.leftBox}>
                   <TouchableOpacity style={styles.button} onPress={() => 
                     router.push('/Activity/activity')}>
-                    <Text style={styles.buttonText}>활동 둘러보기</Text>
+                    <Text style={styles.buttonText}>추천 보러가기</Text>
                   </TouchableOpacity>
 
                   <Text style={styles.slideTitle}>지금 시작해 볼만한 활동</Text>
