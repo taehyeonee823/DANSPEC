@@ -86,10 +86,15 @@ export default function VerificationScreen() {
       const data = await response.json();
 
       if (data.success) {
+<<<<<<< HEAD
         // 타이머 시작 (5분 = 300초)
         setIsCodeSent(true);
         setTimer(300);
         showModal('✅ 확인', '6자리 인증코드를 메일로 발송하였습니다. 인증코드를 입력해주세요.');
+=======
+        showModal('✅ 확인', `6자리 인증코드를 메일로 발송하였습니다.
+인증코드를 입력해주세요.`);
+>>>>>>> 64a191137e65dedba8ce5dd563da30c01b712b0f
       } else {
         showModal('⚠️ 오류', data.message || '인증코드 발송에 실패했습니다.');
       }
@@ -173,6 +178,7 @@ export default function VerificationScreen() {
       return;
     }
 
+<<<<<<< HEAD
     // 데이터를 전달하며 signup으로 이동
     router.push({
       pathname: '/signup',
@@ -181,6 +187,32 @@ export default function VerificationScreen() {
         verificationCode,
         password,
         confirmPassword
+=======
+    try {
+      const response = await fetch(API_ENDPOINTS.EMAIL_VERIFY, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify({ email, code: verificationCode }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        // 인증 성공 시 데이터를 전달하며 signup으로 이동
+        router.push({
+          pathname: '/signup',
+          params: {
+            email,
+            verificationCode,
+            password,
+            confirmPassword
+          }
+        });
+      } else {
+        showModal('⚠️ 오류', data.message || '인증번호가 올바르지 않거나 만료되었습니다.');
+>>>>>>> 64a191137e65dedba8ce5dd563da30c01b712b0f
       }
     });
   };
