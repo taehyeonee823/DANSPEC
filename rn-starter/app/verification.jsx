@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, Text, View, Modal } from 'react-native';
 import { useRouter } from 'expo-router';
+import { Image } from 'expo-image';
 
 export default function VerificationScreen() {
   const router = useRouter();
@@ -117,10 +118,14 @@ export default function VerificationScreen() {
       }} />
 
       <TouchableOpacity
-        style={{ position: 'absolute', top: 60, left: 20, zIndex: 999, padding: 8 }}
+        style={{ position: 'absolute', top: 60, left: 6, zIndex: 999, padding: 8 }}
         onPress={() => router.back()}
       >
-        <Text style={{ fontSize: 28, color: '#000', fontWeight: 'bold' }}>←</Text>
+        <Image
+            source={require('@/assets/images/left.svg')}
+            style={{ width: 30, height: 30 }}
+            contentFit="contain"
+          />
       </TouchableOpacity>
 
       <View style={styles.container}>
@@ -228,7 +233,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ffffff',
-    paddingTop: 105,
+    paddingTop: 100,
     paddingLeft: 24,
     paddingRight: 30,
   },
@@ -274,36 +279,37 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     marginTop: 56,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
   },
   inputContainer2: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: '40%',
+    width: '100%',
     marginTop: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
   },
   inputContainer3: {
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
     marginTop: 30,
-    marginBottom: -15
+    marginBottom: -15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
   },
   input: {
     flex: 1,
     height: 40,
-    borderBottomWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    paddingHorizontal: 15,
     fontSize: 16,
     backgroundColor: '#fff',
-    marginRight: 10,
+    paddingLeft: 8,
   },
   checkButton: {
     backgroundColor: '#ffffff',
     paddingHorizontal: 15,
     paddingVertical: 10,
-    borderBottomWidth: 1,
     borderBottomColor: '#CCCCCC',
     height: 40,
     justifyContent: 'center',

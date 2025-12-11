@@ -110,14 +110,18 @@ export default function SignUpScreen() {
           style={{ position: 'absolute', top:60, left: 20, zIndex: 999, padding: 8 }}
           onPress={() => router.back()}
         >
-          <Text style={{ fontSize: 28, color: '#000', fontWeight: 'bold' }}>←</Text>
+          <Image
+            source={require('@/assets/images/left.svg')}
+            style={{ width: 30, height: 30 }}
+            contentFit="contain"
+          />
       </TouchableOpacity>
 
       <ScrollView style={styles.container}
         contentContainerStyle={styles.scrollViewContent}>
       <Text style={styles.subtitle}>내 정보 입력을 완료해주세요. {'\n'}드림이가 딱 맞는 활동을 추천해 드릴게요.</Text>
 
-      <Text style={styles.text}>* 이름</Text>
+      <Text style={styles.text}>이름</Text>
     <View style={styles.inputContainer3}>
       <TextInput
           style={styles.input}
@@ -296,7 +300,7 @@ export default function SignUpScreen() {
         </ScrollView>
       )}
     </View>
-    <Text style={styles.text}>* 희망 직무 1순위</Text>
+    <Text style={styles.text}>희망 직무 1순위</Text>
     <View style={styles.inputContainer3}>
       <TextInput
           style={styles.input}
@@ -306,7 +310,7 @@ export default function SignUpScreen() {
           onChangeText={setFirstJobPreference}
         />
       </View>
-      <Text style={styles.text}>* 희망 직무 2순위</Text>
+      <Text style={styles.text}>희망 직무 2순위</Text>
     <View style={styles.inputContainer3}>
       <TextInput
           style={styles.input}
@@ -316,7 +320,7 @@ export default function SignUpScreen() {
           onChangeText={setSecondJobPreference}
         />
       </View>
-      <Text style={styles.text}>* 희망 직무 3순위</Text>
+      <Text style={styles.text}>희망 직무 3순위</Text>
     <View style={styles.inputContainer3}>
       <TextInput
           style={styles.input}
@@ -392,19 +396,19 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
   },
   subtitle: {
-    fontSize: 18,
-    fontWeight: '500',
+    fontSize: 20,
+    fontFamily: 'Pretendard-SemiBold',
     color: '#000',
     textAlign: 'left',
-    marginTop: 30,
-    marginBottom: 20
+    marginTop: 28,
+    marginBottom: 32
   },
    text: {
-    fontSize: 14,
-    fontWeight: '300',
+    fontSize: 16,
+    fontFamily: 'Pretendard-SemiBold',
     color: '#000',
     textAlign: 'left',
-    marginBottom: 5,
+    marginBottom: 12,
   },
   errorText: {
     fontSize: 12,
@@ -443,13 +447,11 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     height: 40,
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
+    borderBottomWidth: 1,
+    borderColor: '#1A1A1A',
     paddingHorizontal: 15,
     fontSize: 16,
     backgroundColor: '#fff',
-    marginRight: 10,
   },
   introInput: {
     height: 100,
