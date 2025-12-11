@@ -1,7 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, Text, View, Modal } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Image } from 'expo-image';
 import { API_ENDPOINTS } from '@/config/api';
 
 export default function VerificationScreen() {
@@ -15,6 +14,33 @@ export default function VerificationScreen() {
   const [modalTitle, setModalTitle] = useState('');
   const [modalMessage, setModalMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
+  
+  // 타이머 관련 상태
+  const [isCodeSent, setIsCodeSent] = useState(false);
+  const [timer, setTimer] = useState(0);
+  const timerRef = useRef(null);
+  const [codeVerified, setCodeVerified] = useState(false);
+
+  // 타이머 카운트다운
+  useEffect(() => {
+    if (timer > 0) {
+      timerRef.current = setTimeout(() => {
+        setTimer(timer - 1);
+      }, 1000);
+    }
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+    };
+  }, [timer]);
+
+  // 타이머 포맷 (mm:ss)
+  const formatTimer = (seconds) => {
+    const min = Math.floor(seconds / 60);
+    const sec = seconds % 60;
+    return `${min}:${sec.toString().padStart(2, '0')}`;
+  };
 
   const showModal = (title, message, success = false) => {
     setModalTitle(title);
@@ -60,12 +86,45 @@ export default function VerificationScreen() {
       const data = await response.json();
 
       if (data.success) {
+        // 타이머 시작 (5분 = 300초)
+        setIsCodeSent(true);
+        setTimer(300);
         showModal('✅ 확인', '6자리 인증코드를 메일로 발송하였습니다. 인증코드를 입력해주세요.');
       } else {
         showModal('⚠️ 오류', data.message || '인증코드 발송에 실패했습니다.');
       }
     } catch (error) {
       console.error('Email request error:', error);
+      showModal('⚠️ 오류', '서버와 통신 중 오류가 발생했습니다.');
+    }
+  };
+
+  // 인증번호 검증
+  const handleVerifyCode = async () => {
+    if (!verificationCode || verificationCode.length !== 6) {
+      showModal('⚠️ 오류', '6자리 인증번호를 입력해주세요.');
+      return;
+    }
+
+    try {
+      const response = await fetch(API_ENDPOINTS.EMAIL_VERIFY, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify({ email, code: verificationCode }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setCodeVerified(true);
+        setTimer(0); // 타이머 멈춤
+      } else {
+        showModal('⚠️ 오류', data.message || '인증번호가 올바르지 않습니다.');
+      }
+    } catch (error) {
+      console.error('Email verify error:', error);
       showModal('⚠️ 오류', '서버와 통신 중 오류가 발생했습니다.');
     }
   };
@@ -90,7 +149,7 @@ export default function VerificationScreen() {
     setPasswordMatch(password === text);
   };
 
-  const handleNext = async () => {
+  const handleNext = () => {
     if (!email || !email.includes('@dankook.ac.kr')) {
       showModal('⚠️ 오류', '단국대학교 이메일을 입력해주세요.');
       return;
@@ -114,35 +173,16 @@ export default function VerificationScreen() {
       return;
     }
 
-    try {
-      const response = await fetch(API_ENDPOINTS.EMAIL_VERIFY, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: JSON.stringify({ email, code: verificationCode }),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        // 인증 성공 시 데이터를 전달하며 signup으로 이동
-        router.push({
-          pathname: '/signup',
-          params: {
-            email,
-            verificationCode,
-            password,
-            confirmPassword
-          }
-        });
-      } else {
-        showModal('⚠️ 오류', data.message || '인증번호가 올바르지 않습니다.');
+    // 데이터를 전달하며 signup으로 이동
+    router.push({
+      pathname: '/signup',
+      params: {
+        email,
+        verificationCode,
+        password,
+        confirmPassword
       }
-    } catch (error) {
-      console.error('Email verify error:', error);
-      showModal('⚠️ 오류', '서버와 통신 중 오류가 발생했습니다.');
-    }
+    });
   };
 
   return (
@@ -182,10 +222,11 @@ export default function VerificationScreen() {
             autoComplete="none"
           />
           <TouchableOpacity style={styles.checkButton} onPress={handleCheckDuplicate}>
-            <Text style={styles.checkButtonText}>인증 요청</Text>
+            <Text style={styles.checkButtonText}>
+              {isCodeSent ? '다시 요청' : '인증 요청'}
+            </Text>
           </TouchableOpacity>
         </View>
-
 
         <View style={styles.inputContainer2}>
           <TextInput
@@ -196,7 +237,20 @@ export default function VerificationScreen() {
             onChangeText={setVerificationCode}
             keyboardType="number-pad"
             autoCapitalize="none"
+            editable={!codeVerified}
           />
+          {codeVerified ? (
+            <Text style={styles.checkmark}>✓</Text>
+          ) : (
+            isCodeSent && timer > 0 && (
+              <>
+                <Text style={styles.timerText}>{formatTimer(timer)}</Text>
+                <TouchableOpacity style={styles.verifyButton} onPress={handleVerifyCode}>
+                  <Text style={styles.verifyButtonText}>확인</Text>
+                </TouchableOpacity>
+              </>
+            )
+          )}
         </View>
 
         <View style={styles.inputContainer3}>
@@ -315,37 +369,36 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     marginTop: 56,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
   },
   inputContainer2: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: '40%',
+    width: '100%',
     marginTop: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
   },
   inputContainer3: {
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
     marginTop: 30,
-    marginBottom: -15
+    marginBottom: -15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
   },
   input: {
     flex: 1,
     height: 40,
-    borderBottomWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    paddingHorizontal: 15,
     fontSize: 16,
     backgroundColor: '#fff',
-    marginRight: 10,
+    paddingLeft: 8,
   },
   checkButton: {
     backgroundColor: '#ffffff',
     paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#CCCCCC',
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
@@ -353,8 +406,30 @@ const styles = StyleSheet.create({
   checkButtonText: {
     color: '#1A1A1A',
     fontSize: 14,
-    marginTop: -2,
     fontWeight: '600',
+  },
+  timerText: {
+    color: '#FF3B30',
+    fontSize: 14,
+    fontWeight: '600',
+    marginLeft: 10,
+  },
+  verifyButton: {
+    paddingHorizontal: 12,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  verifyButtonText: {
+    color: '#3E6AF4',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  checkmark: {
+    color: '#34C759',
+    fontSize: 20,
+    fontWeight: '700',
+    marginLeft: 10,
   },
   nextButton: {
     width: '100%',
