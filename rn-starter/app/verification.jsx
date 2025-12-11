@@ -89,7 +89,8 @@ export default function VerificationScreen() {
         // 타이머 시작 (5분 = 300초)
         setIsCodeSent(true);
         setTimer(300);
-        showModal('✅ 확인', '6자리 인증코드를 메일로 발송하였습니다. 인증코드를 입력해주세요.');
+        showModal('✅ 확인', `6자리 인증코드를 메일로 발송하였습니다. 
+인증코드를 입력해주세요.`);
       } else {
         showModal('⚠️ 오류', data.message || '인증코드 발송에 실패했습니다.');
       }

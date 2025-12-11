@@ -161,17 +161,18 @@ export default function SignUpScreen() {
 
     try {
       const signupData = {
-        email,
-        password,
-        name,
-        campus,
-        college,
-        major,
-        grade,
-        interestJobPrimary,
-        interestJobSecondary,
-        interestJobTertiary,
-        tagline: tagline || null,
+        email: String(email),
+        password: String(password),
+        passwordConfirm: String(confirmPassword),
+        name: String(name),
+        campus: String(campus),
+        college: String(college),
+        major: String(major),
+        grade: String(grade),
+        interestJobPrimary: String(interestJobPrimary),
+        interestJobSecondary: String(interestJobSecondary),
+        interestJobTertiary: String(interestJobTertiary),
+        tagline: tagline ? String(tagline) : '',
       };
 
       console.log('=== API 요청 데이터 ===');
