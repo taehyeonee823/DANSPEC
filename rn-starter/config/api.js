@@ -22,8 +22,12 @@ export const EVENT_SERVER_URL = 'http://43.203.191.87:8080';
 // API 엔드포인트
 export const API_ENDPOINTS = {
   LOGIN: `${API_BASE_URL}/api/login`,
-  SIGNUP: `${API_BASE_URL}/api/signup`,
   CHECK_EMAIL: `${API_BASE_URL}/api/check-email`,
+
+  // 이메일 인증 및 회원가입 관련 API
+  EMAIL_REQUEST: `${EVENT_SERVER_URL}/api/auth/email/request`,
+  EMAIL_VERIFY: `${EVENT_SERVER_URL}/api/auth/email/verify`,
+  SIGNUP: `${EVENT_SERVER_URL}/api/auth/signup`,
 
   // 이벤트 관련 API
   ALL_EVENTS: `${EVENT_SERVER_URL}/api/events`,

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, Text, View, Modal } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Image } from 'expo-image';
+import { API_ENDPOINTS } from '@/config/api';
 
 export default function VerificationScreen() {
   const router = useRouter();
@@ -37,7 +38,7 @@ export default function VerificationScreen() {
     }
   };
 
-  const handleCheckDuplicate = () => {
+  const handleCheckDuplicate = async () => {
     if (!email) {
       showModal('⚠️ 오류', '이메일을 입력하세요.');
       return;
@@ -46,7 +47,27 @@ export default function VerificationScreen() {
       showModal('⚠️ 오류', '단국대학교 이메일 주소를 입력하세요.');
       return;
     }
-    showModal('✅ 확인', '6자리 인증코드를 메일로 발송하였습니다. 인증코드를 입력해주세요.');
+
+    try {
+      const response = await fetch(API_ENDPOINTS.EMAIL_REQUEST, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        showModal('✅ 확인', '6자리 인증코드를 메일로 발송하였습니다. 인증코드를 입력해주세요.');
+      } else {
+        showModal('⚠️ 오류', data.message || '인증코드 발송에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('Email request error:', error);
+      showModal('⚠️ 오류', '서버와 통신 중 오류가 발생했습니다.');
+    }
   };
 
   const validatePassword = (text) => {
@@ -69,7 +90,7 @@ export default function VerificationScreen() {
     setPasswordMatch(password === text);
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (!email || !email.includes('@dankook.ac.kr')) {
       showModal('⚠️ 오류', '단국대학교 이메일을 입력해주세요.');
       return;
@@ -93,16 +114,35 @@ export default function VerificationScreen() {
       return;
     }
 
-    // 데이터를 전달하며 signup으로 이동
-    router.push({
-      pathname: '/signup',
-      params: {
-        email,
-        verificationCode,
-        password,
-        confirmPassword
+    try {
+      const response = await fetch(API_ENDPOINTS.EMAIL_VERIFY, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify({ email, code: verificationCode }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        // 인증 성공 시 데이터를 전달하며 signup으로 이동
+        router.push({
+          pathname: '/signup',
+          params: {
+            email,
+            verificationCode,
+            password,
+            confirmPassword
+          }
+        });
+      } else {
+        showModal('⚠️ 오류', data.message || '인증번호가 올바르지 않습니다.');
       }
-    });
+    } catch (error) {
+      console.error('Email verify error:', error);
+      showModal('⚠️ 오류', '서버와 통신 중 오류가 발생했습니다.');
+    }
   };
 
   return (
