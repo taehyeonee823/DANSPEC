@@ -60,7 +60,8 @@ export default function VerificationScreen() {
       const data = await response.json();
 
       if (data.success) {
-        showModal('✅ 확인', '6자리 인증코드를 메일로 발송하였습니다. 인증코드를 입력해주세요.');
+        showModal('✅ 확인', `6자리 인증코드를 메일로 발송하였습니다.
+인증코드를 입력해주세요.`);
       } else {
         showModal('⚠️ 오류', data.message || '인증코드 발송에 실패했습니다.');
       }
@@ -137,7 +138,7 @@ export default function VerificationScreen() {
           }
         });
       } else {
-        showModal('⚠️ 오류', data.message || '인증번호가 올바르지 않습니다.');
+        showModal('⚠️ 오류', data.message || '인증번호가 올바르지 않거나 만료되었습니다.');
       }
     } catch (error) {
       console.error('Email verify error:', error);
