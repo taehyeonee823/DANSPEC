@@ -21,32 +21,38 @@ export default function SignUpScreen() {
   const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
+    console.log('=== verification.jsx로부터 받은 params ===');
+    console.log('params.email:', params.email);
+    console.log('params.verificationCode:', params.verificationCode);
+    console.log('params.password:', params.password);
+    console.log('params.confirmPassword:', params.confirmPassword);
+
     if (params.email) setEmail(params.email);
     if (params.verificationCode) setVerificationCode(params.verificationCode);
     if (params.password) setPassword(params.password);
     if (params.confirmPassword) setConfirmPassword(params.confirmPassword);
   }, [params]);
   const [campus, setCampus] = useState('');
-  const [department, setDepartment] = useState('');
-  const [showDepartmentModal, setShowDepartmentModal] = useState(false);
+  const [college, setCollege] = useState('');
+  const [showCollegeModal, setShowCollegeModal] = useState(false);
   const [major, setMajor] = useState('');
   const [showMajorModal, setShowMajorModal] = useState(false);
   const [grade, setGrade] = useState('');
   const [showGradeModal, setShowGradeModal] = useState(false);
-  const [firstJobPreference, setFirstJobPreference] = useState('');
-  const [secondJobPreference, setSecondJobPreference] = useState('');
-  const [thirdJobPreference, setThirdJobPreference] = useState('');
-  const [introduction, setIntroduction] = useState('');
+  const [interestJobPrimary, setInterestJobPrimary] = useState('');
+  const [interestJobSecondary, setInterestJobSecondary] = useState('');
+  const [interestJobTertiary, setInterestJobTertiary] = useState('');
+  const [tagline, setTagline] = useState('');
 
   const grades = ['1', '2', '3', '4'];
 
-  const jukjeonDepartments = [
+  const jukjeonColleges = [
     '문과대학','법과대학','경영경제대학','사회과학대학','공과대학','SW융합대학','사범대학','음악·예술대학'
   ];
-  const cheonanDepartments = [
+  const cheonanColleges = [
     '외국어대학','공공인재대학','과학기술대학','바이오융합대학','보건과학대학','의과대학','치과대학','약학대학','간호대학','스포츠과학대학','예술대학'
   ];
-  const departmentMajorsJukjeon = {
+  const collegeMajorsJukjeon = {
     '문과대학': ['국어국문학과', '사학과', '철학과', '영미인문학과'],
     '법과대학': ['법학과'],
     '사회과학대학': ['정치외교학과', '행정학과', '도시계획·부동산학부', '미디어커뮤니케이션학과'],
@@ -57,7 +63,7 @@ export default function SignUpScreen() {
     '음악·예술대학': ['도예과', '디자인학부', '공연영화학부','무용과','음악학부'],
   };
 
-  const departmentMajorscheonan = {
+  const collegeMajorsCheonan = {
     '외국어대학': ['아시아중동학부', '유럽중남미학부', '영어과' ,'글로벌한국어과'],
     '공공인재대학': ['공공정책학과', '식품자원경제학과','사회복지학과','해병대군사학과'],
     '과학기술대학': ['수학과','물리학과','화학과','식품영양학과','신소재공학과','에너지공학과','식품공학과','경영공학과','제약공학과'],
@@ -85,13 +91,120 @@ export default function SignUpScreen() {
     }
   };
 
-  const handleSignup = () => {
-    if (!name || !campus || !department || !major || !grade || !firstJobPreference || !secondJobPreference || !thirdJobPreference) {
-      showModal('⚠️ 오류', '필수 항목들을 입력해주세요.');
+  const handleSignup = async () => {
+    // 디버깅: 모든 필드 값 출력
+    console.log('=== 회원가입 데이터 검증 시작 ===');
+    console.log('email:', email);
+    console.log('password:', password);
+    console.log('name:', name);
+    console.log('campus:', campus);
+    console.log('college:', college);
+    console.log('major:', major);
+    console.log('grade:', grade);
+    console.log('interestJobPrimary:', interestJobPrimary);
+    console.log('interestJobSecondary:', interestJobSecondary);
+    console.log('interestJobTertiary:', interestJobTertiary);
+    console.log('tagline:', tagline);
+
+    // 각 필수 항목 개별 검증
+    if (!email) {
+      console.log('검증 실패: 이메일 없음');
+      showModal('⚠️ 오류', '이메일 정보가 없습니다. 이전 단계로 돌아가주세요.');
+      return;
+    }
+    if (!password) {
+      console.log('검증 실패: 비밀번호 없음');
+      showModal('⚠️ 오류', '비밀번호 정보가 없습니다. 이전 단계로 돌아가주세요.');
+      return;
+    }
+    if (!name) {
+      console.log('검증 실패: 이름 없음');
+      showModal('⚠️ 오류', '이름을 입력해주세요.');
+      return;
+    }
+    if (!campus) {
+      console.log('검증 실패: 캠퍼스 미선택');
+      showModal('⚠️ 오류', '소속 캠퍼스를 선택해주세요.');
+      return;
+    }
+    if (!college) {
+      console.log('검증 실패: 단과대학 미선택');
+      showModal('⚠️ 오류', '단과대학을 선택해주세요.');
+      return;
+    }
+    if (!major) {
+      console.log('검증 실패: 학과 미선택');
+      showModal('⚠️ 오류', '학과를 선택해주세요.');
+      return;
+    }
+    if (!grade) {
+      console.log('검증 실패: 학년 미선택');
+      showModal('⚠️ 오류', '학년을 선택해주세요.');
+      return;
+    }
+    if (!interestJobPrimary) {
+      console.log('검증 실패: 희망 직무 1순위 없음');
+      showModal('⚠️ 오류', '희망 직무 1순위를 입력해주세요.');
+      return;
+    }
+    if (!interestJobSecondary) {
+      console.log('검증 실패: 희망 직무 2순위 없음');
+      showModal('⚠️ 오류', '희망 직무 2순위를 입력해주세요.');
+      return;
+    }
+    if (!interestJobTertiary) {
+      console.log('검증 실패: 희망 직무 3순위 없음');
+      showModal('⚠️ 오류', '희망 직무 3순위를 입력해주세요.');
       return;
     }
 
-    router.push('/signupConfirmed');
+    console.log('✓ 모든 필드 검증 통과');
+
+    try {
+      const signupData = {
+        email,
+        password,
+        name,
+        campus,
+        college,
+        major,
+        grade,
+        interestJobPrimary,
+        interestJobSecondary,
+        interestJobTertiary,
+        tagline: tagline || null,
+      };
+
+      console.log('=== API 요청 데이터 ===');
+      console.log('Endpoint:', API_ENDPOINTS.SIGNUP);
+      console.log('Request body:', JSON.stringify(signupData, null, 2));
+
+      const response = await fetch(API_ENDPOINTS.SIGNUP, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify(signupData),
+      });
+
+      console.log('=== API 응답 ===');
+      console.log('Status:', response.status);
+      console.log('Status Text:', response.statusText);
+
+      const data = await response.json();
+      console.log('Response data:', JSON.stringify(data, null, 2));
+
+      if (data.success) {
+        console.log('✓ 회원가입 성공');
+        router.push('/signupConfirmed');
+      } else {
+        console.log('✗ 회원가입 실패:', data.message);
+        showModal('⚠️ 오류', data.message || '회원가입에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('Signup error:', error);
+      showModal('⚠️ 오류', '서버와 통신 중 오류가 발생했습니다.');
+    }
   };
 
   return (
@@ -138,17 +251,17 @@ export default function SignUpScreen() {
       <TouchableOpacity
         style={[
           styles.campusButton,
-          campus === '죽전' && styles.campusButtonSelected
+          campus === 'JUKJEON' && styles.campusButtonSelected
         ]}
         onPress={() => {
-          setCampus('죽전');
-          setDepartment('');
+          setCampus('JUKJEON');
+          setCollege('');
           setMajor('');
         }}
       >
         <Text style={[
           styles.campusButtonText,
-          campus === '죽전' && styles.campusButtonTextSelected
+          campus === 'JUKJEON' && styles.campusButtonTextSelected
         ]}> 죽전
         </Text>
       </TouchableOpacity>
@@ -156,17 +269,17 @@ export default function SignUpScreen() {
       <TouchableOpacity
         style={[
           styles.campusButton,
-          campus === '천안' && styles.campusButtonSelected
+          campus === 'CHEONAN' && styles.campusButtonSelected
         ]}
         onPress={() => {
-          setCampus('천안');
-          setDepartment('');
+          setCampus('CHEONAN');
+          setCollege('');
           setMajor('');
         }}
       >
         <Text style={[
           styles.campusButtonText,
-          campus === '천안' && styles.campusButtonTextSelected
+          campus === 'CHEONAN' && styles.campusButtonTextSelected
         ]}> 천안
         </Text>
       </TouchableOpacity>
@@ -179,37 +292,37 @@ export default function SignUpScreen() {
               style={styles.departmentSelector}
               onPress={() => {
                 if (campus) {
-                  setShowDepartmentModal(!showDepartmentModal);
+                  setShowCollegeModal(!showCollegeModal);
                 }
               }}
             >
               <Text style={[
                 styles.departmentSelectorText,
-                !department && styles.departmentPlaceholder
+                !college && styles.departmentPlaceholder
               ]}>
-                {department || '단과대학 선택'}
+                {college || '단과대학 선택'}
               </Text>
               <Text style={styles.dropdownIcon}>
-                {showDepartmentModal ? '▲' : '▼'}
+                {showCollegeModal ? '▲' : '▼'}
               </Text>
             </TouchableOpacity>
 
-            {showDepartmentModal && campus && (
+            {showCollegeModal && campus && (
               <ScrollView style={styles.dropdownList} nestedScrollEnabled={true}>
-                {(campus === '죽전' ? jukjeonDepartments : cheonanDepartments).map((item) => (
+                {(campus === 'JUKJEON' ? jukjeonColleges : cheonanColleges).map((item) => (
                   <TouchableOpacity
                     key={item}
                     style={styles.departmentOption}
                     onPress={() => {
-                      setDepartment(item);
-                      setShowDepartmentModal(false);
+                      setCollege(item);
+                      setShowCollegeModal(false);
                       setMajor(''); // 단과대학 변경 시 학과 초기화
                     }}
                   >
                     <Text style={styles.departmentOptionText}>
                       {item}
                     </Text>
-                    {department === item && (
+                    {college === item && (
                       <Text style={styles.checkmark}>✓</Text>
                     )}
                   </TouchableOpacity>
@@ -222,8 +335,8 @@ export default function SignUpScreen() {
             <TouchableOpacity
               style={styles.departmentSelector}
               onPress={() => {
-                const majors = campus === '죽전' ? departmentMajorsJukjeon : departmentMajorscheonan;
-                if (department && majors[department]) {
+                const majors = campus === 'JUKJEON' ? collegeMajorsJukjeon : collegeMajorsCheonan;
+                if (college && majors[college]) {
                   setShowMajorModal(!showMajorModal);
                 }
               }}
@@ -239,9 +352,9 @@ export default function SignUpScreen() {
               </Text>
             </TouchableOpacity>
 
-            {showMajorModal && department && (
+            {showMajorModal && college && (
               <ScrollView style={styles.dropdownList} nestedScrollEnabled={true}>
-                {(campus === '죽전' ? departmentMajorsJukjeon[department] : departmentMajorscheonan[department])?.map((item) => (
+                {(campus === 'JUKJEON' ? collegeMajorsJukjeon[college] : collegeMajorsCheonan[college])?.map((item) => (
                   <TouchableOpacity
                     key={item}
                     style={styles.departmentOption}
@@ -307,8 +420,8 @@ export default function SignUpScreen() {
           style={styles.input}
           placeholder="희망 직무를 입력해주세요"
           placeholderTextColor="#999"
-          value={firstJobPreference}
-          onChangeText={setFirstJobPreference}
+          value={interestJobPrimary}
+          onChangeText={setInterestJobPrimary}
         />
       </View>
       <Text style={styles.text}>희망 직무 2순위</Text>
@@ -317,8 +430,8 @@ export default function SignUpScreen() {
           style={styles.input}
           placeholder="희망 직무를 입력해주세요"
           placeholderTextColor="#999"
-          value={secondJobPreference}
-          onChangeText={setSecondJobPreference}
+          value={interestJobSecondary}
+          onChangeText={setInterestJobSecondary}
         />
       </View>
       <Text style={styles.text}>희망 직무 3순위</Text>
@@ -327,8 +440,8 @@ export default function SignUpScreen() {
           style={styles.input}
           placeholder="희망 직무를 입력해주세요"
           placeholderTextColor="#999"
-          value={thirdJobPreference}
-          onChangeText={setThirdJobPreference}
+          value={interestJobTertiary}
+          onChangeText={setInterestJobTertiary}
         />
       </View>
 
@@ -338,8 +451,8 @@ export default function SignUpScreen() {
         style={[styles.input, styles.introInput]}
         placeholder="자신을 소개해주세요 한 줄이면 충분합니다!"
         placeholderTextColor="#999"
-        value={introduction}
-        onChangeText={setIntroduction}
+        value={tagline}
+        onChangeText={setTagline}
         multiline
         numberOfLines={4}
         textAlignVertical="top"
