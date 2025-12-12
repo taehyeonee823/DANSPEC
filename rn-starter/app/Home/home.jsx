@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { View, StyleSheet, ScrollView, Image, Dimensions, TouchableOpacity, Text } from 'react-native';
 import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API_ENDPOINTS } from '@/config/api';
 import NaviBar from '../naviBar';
 
 const { width } = Dimensions.get('window');
@@ -9,7 +11,61 @@ const { width } = Dimensions.get('window');
 export default function Home() {
   const router = useRouter();
   const [activeIndex, setActiveIndex] = useState(0);
+  const [userName, setUserName] = useState('사용자');
   const scrollViewRef = useRef(null);
+
+  // 사용자 정보 불러오기
+  useEffect(() => {
+    const loadUserInfo = async () => {
+      try {
+        const token = await AsyncStorage.getItem('authToken');
+
+        if (token) {
+          // API에서 사용자 정보 가져오기
+          const response = await fetch(API_ENDPOINTS.USER_ME, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            if (data.name) {
+              setUserName(data.name);
+              // AsyncStorage에도 업데이트
+              await AsyncStorage.setItem('userName', data.name);
+            }
+          } else {
+            // API 호출 실패 시 AsyncStorage에서 가져오기
+            const cachedName = await AsyncStorage.getItem('userName');
+            if (cachedName) {
+              setUserName(cachedName);
+            }
+          }
+        } else {
+          // 토큰이 없으면 AsyncStorage에서 가져오기
+          const cachedName = await AsyncStorage.getItem('userName');
+          if (cachedName) {
+            setUserName(cachedName);
+          }
+        }
+      } catch (error) {
+        console.error('사용자 정보 불러오기 실패:', error);
+        // 에러 발생 시 AsyncStorage에서 가져오기
+        try {
+          const cachedName = await AsyncStorage.getItem('userName');
+          if (cachedName) {
+            setUserName(cachedName);
+          }
+        } catch (storageError) {
+          console.error('AsyncStorage 읽기 실패:', storageError);
+        }
+      }
+    };
+    loadUserInfo();
+  }, []);
 
   // 슬라이드 자동 전환
   useEffect(() => {
@@ -22,10 +78,11 @@ export default function Home() {
         });
         return nextIndex;
       });
-    }, 10000); 
+    }, 10000);
 
     return () => clearInterval(interval);
   }, []);
+
 
   const handleScroll = (event) => {
     const scrollPosition = event.nativeEvent.contentOffset.x;
@@ -108,7 +165,7 @@ export default function Home() {
           </View>
         </ScrollView>
       </View>
-      <Text style={styles.title}>name 님을 위한 맞춤활동</Text>
+      <Text style={styles.title}>{userName} 님을 위한 맞춤활동</Text>
 
       <NaviBar currentPage="home" />
     </View>

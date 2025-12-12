@@ -45,5 +45,8 @@ export const API_ENDPOINTS = {
   CREATE_TEAM: `${EVENT_SERVER_URL}/api/teams`,
   GET_TEAMS: (myPosts) =>
     `${EVENT_SERVER_URL}/api/teams?myPosts=${myPosts}`,
+
+  // 사용자 정보 관련 API
+  USER_ME: `${EVENT_SERVER_URL}/api/users/me`,
 };
 

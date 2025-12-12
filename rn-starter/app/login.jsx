@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, Alert, Image, View, Text } from 'react-native';
 import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { API_ENDPOINTS } from '@/config/api';
 
@@ -50,6 +51,15 @@ export default function LoginScreen() {
       const data = await response.json();
 
       if (response.ok && data.success) {
+        // 자동 로그인 체크된 경우에만 AsyncStorage에 저장
+        if (autoLogin) {
+          if (data.token) {
+            await AsyncStorage.setItem('authToken', data.token);
+          }
+          await AsyncStorage.setItem('userName', data.user.name);
+          await AsyncStorage.setItem('userEmail', data.user.email || email);
+        }
+
         Alert.alert('👋 환영합니다', `${data.user.name}님, 로그인이 완료되었습니다.`, [
           { text: '확인', onPress: () => router.push('/home') }
         ]);
