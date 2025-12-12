@@ -5,6 +5,7 @@ import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_ENDPOINTS } from '@/config/api';
 import NaviBar from '../naviBar';
+import ActivityApplyBox from '../Activity/activityApplyBox';
 
 const { width } = Dimensions.get('window');
 
@@ -12,6 +13,7 @@ export default function Home() {
   const router = useRouter();
   const [activeIndex, setActiveIndex] = useState(0);
   const [userName, setUserName] = useState('사용자');
+  const [activities, setActivities] = useState([]);
   const scrollViewRef = useRef(null);
 
   // 사용자 정보 불러오기
@@ -67,6 +69,40 @@ export default function Home() {
     loadUserInfo();
   }, []);
 
+  // 활동 데이터 불러오기
+  useEffect(() => {
+    const loadActivities = async () => {
+      try {
+        const response = await fetch(API_ENDPOINTS.ALL_EVENTS, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+
+          // 각 카테고리에서 하나씩 선택
+          const categories = ['CONTEST', 'EXTERNAL', 'SCHOOL'];
+          const selectedActivities = [];
+
+          categories.forEach(category => {
+            const activityInCategory = data.find(activity => activity.category === category);
+            if (activityInCategory) {
+              selectedActivities.push(activityInCategory);
+            }
+          });
+
+          setActivities(selectedActivities);
+        }
+      } catch (error) {
+        console.error('활동 데이터 불러오기 실패:', error);
+      }
+    };
+    loadActivities();
+  }, []);
+
   // 슬라이드 자동 전환
   useEffect(() => {
     const interval = setInterval(() => {
@@ -92,22 +128,23 @@ export default function Home() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.imageContainer}>
-        <ScrollView
-          ref={scrollViewRef}
-          horizontal
-          pagingEnabled
-          showsHorizontalScrollIndicator={false}
-          onScroll={handleScroll}
-          scrollEventThrottle={16}
-        >
+      <ScrollView style={styles.scrollContent}>
+        <View style={styles.imageContainer}>
+          <ScrollView
+            ref={scrollViewRef}
+            horizontal
+            pagingEnabled
+            showsHorizontalScrollIndicator={false}
+            onScroll={handleScroll}
+            scrollEventThrottle={16}
+          >
           {/* 첫 번째 슬라이드 */}
           <View style={{ width }}>
             <LinearGradient
               colors={['#4D90CC', '#fff']}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
-              style={{ flex: 1, paddingTop: 180 }}
+              style={{ flex: 1, paddingTop: 150 }}
             >
               <View style={styles.slideContent}>
                 <View style={styles.leftBox}>
@@ -138,7 +175,7 @@ export default function Home() {
               colors={['#957DAD', '#fff']}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
-              style={{ flex: 1, paddingTop: 180 }}
+              style={{ flex: 1, paddingTop: 150 }}
             >
               <View style={styles.slideContent}>
                 <View style={styles.leftBox}>
@@ -165,7 +202,25 @@ export default function Home() {
           </View>
         </ScrollView>
       </View>
-      <Text style={styles.title}>{userName} 님을 위한 맞춤활동</Text>
+      <Text style={styles.title}>{userName} 님을 위한 맞춤활동 </Text> 
+
+      {/*api 연결 후 맞춤형 리스트로 변경*/}
+
+      <View style={styles.activitiesContainer}>
+        {activities.map((activity, index) => (
+          <ActivityApplyBox
+            key={activity.id || index}
+            event={activity}
+            tag={activity.category}
+            title={activity.title}
+            summarizedDescription={activity.summarizedDescription || activity.description}
+            dueDate={activity.dueDate}
+            startDate={activity.startDate}
+            endDate={activity.endDate}
+          />
+        ))}
+      </View>
+      </ScrollView>
 
       <NaviBar currentPage="home" />
     </View>
@@ -177,8 +232,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
+  scrollContent: {
+    flex: 1,
+    marginBottom: 70,
+  },
   imageContainer: {
-    height: 350,
+    height: 330,
     backgroundColor: '#F0F0F0',
   },
   slideContent: {
@@ -239,5 +298,9 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     color: '#000',
     textAlign: 'left',
+  },
+  activitiesContainer: {
+    marginTop: 16,
+    paddingBottom: 20,
   },
 });

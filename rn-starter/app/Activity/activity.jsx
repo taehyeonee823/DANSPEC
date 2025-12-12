@@ -7,6 +7,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 import ActivityApplyBox from './activityApplyBox';
 import DeptTab from './deptTab';
 import { API_ENDPOINTS } from '@/config/api';
+import TeamApplyBox from '../Team/teamApplyBox';
+import guitarData from './guitarDemo.json';
 
 export default function Activity() {
   const router = useRouter();
@@ -31,7 +33,7 @@ export default function Activity() {
 
   const fetchEvents = async () => {
     if (selectedCategory === "기타") {
-      setEvents([]);
+      setEvents(guitarData);
       return;
     }
 
@@ -138,21 +140,26 @@ export default function Activity() {
           <Text style={styles.loadingText}>로딩 중...</Text>
         ) : events.length > 0 ? (
           events.map((event) => {
-            const dueDate = calculateDueDate(event.endDate);
+            const dueDate = selectedCategory === "기타"
+              ? event.dueDate
+              : calculateDueDate(event.endDate);
+
             // 마감된 카드는 렌더링하지 않음
             if (dueDate === '마감') {
               return null;
             }
+
             return (
               <ActivityApplyBox
                 key={event.id}
                 event={event}
-                tag={event.category}
+                tag={selectedCategory === "기타" ? event.tag : event.category}
                 dueDate={dueDate}
                 title={event.title}
-                summarizedDescription={event.summarizedDescription}
+                summarizedDescription={selectedCategory === "기타" ? event.description : event.summarizedDescription}
                 startDate={event.startDate}
                 endDate={event.endDate}
+                clickable={selectedCategory !== "기타"}
               />
             );
           })
