@@ -4,11 +4,9 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 
 import { API_ENDPOINTS } from '@/config/api';
 
-
 export default function SignUpScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
-
   const [email, setEmail] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
   const [password, setPassword] = useState('');
@@ -25,6 +23,7 @@ export default function SignUpScreen() {
     if (params.password) setPassword(params.password);
     if (params.confirmPassword) setConfirmPassword(params.confirmPassword);
   }, [params]);
+
   const [campus, setCampus] = useState('');
   const [department, setDepartment] = useState('');
   const [showDepartmentModal, setShowDepartmentModal] = useState(false);
@@ -89,6 +88,26 @@ export default function SignUpScreen() {
       showModal('⚠️ 오류', '필수 항목들을 입력해주세요.');
       return;
     }
+
+    // 캠퍼스 매핑
+    const campusMap = { '죽전': 'JUKJEON', '천안': 'CHEONAN' };
+
+    const payload = {
+      email,
+      password,
+      passwordConfirm: confirmPassword,
+      name,
+      campus: campusMap[campus] || campus,
+      college: department,
+      major,
+      grade,
+      interestJobPrimary: firstJobPreference,
+      interestJobSecondary: secondJobPreference,
+      interestJobTertiary: thirdJobPreference,
+      tagline: introduction,
+    };
+
+    console.log('회원가입 데이터:', JSON.stringify(payload, null, 2));
 
     router.push('/signupConfirmed');
   };
