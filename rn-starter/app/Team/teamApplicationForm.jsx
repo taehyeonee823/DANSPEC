@@ -1,6 +1,8 @@
 import { Text, View, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpacity, Image } from "react-native";
-import React, {useState} from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API_ENDPOINTS } from '@/config/api';
 import Button from '../../components/Button';
 import MultiplelineInput from '../../components/MultiplelineInput';
 import SinglelineInput from '../../components/SinglelineInput';
@@ -12,10 +14,48 @@ export default function Index() {
   const [portfolioLink, setPortfolioLink] = useState("");
   const [contactInfo, setContactInfo] = useState("");
 
-  // 강제로 표시될 팀장 정보 (실제로는 전역 상태에서 불러와야 함)
-  const teamLeaderName = "김단국";
-  const teamLeaderDepartment = "SW융합대학";
-  const teamLeaderGrade = "3학년";
+  const [userInfo, setUserInfo] = useState({
+    name: '',
+    college: '',
+    major: '',
+    grade: '',
+  });
+  const [loadingUser, setLoadingUser] = useState(true);
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const token = await AsyncStorage.getItem('accessToken');
+        if (!token) {
+          setLoadingUser(false);
+          return;
+        }
+        const response = await fetch(API_ENDPOINTS.USER_ME, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.data) {
+            setUserInfo({
+              name: data.data.name || '',
+              college: data.data.college || '',
+              major: data.data.major || '',
+              grade: data.data.grade || '',
+            });
+          }
+        }
+      } catch (e) {
+        // ignore
+      } finally {
+        setLoadingUser(false);
+      }
+    };
+    fetchUserInfo();
+  }, []);
 
   return (
       <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
@@ -32,13 +72,29 @@ export default function Index() {
             <Text style={styles.mainTitle}>팀 지원글 작성하기</Text>
 
             <Text style={styles.sectionTitle}>이름</Text>
-            <Text style={styles.readOnlyText}>{teamLeaderName}</Text>
+            {loadingUser ? (
+              <Text style={styles.readOnlyText}>불러오는 중...</Text>
+            ) : (
+              <Text style={styles.readOnlyText}>{userInfo.name || '정보 없음'}</Text>
+            )}
 
             <Text style={styles.sectionTitle}>학과</Text>
-            <Text style={styles.readOnlyText}>{teamLeaderDepartment}</Text>
+            {loadingUser ? (
+              <Text style={styles.readOnlyText}>불러오는 중...</Text>
+            ) : (
+              <Text style={styles.readOnlyText}>
+                {userInfo.college && userInfo.major
+                  ? `${userInfo.college} ${userInfo.major}`
+                  : userInfo.college || userInfo.major || '정보 없음'}
+              </Text>
+            )}
 
             <Text style={styles.sectionTitle}>학년</Text>
-            <Text style={styles.readOnlyText}>{teamLeaderGrade}</Text>
+            {loadingUser ? (
+              <Text style={styles.readOnlyText}>불러오는 중...</Text>
+            ) : (
+              <Text style={styles.readOnlyText}>{userInfo.grade ? `${userInfo.grade}학년` : '정보 없음'}</Text>
+            )}
 
             <Text style={styles.sectionTitle}>간단 소개글</Text>
             <MultiplelineInput

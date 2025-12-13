@@ -9,7 +9,7 @@ import CategoryTab from './categoryTab';
 
 export default function Team() {
   const router = useRouter();
-  const [activeTabIndex, setActiveTabIndex] = useState(0); // 0: 모든 모집글, 1: 내가 쓴 모집글, 2: 내가 쓴 지원글
+  const [activeTabIndex, setActiveTabIndex] = useState(0); // 0: 내가 쓴 모집글, 1: 내가 쓴 지원글
 
   // TODO: 외부 API 연결 예정
   const displayedTeams = [...teamData].sort((a, b) => {
