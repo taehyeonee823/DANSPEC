@@ -1,13 +1,94 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Text, Modal } from 'react-native';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { API_ENDPOINTS } from '@/config/api';
 import NaviBar from '../naviBar';
 
 export default function My() {
   const router = useRouter();
   const [hasNotification, setHasNotification] = useState(false); // 알림 여부 상태
   const [showLogoutModal, setShowLogoutModal] = useState(false); // 로그아웃 모달 상태
+  const [userInfo, setUserInfo] = useState({
+    name: '',
+    college: '',
+    major: '',
+    grade: '',
+    interestJobPrimary: '',
+    interestJobSecondary: '',
+    interestJobTertiary: '',
+  });
+  const [loading, setLoading] = useState(true);
+
+  // 사용자 정보 가져오기
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
+
+  const fetchUserInfo = async () => {
+    try {
+      const token = await AsyncStorage.getItem('accessToken');
+
+      if (!token) {
+        console.log('토큰이 없습니다. 로그인 페이지로 이동합니다.');
+        router.replace('/login');
+        return;
+      }
+
+      const response = await fetch(API_ENDPOINTS.USER_ME, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('사용자 정보:', data);
+
+        if (data.success && data.data) {
+          setUserInfo({
+            name: data.data.name || '',
+            college: data.data.college || '',
+            major: data.data.major || '',
+            grade: data.data.grade || '',
+            interestJobPrimary: data.data.interestJobPrimary || '',
+            interestJobSecondary: data.data.interestJobSecondary || '',
+            interestJobTertiary: data.data.interestJobTertiary || '',
+          });
+        }
+      } else {
+        console.error('사용자 정보 가져오기 실패:', response.status);
+        // 토큰이 만료되었을 수 있으므로 로그인 페이지로 이동
+        if (response.status === 401) {
+          await AsyncStorage.removeItem('accessToken');
+          await AsyncStorage.removeItem('refreshToken');
+          router.replace('/login');
+        }
+      }
+    } catch (error) {
+      console.error('사용자 정보 가져오기 오류:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      // AsyncStorage에서 토큰 삭제
+      await AsyncStorage.removeItem('accessToken');
+      await AsyncStorage.removeItem('refreshToken');
+      await AsyncStorage.removeItem('autoLogin');
+      await AsyncStorage.removeItem('savedEmail');
+
+      setShowLogoutModal(false);
+      router.replace('/login');
+    } catch (error) {
+      console.error('로그아웃 오류:', error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -63,9 +144,13 @@ export default function My() {
             />
           </View>
           <View style={styles.profileInfo}>
-            <Text style={styles.profileName}>지은</Text>
-            <Text style={styles.profileInfo}>SW융합대학 {"\n"}통계데이터사이언스학과 3학년</Text>
-            <Text style={styles.profileJob}>희망직무: 데이터분석가 (삼성전자)</Text>
+            <Text style={styles.profileName}>{loading ? '로딩 중...' : userInfo.name}</Text>
+            <Text style={styles.profileInfo}>
+              {loading ? '로딩 중...' : `${userInfo.college} ${userInfo.major} ${userInfo.grade}학년`}
+            </Text>
+            <Text style={styles.profileJob}>
+              {loading ? '로딩 중...' : `희망직무: ${userInfo.interestJobPrimary}`}
+            </Text>
           </View>
         </View>
 
@@ -136,10 +221,7 @@ export default function My() {
               </TouchableOpacity>
               <TouchableOpacity
                 style={[styles.modalButton, styles.logoutButton]}
-                onPress={() => {
-                  setShowLogoutModal(false);
-                  router.push('../login');
-                }}
+                onPress={handleLogout}
               >
                 <Text style={styles.logoutButtonText}>로그아웃</Text>
               </TouchableOpacity>

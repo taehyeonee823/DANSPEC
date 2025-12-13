@@ -20,50 +20,35 @@ export default function Home() {
   useEffect(() => {
     const loadUserInfo = async () => {
       try {
-        const token = await AsyncStorage.getItem('authToken');
+        const token = await AsyncStorage.getItem('accessToken');
 
-        if (token) {
-          // API에서 사용자 정보 가져오기
-          const response = await fetch(API_ENDPOINTS.USER_ME, {
-            method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
-          });
+        if (!token) {
+          console.log('토큰이 없습니다.');
+          return;
+        }
 
-          if (response.ok) {
-            const data = await response.json();
-            if (data.name) {
-              setUserName(data.name);
-              // AsyncStorage에도 업데이트
-              await AsyncStorage.setItem('userName', data.name);
-            }
-          } else {
-            // API 호출 실패 시 AsyncStorage에서 가져오기
-            const cachedName = await AsyncStorage.getItem('userName');
-            if (cachedName) {
-              setUserName(cachedName);
-            }
+        // API에서 사용자 정보 가져오기
+        const response = await fetch(API_ENDPOINTS.USER_ME, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log('홈 사용자 정보:', data);
+
+          if (data.success && data.data && data.data.name) {
+            setUserName(data.data.name);
           }
-        } else {
-          // 토큰이 없으면 AsyncStorage에서 가져오기
-          const cachedName = await AsyncStorage.getItem('userName');
-          if (cachedName) {
-            setUserName(cachedName);
-          }
+        } else if (response.status === 401) {
+          // 토큰 만료
+          console.log('토큰이 만료되었습니다.');
         }
       } catch (error) {
         console.error('사용자 정보 불러오기 실패:', error);
-        // 에러 발생 시 AsyncStorage에서 가져오기
-        try {
-          const cachedName = await AsyncStorage.getItem('userName');
-          if (cachedName) {
-            setUserName(cachedName);
-          }
-        } catch (storageError) {
-          console.error('AsyncStorage 읽기 실패:', storageError);
-        }
       }
     };
     loadUserInfo();
@@ -83,12 +68,15 @@ export default function Home() {
         if (response.ok) {
           const data = await response.json();
 
+          // data가 배열인지 확인
+          const activitiesArray = Array.isArray(data) ? data : (Array.isArray(data.data) ? data.data : []);
+
           // 각 카테고리에서 하나씩 선택
           const categories = ['CONTEST', 'EXTERNAL', 'SCHOOL'];
           const selectedActivities = [];
 
           categories.forEach(category => {
-            const activityInCategory = data.find(activity => activity.category === category);
+            const activityInCategory = activitiesArray.find(activity => activity.category === category);
             if (activityInCategory) {
               selectedActivities.push(activityInCategory);
             }

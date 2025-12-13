@@ -465,7 +465,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'Pretendard-SemiBold',
     color: '#000',
-    marginBottom: 20,
+    marginBottom: 10,
   },
   modalMessage: {
     fontSize: 16,
