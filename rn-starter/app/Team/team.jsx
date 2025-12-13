@@ -1,42 +1,88 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useFocusEffect } from '@react-navigation/native';
 import NaviBar from '../naviBar';
 import CategoryChips from '@/components/CategoryChips';
 import TeamApplyBox from './teamApplyBox';
-import teamData from './teamApplyBoxDemo.json'; 
 import CategoryTab from './categoryTab';
+import { API_ENDPOINTS } from '@/config/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Team() {
   const router = useRouter();
   const [activeTabIndex, setActiveTabIndex] = useState(0); // 0: 모든 모집글, 1: 내가 쓴 모집글, 2: 내가 쓴 지원글
+  const [teams, setTeams] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  // TODO: 외부 API 연결 예정
-  const displayedTeams = [...teamData].sort((a, b) => {
-    // "상시 모집"은 최상단에 위치
-    if (a.dueDate === "상시 모집") return -1;
-    if (b.dueDate === "상시 모집") return 1;
+  const fetchMyTeams = useCallback(async () => {
+    try {
+      setLoading(true);
+      const token = await AsyncStorage.getItem('accessToken');
+      if (!token) {
+        console.warn('액세스 토큰이 없습니다. 로그인 후 다시 시도하세요.');
+        setTeams([]);
+        return;
+      }
 
-    // 마감 여부 계산 (오늘 이전 날짜는 마감)
-    const today = new Date();
-    const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    const aDate = new Date(a.dueDate);
-    const bDate = new Date(b.dueDate);
-    const aIsClosed = !isNaN(aDate) && aDate < todayStart;
-    const bIsClosed = !isNaN(bDate) && bDate < todayStart;
+      const url = API_ENDPOINTS.GET_TEAMS({ myPosts: true });
+      console.log('내 모집글 조회 URL:', url);
+      const response = await fetch(url, {
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    // 마감된 항목은 최하단으로
-    if (aIsClosed && !bIsClosed) return 1;
-    if (!aIsClosed && bIsClosed) return -1;
+      const text = await response.text();
 
-    // 모집 중이면 dueDate 빠른 순 (오름차순)
-    // 마감이면 dueDate 늦은 순 (내림차순, 현재 날짜에 가까운 것이 위)
-    if (aIsClosed && bIsClosed) {
-      return bDate - aDate; // 내림차순
-    } else {
-      return aDate - bDate; // 오름차순
+      if (!response.ok) {
+        console.error('내 모집글 응답 상태 코드:', response.status, text.slice(0, 200));
+        setTeams([]);
+        return;
+      }
+
+      if (!text || text.trim().length === 0) {
+        console.warn('내 모집글 응답이 비어 있습니다.');
+        setTeams([]);
+        return;
+      }
+
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        console.error('내 모집글 JSON 파싱 실패:', e, text.slice(0, 200));
+        setTeams([]);
+        return;
+      }
+
+      const teamArray = Array.isArray(data) ? data : (Array.isArray(data.data) ? data.data : []);
+
+      const sorted = teamArray.sort((a, b) => {
+        const aDate = new Date(a.recruitmentEndDate);
+        const bDate = new Date(b.recruitmentEndDate);
+        return aDate - bDate;
+      });
+
+      setTeams(sorted);
+    } catch (error) {
+      console.error('내 모집글 불러오기 실패:', error);
+      setTeams([]);
+    } finally {
+      setLoading(false);
     }
-  });
+  }, []);
+
+  useEffect(() => {
+    fetchMyTeams();
+  }, [fetchMyTeams]);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchMyTeams();
+    }, [fetchMyTeams])
+  );
 
   return (
     <View style={styles.container}>
@@ -67,19 +113,21 @@ export default function Team() {
       </View>
 
       <ScrollView style={styles.contentArea} contentContainerStyle={styles.scrollContent}>
-        {activeTabIndex === 0 && displayedTeams
-          .filter((team) => team.manager === "지은")
-          .map((team) => (
-            <TeamApplyBox
-              key={team.id}
-              status={team.status}
-              dueDate={team.dueDate}
-              title={team.title}
-              description={team.description}
-              tag={`연결된 활동: ${team.tag}`}
-              onPress={() => router.push(`/Team/teamInfoModify?id=${team.id}&title=${encodeURIComponent(team.title)}`)}
-            />
-          ))}
+        {activeTabIndex === 0 && (
+          <>
+            {loading ? null : null}
+            {teams.map((team) => (
+              <TeamApplyBox
+                key={team.id}
+                dueDate={team.recruitmentEndDate}
+                title={team.title}
+                description={team.promotionText}
+                tag={`연결된 활동: ${team.connectedActivityTitle || '자율 모집'}`}
+                onPress={() => router.push(`/Team/teamInfoModify?id=${team.id}&title=${encodeURIComponent(team.title)}`)}
+              />
+            ))}
+          </>
+        )}
         {activeTabIndex === 1 && (
           <></>
           // TODO: 내가 쓴 지원글 구현 예정
