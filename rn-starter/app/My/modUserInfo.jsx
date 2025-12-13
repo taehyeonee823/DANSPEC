@@ -1,11 +1,7 @@
 import { useState, useEffect } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, Text, View, Modal, Image, ScrollView } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-<<<<<<< HEAD
-=======
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
->>>>>>> e11aab9c0880d7792d5c87573043f3b069b751af
 import { API_ENDPOINTS } from '@/config/api';
 
 
@@ -27,9 +23,10 @@ export default function SignUpScreen() {
   useEffect(() => {
     const loadUserInfo = async () => {
       try {
-        const token = await AsyncStorage.getItem('authToken');
+        const token = await AsyncStorage.getItem('accessToken');
         if (!token) {
           showModal('⚠️ 오류', '로그인이 필요합니다.');
+          router.replace('/login');
           return;
         }
 
@@ -43,17 +40,25 @@ export default function SignUpScreen() {
 
         if (response.ok) {
           const data = await response.json();
+          console.log('사용자 정보:', data);
 
           // 데이터 매핑
-          if (data.name) setName(data.name);
-          if (data.campus) setCampus(data.campus === 'JUKJEON' ? '죽전' : '천안');
-          if (data.college) setDepartment(data.college);
-          if (data.major) setMajor(data.major);
-          if (data.grade) setGrade(data.grade);
-          if (data.interestJobPrimary) setFirstJobPreference(data.interestJobPrimary);
-          if (data.interestJobSecondary) setSecondJobPreference(data.interestJobSecondary);
-          if (data.interestJobTertiary) setThirdJobPreference(data.interestJobTertiary);
-          if (data.tagline) setIntroduction(data.tagline);
+          if (data.success && data.data) {
+            if (data.data.name) setName(data.data.name);
+            if (data.data.campus) setCampus(data.data.campus === 'JUKJEON' ? '죽전' : '천안');
+            if (data.data.college) setDepartment(data.data.college);
+            if (data.data.major) setMajor(data.data.major);
+            if (data.data.grade) setGrade(data.data.grade);
+            if (data.data.interestJobPrimary) setFirstJobPreference(data.data.interestJobPrimary);
+            if (data.data.interestJobSecondary) setSecondJobPreference(data.data.interestJobSecondary);
+            if (data.data.interestJobTertiary) setThirdJobPreference(data.data.interestJobTertiary);
+            if (data.data.tagline) setIntroduction(data.data.tagline);
+          }
+        } else if (response.status === 401) {
+          // 토큰 만료
+          await AsyncStorage.removeItem('accessToken');
+          await AsyncStorage.removeItem('refreshToken');
+          router.replace('/login');
         }
       } catch (error) {
         console.error('사용자 정보 불러오기 실패:', error);
@@ -128,9 +133,10 @@ export default function SignUpScreen() {
     }
 
     try {
-      const token = await AsyncStorage.getItem('authToken');
+      const token = await AsyncStorage.getItem('accessToken');
       if (!token) {
         showModal('⚠️ 오류', '로그인이 필요합니다.');
+        router.replace('/login');
         return;
       }
 

@@ -1,11 +1,6 @@
-import { useState } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity, Alert, Image, View, Text } from 'react-native';
+import { useState, useEffect } from 'react';
+import { StyleSheet, TextInput, TouchableOpacity, Modal, Image, View, Text } from 'react-native';
 import { useRouter } from 'expo-router';
-<<<<<<< HEAD
-=======
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
->>>>>>> e11aab9c0880d7792d5c87573043f3b069b751af
 import { API_ENDPOINTS } from '@/config/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -15,6 +10,69 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const [autoLogin, setAutoLogin] = useState(false);
   const [emailError, setEmailError] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalTitle, setModalTitle] = useState('');
+  const [modalMessage, setModalMessage] = useState('');
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isCheckingAutoLogin, setIsCheckingAutoLogin] = useState(true);
+
+  const showModal = (title, message, success = false) => {
+    setModalTitle(title);
+    setModalMessage(message);
+    setIsSuccess(success);
+    setModalVisible(true);
+  };
+
+  const handleModalClose = () => {
+    setModalVisible(false);
+  };
+
+  // 자동 로그인 확인
+  useEffect(() => {
+    const checkAutoLogin = async () => {
+      try {
+        const autoLoginEnabled = await AsyncStorage.getItem('autoLogin');
+        const accessToken = await AsyncStorage.getItem('accessToken');
+        const savedEmail = await AsyncStorage.getItem('savedEmail');
+
+        if (autoLoginEnabled === 'true' && accessToken) {
+          console.log('자동 로그인 시도 중...');
+
+          // 토큰이 유효한지 확인
+          const response = await fetch(API_ENDPOINTS.USER_ME, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${accessToken}`,
+              'Content-Type': 'application/json',
+            },
+          });
+
+          if (response.ok) {
+            console.log('자동 로그인 성공');
+            router.replace('/Home/home');
+            return;
+          } else {
+            // 토큰이 만료되었으면 삭제
+            console.log('토큰이 만료되었습니다.');
+            await AsyncStorage.removeItem('accessToken');
+            await AsyncStorage.removeItem('refreshToken');
+            await AsyncStorage.removeItem('autoLogin');
+          }
+        }
+
+        // 저장된 이메일이 있으면 입력 필드에 표시
+        if (savedEmail) {
+          setEmail(savedEmail);
+        }
+      } catch (error) {
+        console.error('자동 로그인 확인 오류:', error);
+      } finally {
+        setIsCheckingAutoLogin(false);
+      }
+    };
+
+    checkAutoLogin();
+  }, []);
 
   const handleEmailChange = (text) => {
     setEmail(text);
@@ -27,16 +85,12 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert('⚠️ 로그인 실패', '이메일과 비밀번호를 입력하세요.', [
-        { text: '닫기', style: 'cancel' }
-      ]);
+      showModal('⚠️ 로그인 실패', '이메일과 비밀번호를 입력하세요.');
       return;
     }
-  
+
     if (!email.includes('dankook.ac.kr')) {
-      Alert.alert('⚠️ 로그인 실패', '유효한 단국대학교 이메일 주소를 입력하십시오.', [
-        { text: '닫기', style: 'cancel' }
-      ]);
+      showModal('⚠️ 로그인 실패', '유효한 단국대학교 이메일 주소를 입력하십시오.');
       return;
     }
   
@@ -62,49 +116,38 @@ export default function LoginScreen() {
       console.log('==================');
   
       if (response.ok && data.success) {
-<<<<<<< HEAD
         // 토큰 저장
         if (data.data?.accessToken && data.data?.refreshToken) {
           await AsyncStorage.setItem('accessToken', data.data.accessToken);
           await AsyncStorage.setItem('refreshToken', data.data.refreshToken);
-          
+
           // 자동 로그인 설정 저장
           if (autoLogin) {
             await AsyncStorage.setItem('autoLogin', 'true');
             await AsyncStorage.setItem('savedEmail', email);
           }
         }
-  
+
         // 홈으로 이동
         router.replace('/Home/home');
-        
-=======
-        // 자동 로그인 체크된 경우에만 AsyncStorage에 저장
-        if (autoLogin) {
-          if (data.token) {
-            await AsyncStorage.setItem('authToken', data.token);
-          }
-          await AsyncStorage.setItem('userName', data.user.name);
-          await AsyncStorage.setItem('userEmail', data.user.email || email);
-        }
-
-        Alert.alert('👋 환영합니다', `${data.user.name}님, 로그인이 완료되었습니다.`, [
-          { text: '확인', onPress: () => router.push('/home') }
-        ]);
->>>>>>> e11aab9c0880d7792d5c87573043f3b069b751af
       } else {
-        Alert.alert('⚠️ 로그인 실패', data.message || '이메일 또는 비밀번호가 올바르지 않습니다.', [
-          { text: '확인' }
-        ]);
+        showModal('⚠️ 로그인 실패', data.message || '이메일 또는 비밀번호가 올바르지 않습니다.');
       }
-  
+
     } catch (error) {
       console.error('로그인 오류:', error);
-      Alert.alert('⚠️ 오류', '백엔드 서버가 응답하지 않습니다.', [
-        { text: '확인' }
-      ]);
+      showModal('⚠️ 오류', '백엔드 서버가 응답하지 않습니다.');
     }
   };
+
+  // 자동 로그인 확인 중일 때는 빈 화면 표시
+  if (isCheckingAutoLogin) {
+    return (
+      <View style={styles.container}>
+        <Text style={{ fontSize: 16, color: '#666' }}>로딩 중...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -170,6 +213,26 @@ export default function LoginScreen() {
           <Text style={styles.signupLink}>회원가입하기</Text>
         </TouchableOpacity>
       </View>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={handleModalClose}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>{modalTitle}</Text>
+            <Text style={styles.modalMessage}>{modalMessage}</Text>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={handleModalClose}
+            >
+              <Text style={styles.modalButtonText}>확인</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -279,5 +342,43 @@ const styles = StyleSheet.create({
     color: '#4869EC',
     fontSize: 14,
     fontFamily: 'Pretendard-Regular',
-  }
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    width: '80%',
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontFamily: 'Pretendard-SemiBold',
+    color: '#000',
+    marginTop:5,
+    marginBottom: 10,
+  },
+  modalMessage: {
+    fontSize: 16,
+    fontFamily: 'Pretendard-Regular',
+    color: '#555',
+    textAlign: 'center',
+    marginBottom: 16,
+  },
+  modalButton: {
+    backgroundColor: '#4869EC',
+    paddingVertical: 10,
+    paddingHorizontal: 40,
+    borderRadius: 8,
+  },
+  modalButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
 });
