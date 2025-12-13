@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet, TouchableOpacity, Image, Text } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useFocusEffect } from '@react-navigation/native';
 import NaviBar from '../naviBar';
 import CategoryChips from '@/components/CategoryChips';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -29,6 +30,13 @@ export default function Activity() {
   useEffect(() => {
     fetchEvents();
   }, [selectedDepartment, selectedCategory]);
+
+  // 화면 포커스 시 최신 데이터 재조회 (기타 모집글 작성 후 복귀 등)
+  useFocusEffect(
+    useCallback(() => {
+      fetchEvents();
+    }, [selectedDepartment, selectedCategory])
+  );
 
   const fetchEvents = async () => {
     if (selectedCategory === "기타") {
