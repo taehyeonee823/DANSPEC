@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { View, Text, ScrollView, KeyboardAvoidingView, TouchableOpacity, StyleSheet, TextInput, Alert } from 'react-native';
 import { Image } from 'expo-image';
@@ -146,17 +146,55 @@ export default function teamRecruitmentForm() {
       const result = await response.json();
       console.log("서버 응답:", result);
 
-      Alert.alert('성공', '팀 모집글이 등록되었습니다.', [
-        { text: '확인', onPress: () => router.replace('../Activity/recruitmentConfirmed') }
-      ]);
+
     } catch (error) {
       console.error("모집글 저장 오류:", error);
       Alert.alert('오류', `모집글 등록에 실패했습니다.\n${error.message}`);
     }
   };
 
-  //전역에서 팀장 이름, 학과, 학년 끌고 올 예정
-  const teamLeaderName = "김단국";
+  const [userInfo, setUserInfo] = useState({
+    name: '',
+    college: '',
+    major: '',
+    grade: '',
+  });
+  const [loadingUser, setLoadingUser] = useState(true);
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const token = await AsyncStorage.getItem('accessToken');
+        if (!token) {
+          setLoadingUser(false);
+          return;
+        }
+        const response = await fetch(API_ENDPOINTS.USER_ME, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.data) {
+            setUserInfo({
+              name: data.data.name || '',
+              college: data.data.college || '',
+              major: data.data.major || '',
+              grade: data.data.grade || '',
+            });
+          }
+        }
+      } catch (e) {
+        // ignore
+      } finally {
+        setLoadingUser(false);
+      }
+    };
+    fetchUserInfo();
+  }, []);
 
   return (
       <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
@@ -191,20 +229,24 @@ export default function teamRecruitmentForm() {
             />
 
             <Text style={styles.sectionTitle}>팀장 이름</Text>
-            <Text style={styles.readOnlyText}>{teamLeaderName}</Text>
+            {loadingUser ? (
+              <Text style={styles.readOnlyText}>불러오는 중...</Text>
+            ) : (
+              <Text style={styles.readOnlyText}>{userInfo.name || '정보 없음'}</Text>
+            )}
             <Text style={styles.sectionTitle}>학과</Text>
             <View style={styles.departmentRow}>
               <View style={styles.collegeBox}>
-                <Text style={styles.collegeText}>SW융합대학</Text>
+                <Text style={styles.collegeText}>{loadingUser ? '불러오는 중...' : (userInfo.college || '정보 없음')}</Text>
               </View>
               <View style={styles.majorBox}>
-                <Text style={styles.majorText}>통계데이터사이언스</Text>
+                <Text style={styles.majorText}>{loadingUser ? '불러오는 중...' : (userInfo.major || '정보 없음')}</Text>
               </View>
             </View>
             <Text style={styles.sectionTitle}>학년</Text>
             <View style={styles.departmentRow}>
               <View style={styles.collegeBox}>
-                <Text style={styles.collegeText}>3학년</Text>
+                <Text style={styles.collegeText}>{loadingUser ? '불러오는 중...' : (userInfo.grade ? `${userInfo.grade}학년` : '정보 없음')}</Text>
               </View>
               <Text style={styles.emptyBox}></Text>
             </View>

@@ -90,7 +90,7 @@ export default function LoginScreen() {
     }
 
     if (!email.includes('dankook.ac.kr')) {
-      showModal('⚠️ 로그인 실패', '유효한 단국대학교 이메일 주소를 입력하십시오.');
+      showModal('⚠️ 로그인 실패', '유효한 단국대학교 \n이메일 주소를 입력해주세요.');
       return;
     }
   

@@ -11,9 +11,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Team() {
   const router = useRouter();
+<<<<<<< HEAD
   const [activeTabIndex, setActiveTabIndex] = useState(0); // 0: 모든 모집글, 1: 내가 쓴 모집글, 2: 내가 쓴 지원글
   const [teams, setTeams] = useState([]);
   const [loading, setLoading] = useState(false);
+=======
+  const [activeTabIndex, setActiveTabIndex] = useState(0); // 0: 내가 쓴 모집글, 1: 내가 쓴 지원글
+>>>>>>> 5ce325e4a699b3beeeeb5860b7e61ac82ecc14fc
 
   const fetchMyTeams = useCallback(async () => {
     try {
