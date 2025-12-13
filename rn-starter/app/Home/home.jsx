@@ -58,10 +58,12 @@ export default function Home() {
   useEffect(() => {
     const loadActivities = async () => {
       try {
-        const response = await fetch(API_ENDPOINTS.ALL_EVENTS, {
+        const token = await AsyncStorage.getItem('accessToken');
+        const response = await fetch(API_ENDPOINTS.RECOMMENDED_EVENTS, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
+            ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
           },
         });
 
