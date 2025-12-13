@@ -166,7 +166,8 @@ export default function ActivityInfo() {
             onPress={() => router.push({
               pathname: '/Team/teamRecruitmentForm',
               params: {
-                activityTitle: eventData.title
+                activityTitle: eventData.title,
+                eventId: eventData.id
               }
             })}
           >

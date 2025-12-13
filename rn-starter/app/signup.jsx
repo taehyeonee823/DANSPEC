@@ -7,6 +7,13 @@ import { API_ENDPOINTS } from '@/config/api';
 export default function SignUpScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
+  
+  // params에서 개별 값 추출 (의존성 배열용)
+  const pEmail = params.email;
+  const pCode = params.verificationCode;
+  const pPass = params.password;
+  const pConfirm = params.confirmPassword;
+
   const [email, setEmail] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
   const [password, setPassword] = useState('');
@@ -19,16 +26,16 @@ export default function SignUpScreen() {
 
   useEffect(() => {
     console.log('=== verification.jsx로부터 받은 params ===');
-    console.log('params.email:', params.email);
-    console.log('params.verificationCode:', params.verificationCode);
-    console.log('params.password:', params.password);
-    console.log('params.confirmPassword:', params.confirmPassword);
+    console.log('email:', pEmail);
+    console.log('verificationCode:', pCode);
+    console.log('password:', pPass);
+    console.log('confirmPassword:', pConfirm);
 
-    if (params.email) setEmail(params.email);
-    if (params.verificationCode) setVerificationCode(params.verificationCode);
-    if (params.password) setPassword(params.password);
-    if (params.confirmPassword) setConfirmPassword(params.confirmPassword);
-  }, [params]);
+    if (pEmail) setEmail(pEmail);
+    if (pCode) setVerificationCode(pCode);
+    if (pPass) setPassword(pPass);
+    if (pConfirm) setConfirmPassword(pConfirm);
+  }, [pEmail, pCode, pPass, pConfirm]);
 
   const [campus, setCampus] = useState('');
   const [college, setCollege] = useState('');
@@ -230,7 +237,7 @@ export default function SignUpScreen() {
         contentContainerStyle={styles.scrollViewContent}>
       <Text style={styles.subtitle}>내 정보 입력을 완료해주세요. {'\n'}드림이가 딱 맞는 활동을 추천해 드릴게요.</Text>
 
-      <Text style={styles.text}>* 이름</Text>
+      <Text style={styles.text}>이름</Text>
     <View style={styles.inputContainer3}>
       <TextInput
           style={styles.input}
@@ -241,7 +248,7 @@ export default function SignUpScreen() {
         />
       </View>
 
-    <Text style={styles.text}>* 소속 캠퍼스</Text>
+    <Text style={styles.text}>소속 캠퍼스</Text>
     <View style={styles.campusButtonContainer}>
       <TouchableOpacity
         style={[
@@ -280,7 +287,7 @@ export default function SignUpScreen() {
       </TouchableOpacity>
     </View>
 
-    <Text style={styles.text}>* 소속 학과</Text>
+    <Text style={styles.text}>소속 학과</Text>
         <View style={styles.majorContainer}>
           <View style={styles.majorWrapper}>
             <TouchableOpacity
@@ -370,7 +377,7 @@ export default function SignUpScreen() {
             )}
           </View>
         </View>
-    <Text style={styles.text}>* 학년</Text>
+    <Text style={styles.text}>학년</Text>
     <View style={styles.gradeContainer}>
       <TouchableOpacity
         style={styles.gradeSelector}
@@ -409,7 +416,7 @@ export default function SignUpScreen() {
         </ScrollView>
       )}
     </View>
-    <Text style={styles.text}>* 희망 직무 1순위</Text>
+    <Text style={styles.text}>희망 직무 1순위</Text>
     <View style={styles.inputContainer3}>
       <TextInput
           style={styles.input}
@@ -419,7 +426,7 @@ export default function SignUpScreen() {
           onChangeText={setInterestJobPrimary}
         />
       </View>
-      <Text style={styles.text}>* 희망 직무 2순위</Text>
+      <Text style={styles.text}>희망 직무 2순위</Text>
     <View style={styles.inputContainer3}>
       <TextInput
           style={styles.input}
@@ -429,7 +436,7 @@ export default function SignUpScreen() {
           onChangeText={setInterestJobSecondary}
         />
       </View>
-      <Text style={styles.text}>* 희망 직무 3순위</Text>
+      <Text style={styles.text}>희망 직무 3순위</Text>
     <View style={styles.inputContainer3}>
       <TextInput
           style={styles.input}
@@ -438,12 +445,12 @@ export default function SignUpScreen() {
           value={interestJobTertiary}
           onChangeText={setInterestJobTertiary}
         />
-      </View>
+      </View> 
 
-    <Text style={styles.text}>간단 소개</Text>
+    <Text style={styles.text}>한 줄 소개</Text>
     <View style={styles.inputContainer3}>
       <TextInput
-        style={[styles.input, styles.introInput]}
+        style={[styles.input2, styles.introInput]}
         placeholder="자신을 소개해주세요 한 줄이면 충분합니다!"
         placeholderTextColor="#999"
         value={tagline}
@@ -500,24 +507,24 @@ const styles = StyleSheet.create({
     },
   scrollViewContent: {
     paddingTop: 85,
-    paddingLeft: 30,
-    paddingRight: 0,
+    paddingLeft: 24,
+    paddingRight: 24,
     paddingBottom: 30,
   },
   subtitle: {
     fontSize: 18,
-    fontWeight: '500',
+    fontFamily: 'Pretendard-SemiBold',
     color: '#000',
     textAlign: 'left',
     marginTop: 30,
     marginBottom: 20
   },
    text: {
-    fontSize: 14,
-    fontWeight: '300',
+    fontSize: 16,
+    fontFamily: 'Pretendard-SemiBold',
     color: '#000',
     textAlign: 'left',
-    marginBottom: 5,
+    paddingBottom: 12,
   },
   errorText: {
     fontSize: 12,
@@ -535,50 +542,38 @@ const styles = StyleSheet.create({
     marginTop: -10,
     marginBottom: 15,
   },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '90%',
-    marginBottom: 15,
-  },
-  inputContainer2: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '40%',
-    marginBottom: 15,
-  },
   inputContainer3: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: '90%',
-    marginBottom: 15,
+    width: '100%',
   },
   input: {
     flex: 1,
     height: 40,
-    borderWidth: 1,
+    borderBottomWidth: 1,
     borderColor: '#ddd',
-    borderRadius: 8,
-    paddingHorizontal: 15,
+    paddingHorizontal: 8,
     fontSize: 16,
+    fontFamily: 'Pretendard-Regular',
     backgroundColor: '#fff',
-    marginRight: 10,
-  },
-  introInput: {
-    height: 100,
-    paddingTop: 12,
-    paddingBottom: 12,
+    marginBottom: 32,
   },
   input2: {
     flex: 1,
     height: 40,
     borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    paddingHorizontal: 15,
+    borderColor: '#3E6AF433',
+    paddingHorizontal: 8,
     fontSize: 16,
+    borderRadius: 8,
+    fontFamily: 'Pretendard-Regular',
     backgroundColor: '#fff',
-    marginRight: 10,
+    marginBottom: 32,
+  },
+  introInput: {
+    height: 100,
+    paddingTop: 12,
+    paddingBottom: 12,
   },
   checkButton: {
     backgroundColor: '#007AFF',
@@ -597,23 +592,23 @@ const styles = StyleSheet.create({
   },
   campusButtonContainer: {
     flexDirection: 'row',
-    width: '90%',
-    marginBottom: 15,
+    width: '100%',
     gap: 10,
   },
   campusButton: {
     flex: 1,
     height: 45,
     borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 20,
+    borderColor: '#E6E6E6',
+    borderRadius: 48,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 32,
     backgroundColor: '#fff',
   },
   campusButtonSelected: {
-    backgroundColor: '#007AFF',
-    borderColor: '#007AFF',
+    backgroundColor: '#3E6AF4',
+    borderColor: '#3E6AF4',
   },
   campusButtonText: {
     fontSize: 16,
@@ -626,9 +621,8 @@ const styles = StyleSheet.create({
   },
   majorContainer: {
     flexDirection: 'row',
-    width: '90%',
+    width: '100%',
     gap: 10,
-    marginBottom: 15,
   },
   majorWrapper: {
     flex: 1,
@@ -640,11 +634,11 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 45,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: '#3E6AF433',
     borderRadius: 8,
     paddingHorizontal: 15,
     backgroundColor: '#fff',
-    marginBottom: 15,
+    marginBottom: 32,
   },
   departmentSelectorText: {
     fontSize: 16,
@@ -693,10 +687,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    width: '45%',
+    width: '48%',
     height: 45,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: '#3E6AF433',
     borderRadius: 8,
     paddingHorizontal: 15,
     backgroundColor: '#fff',
@@ -713,13 +707,12 @@ const styles = StyleSheet.create({
     maxHeight: 150,
   },
   signupButton: {
-    width: '90%',
+    width: '100%',
     height: 50,
-    backgroundColor: '#4869EC',
-    borderRadius: 25,
+    backgroundColor: '#3E6AF4',
+    borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
   },
   signupButtonText: {
     color: '#fff',

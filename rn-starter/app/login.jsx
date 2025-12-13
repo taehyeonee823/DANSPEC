@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, Alert, Image, View, Text } from 'react-native';
 import { useRouter } from 'expo-router';
-
 import { API_ENDPOINTS } from '@/config/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -27,14 +27,14 @@ export default function LoginScreen() {
       ]);
       return;
     }
-
+  
     if (!email.includes('dankook.ac.kr')) {
       Alert.alert('⚠️ 로그인 실패', '유효한 단국대학교 이메일 주소를 입력하십시오.', [
         { text: '닫기', style: 'cancel' }
       ]);
       return;
     }
-
+  
     try {
       const response = await fetch(API_ENDPOINTS.LOGIN, {
         method: 'POST',
@@ -46,18 +46,38 @@ export default function LoginScreen() {
           password,
         }),
       });
-
+  
       const data = await response.json();
-
+      
+      // 디버깅용 로그
+      console.log('=== 로그인 응답 ===');
+      console.log('status:', response.status);
+      console.log('data:', JSON.stringify(data, null, 2));
+      console.log('accessToken:', data.data?.accessToken);
+      console.log('==================');
+  
       if (response.ok && data.success) {
-        Alert.alert('👋 환영합니다', `${data.user.name}님, 로그인이 완료되었습니다.`, [
-          { text: '확인', onPress: () => router.push('/home') }
-        ]);
+        // 토큰 저장
+        if (data.data?.accessToken && data.data?.refreshToken) {
+          await AsyncStorage.setItem('accessToken', data.data.accessToken);
+          await AsyncStorage.setItem('refreshToken', data.data.refreshToken);
+          
+          // 자동 로그인 설정 저장
+          if (autoLogin) {
+            await AsyncStorage.setItem('autoLogin', 'true');
+            await AsyncStorage.setItem('savedEmail', email);
+          }
+        }
+  
+        // 홈으로 이동
+        router.replace('/Home/home');
+        
       } else {
         Alert.alert('⚠️ 로그인 실패', data.message || '이메일 또는 비밀번호가 올바르지 않습니다.', [
           { text: '확인' }
         ]);
       }
+  
     } catch (error) {
       console.error('로그인 오류:', error);
       Alert.alert('⚠️ 오류', '백엔드 서버가 응답하지 않습니다.', [
@@ -121,7 +141,7 @@ export default function LoginScreen() {
         <Text style={styles.autoLoginText}>자동 로그인</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={() => router.push('/Home/home')}>
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>로그인</Text>
       </TouchableOpacity>
       <View style={styles.signupContainer}>

@@ -6,6 +6,7 @@ import Button from '../../components/Button';
 import DateRangePicker from '../../components/DateRangePicker';
 import MultilineInput from '../../components/MultiplelineInput';
 import { API_ENDPOINTS } from '@/config/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function teamRecruitmentForm() {
   const router = useRouter();
@@ -28,6 +29,7 @@ export default function teamRecruitmentForm() {
   const [traitInfo, setTraitInfo] = useState("");
   const [introductionInfo, setIntroductionInfo] = useState("");
   const activityTitle = params.activityTitle;
+  const eventId = params.eventId ? Number(params.eventId) : 0;
   const [inputs, setInputs] = useState([{id: Date.now(), value: ''}]);
   const [recruitCount, setRecruitCount] = useState(1);
   
@@ -98,7 +100,7 @@ export default function teamRecruitmentForm() {
 
     // 백엔드 API 형식에 맞게 데이터 구성
     const newRecruitment = {
-      eventId: 0, // activityTitle에서 eventId를 추출해야 한다면 수정 필요
+      eventId: eventId,
       title: titleInfo,
       promotionText: introductionInfo || "",
       role: roles,
@@ -109,13 +111,26 @@ export default function teamRecruitmentForm() {
     };
 
     try {
-      console.log("저장할 데이터:", newRecruitment);
+      console.log("=== 팀 모집글 등록 ===");
+      console.log("eventId:", eventId);
+      console.log("저장할 데이터:", JSON.stringify(newRecruitment, null, 2));
       console.log("요청 URL:", API_ENDPOINTS.CREATE_TEAM);
+
+      // 토큰 가져오기
+      const accessToken = await AsyncStorage.getItem('accessToken');
+      
+      if (!accessToken) {
+        Alert.alert('알림', '로그인이 필요합니다.', [
+          { text: '확인', onPress: () => router.replace('/login') }
+        ]);
+        return;
+      }
 
       const response = await fetch(API_ENDPOINTS.CREATE_TEAM, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
         },
         body: JSON.stringify(newRecruitment),
       });

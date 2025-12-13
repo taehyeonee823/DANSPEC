@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, Text, View, Modal, Image, ScrollView } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-
 import { API_ENDPOINTS } from '@/config/api';
 
 
@@ -9,7 +8,6 @@ export default function SignUpScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const [focusedInput, setFocusedInput] = useState(null);
-
   const [email, setEmail] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
   const [password, setPassword] = useState('');
@@ -132,7 +130,7 @@ export default function SignUpScreen() {
       <ScrollView style={styles.container}
         contentContainerStyle={styles.scrollViewContent}>
 
-      <Text style={styles.text}>* 이름</Text>
+      <Text style={styles.text}>이름</Text>
       <View style={styles.inputGroup}>
         <TextInput
           style={[styles.input, styles.disabledInput]}
@@ -141,7 +139,7 @@ export default function SignUpScreen() {
         />
       </View>
 
-    <Text style={styles.text}>* 소속 캠퍼스</Text>
+    <Text style={styles.text}>소속 캠퍼스</Text>
     <View style={styles.campusButtonContainer}>
       <TouchableOpacity
         style={[
@@ -180,7 +178,7 @@ export default function SignUpScreen() {
       </TouchableOpacity>
     </View>
 
-    <Text style={styles.text}>* 소속 학과</Text>
+    <Text style={styles.text}>소속 학과</Text>
         <View style={styles.majorContainer}>
           <View style={styles.majorWrapper}>
             <TouchableOpacity
@@ -270,7 +268,7 @@ export default function SignUpScreen() {
             )}
           </View>
         </View>
-    <Text style={styles.text}>* 학년</Text>
+    <Text style={styles.text}>학년</Text>
     <View style={styles.gradeContainer}>
       <TouchableOpacity
         style={styles.gradeSelector}
@@ -309,7 +307,7 @@ export default function SignUpScreen() {
         </ScrollView>
       )}
     </View>
-    <Text style={styles.text}>* 희망 직무 1순위</Text>
+    <Text style={styles.text}>희망 직무 1순위</Text>
     <View style={styles.inputGroup}>
       <TextInput
         style={styles.input}
@@ -322,7 +320,7 @@ export default function SignUpScreen() {
       />
     </View>
 
-    <Text style={styles.text}>* 희망 직무 2순위</Text>
+    <Text style={styles.text}>희망 직무 2순위</Text>
     <View style={styles.inputGroup}>
       <TextInput
         style={styles.input}
@@ -335,7 +333,7 @@ export default function SignUpScreen() {
       />
     </View>
 
-    <Text style={styles.text}>* 희망 직무 3순위</Text>
+    <Text style={styles.text}>희망 직무 3순위</Text>
     <View style={styles.inputGroup}>
       <TextInput
         style={styles.input}
@@ -424,7 +422,7 @@ const styles = StyleSheet.create({
   },
    text: {
     fontSize: 16,
-    fontFamily: 'Pretendard-Medium',
+    fontFamily: 'Pretendard-SemiBold',
     color: '#000',
     textAlign: 'left',
     marginBottom: 5,
