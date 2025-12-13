@@ -68,12 +68,15 @@ export default function Home() {
         if (response.ok) {
           const data = await response.json();
 
+          // data가 배열인지 확인
+          const activitiesArray = Array.isArray(data) ? data : (Array.isArray(data.data) ? data.data : []);
+
           // 각 카테고리에서 하나씩 선택
           const categories = ['CONTEST', 'EXTERNAL', 'SCHOOL'];
           const selectedActivities = [];
 
           categories.forEach(category => {
-            const activityInCategory = data.find(activity => activity.category === category);
+            const activityInCategory = activitiesArray.find(activity => activity.category === category);
             if (activityInCategory) {
               selectedActivities.push(activityInCategory);
             }

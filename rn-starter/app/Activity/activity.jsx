@@ -58,17 +58,25 @@ export default function Activity() {
         // 단과대 + 카테고리 필터링
         url = API_ENDPOINTS.SEARCH_EVENTS(selectedDepartment, apiCategory);
       }
-
       const response = await fetch(url);
       const data = await response.json();
 
+      // data가 배열이 아닐 경우, 혹은 data.data가 배열일 경우 처리
+      let eventArray = [];
+      if (Array.isArray(data)) {
+        eventArray = data;
+      } else if (data && Array.isArray(data.data)) {
+        eventArray = data.data;
+      }
+
       // 마감일 순으로 정렬
-      const sortedData = data.sort((a, b) => {
+      const sortedData = eventArray.sort((a, b) => {
         const dateA = new Date(a.endDate);
         const dateB = new Date(b.endDate);
         return dateA - dateB;
       });
 
+      setEvents(sortedData);
       setEvents(sortedData);
     }
     catch (error) {
