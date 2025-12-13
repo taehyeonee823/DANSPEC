@@ -135,15 +135,11 @@ export default function LoginScreen() {
           if (data.token) {
             await AsyncStorage.setItem('authToken', data.token);
           }
-          await AsyncStorage.setItem('userName', data.user.name);
           await AsyncStorage.setItem('userEmail', data.user.email || email);
         }
-        Alert.alert('👋 환영합니다', `${data.user.name}님, 로그인이 완료되었습니다.`, [
-          { text: '확인', onPress: () => router.push('/home') }
-        ]);
-      } else {
+            } else {
         showModal('⚠️ 로그인 실패', data.message || '이메일 또는 비밀번호가 올바르지 않습니다.');
-      }
+            }
 
     } catch (error) {
       console.error('로그인 오류:', error);
