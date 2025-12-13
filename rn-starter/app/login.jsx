@@ -1,11 +1,6 @@
 import { useState } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, Alert, Image, View, Text } from 'react-native';
 import { useRouter } from 'expo-router';
-<<<<<<< HEAD
-=======
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
->>>>>>> e11aab9c0880d7792d5c87573043f3b069b751af
 import { API_ENDPOINTS } from '@/config/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -62,7 +57,6 @@ export default function LoginScreen() {
       console.log('==================');
   
       if (response.ok && data.success) {
-<<<<<<< HEAD
         // 토큰 저장
         if (data.data?.accessToken && data.data?.refreshToken) {
           await AsyncStorage.setItem('accessToken', data.data.accessToken);
@@ -78,20 +72,6 @@ export default function LoginScreen() {
         // 홈으로 이동
         router.replace('/Home/home');
         
-=======
-        // 자동 로그인 체크된 경우에만 AsyncStorage에 저장
-        if (autoLogin) {
-          if (data.token) {
-            await AsyncStorage.setItem('authToken', data.token);
-          }
-          await AsyncStorage.setItem('userName', data.user.name);
-          await AsyncStorage.setItem('userEmail', data.user.email || email);
-        }
-
-        Alert.alert('👋 환영합니다', `${data.user.name}님, 로그인이 완료되었습니다.`, [
-          { text: '확인', onPress: () => router.push('/home') }
-        ]);
->>>>>>> e11aab9c0880d7792d5c87573043f3b069b751af
       } else {
         Alert.alert('⚠️ 로그인 실패', data.message || '이메일 또는 비밀번호가 올바르지 않습니다.', [
           { text: '확인' }
