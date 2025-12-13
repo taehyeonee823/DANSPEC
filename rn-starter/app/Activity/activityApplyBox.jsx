@@ -4,7 +4,7 @@ import { useRouter } from 'expo-router';
 import { Image } from 'expo-image';
 
 
-export default function activityApplyBox({ event, tag, title, summarizedDescription, dueDate, startDate, endDate }) {
+export default function activityApplyBox({ event, tag, title, summarizedDescription, dueDate, startDate, endDate, clickable = true }) {
   const router = useRouter();
 
   // 카테고리 한글 변환
@@ -18,18 +18,22 @@ export default function activityApplyBox({ event, tag, title, summarizedDescript
   };
 
   const handlePress = () => {
-    router.push({
-      pathname: './activityInfo',
-      params: {
-        eventData: JSON.stringify(event)
-      }
-    });
+    if (clickable) {
+      router.push({
+        pathname: '/Activity/activityInfo',
+        params: {
+          eventData: JSON.stringify(event)
+        }
+      });
+    }
   };
 
+  const CardContainer = clickable ? TouchableOpacity : View;
+
   return (
-    <TouchableOpacity
+    <CardContainer
       style={styles.card}
-      onPress={handlePress}
+      onPress={clickable ? handlePress : undefined}
     >
       <View style={styles.header}>
         <Text style={styles.tag}>{getCategoryName(tag)}</Text>
@@ -49,7 +53,7 @@ export default function activityApplyBox({ event, tag, title, summarizedDescript
         <Text style={styles.dateTagText}>{startDate} ~ {endDate}</Text>
         </View>
       </View>
-    </TouchableOpacity>
+    </CardContainer>
   );
 }
 

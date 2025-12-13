@@ -67,23 +67,7 @@ export default function Team() {
       </View>
 
       <ScrollView style={styles.contentArea} contentContainerStyle={styles.scrollContent}>
-        {activeTabIndex === 0 && displayedTeams.map((team) => {
-          const isMine = team.manager === "지은";
-          const navigateToModify = () =>
-            router.push(`/Team/teamInfoModify?id=${team.id}&title=${encodeURIComponent(team.title)}`);
-          return (
-            <TeamApplyBox
-              key={team.id}
-              status={team.status}
-              dueDate={team.dueDate}
-              title={team.title}
-              description={team.description}
-              tag={`연결된 활동: ${team.tag}`}
-              onPress={isMine ? navigateToModify : undefined}
-            />
-          );
-        })}
-        {activeTabIndex === 1 && displayedTeams
+        {activeTabIndex === 0 && displayedTeams
           .filter((team) => team.manager === "지은")
           .map((team) => (
             <TeamApplyBox
@@ -96,6 +80,10 @@ export default function Team() {
               onPress={() => router.push(`/Team/teamInfoModify?id=${team.id}&title=${encodeURIComponent(team.title)}`)}
             />
           ))}
+        {activeTabIndex === 1 && (
+          <></>
+          // TODO: 내가 쓴 지원글 구현 예정
+        )}
       </ScrollView>
       <NaviBar currentPage="team" />
     </View>

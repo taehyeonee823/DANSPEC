@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, Text, View, Modal, Image, ScrollView } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+<<<<<<< HEAD
+=======
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+>>>>>>> e11aab9c0880d7792d5c87573043f3b069b751af
 import { API_ENDPOINTS } from '@/config/api';
 
 
@@ -18,12 +23,45 @@ export default function SignUpScreen() {
   const [modalMessage, setModalMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
 
+  // 초기 사용자 정보 불러오기
   useEffect(() => {
-    if (params.email) setEmail(params.email);
-    if (params.verificationCode) setVerificationCode(params.verificationCode);
-    if (params.password) setPassword(params.password);
-    if (params.confirmPassword) setConfirmPassword(params.confirmPassword);
-  }, [params]);
+    const loadUserInfo = async () => {
+      try {
+        const token = await AsyncStorage.getItem('authToken');
+        if (!token) {
+          showModal('⚠️ 오류', '로그인이 필요합니다.');
+          return;
+        }
+
+        const response = await fetch(API_ENDPOINTS.USER_ME, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+
+          // 데이터 매핑
+          if (data.name) setName(data.name);
+          if (data.campus) setCampus(data.campus === 'JUKJEON' ? '죽전' : '천안');
+          if (data.college) setDepartment(data.college);
+          if (data.major) setMajor(data.major);
+          if (data.grade) setGrade(data.grade);
+          if (data.interestJobPrimary) setFirstJobPreference(data.interestJobPrimary);
+          if (data.interestJobSecondary) setSecondJobPreference(data.interestJobSecondary);
+          if (data.interestJobTertiary) setThirdJobPreference(data.interestJobTertiary);
+          if (data.tagline) setIntroduction(data.tagline);
+        }
+      } catch (error) {
+        console.error('사용자 정보 불러오기 실패:', error);
+      }
+    };
+
+    loadUserInfo();
+  }, []);
   const [campus, setCampus] = useState('');
   const [department, setDepartment] = useState('');
   const [showDepartmentModal, setShowDepartmentModal] = useState(false);
@@ -79,18 +117,60 @@ export default function SignUpScreen() {
   const handleModalClose = () => {
     setModalVisible(false);
     if (isSuccess) {
-      router.push('/login');
+      router.push('./modUserInfoConfirmed');
     }
   };
 
-  const handleSignup = () => {
+  const handleSignup = async () => {
     if (!name || !campus || !department || !major || !grade || !firstJobPreference || !secondJobPreference || !thirdJobPreference) {
       showModal('⚠️ 오류', '필수 항목들을 입력해주세요.');
       return;
     }
 
-    // 유효성 검사 통과 시 modUserInfoConfirmed로 이동
-    router.push('./modUserInfoConfirmed');
+    try {
+      const token = await AsyncStorage.getItem('authToken');
+      if (!token) {
+        showModal('⚠️ 오류', '로그인이 필요합니다.');
+        return;
+      }
+
+      // 요청 본문 생성 (변경된 필드만 포함)
+      const updateData = {
+        name,
+        campus: campus === '죽전' ? 'JUKJEON' : 'CHEONAN',
+        college: department,
+        major,
+        grade,
+        interestJobPrimary: firstJobPreference,
+        interestJobSecondary: secondJobPreference,
+        interestJobTertiary: thirdJobPreference,
+      };
+
+      // 간단 소개가 있으면 추가
+      if (introduction) {
+        updateData.tagline = introduction;
+      }
+
+      const response = await fetch(API_ENDPOINTS.UPDATE_USER_INFO, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: JSON.stringify(updateData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        showModal('✅ 성공', '회원정보가 수정되었습니다.', true);
+      } else {
+        showModal('⚠️ 오류', data.message || '회원정보 수정에 실패했습니다.');
+      }
+    } catch (error) {
+      console.error('회원정보 수정 오류:', error);
+      showModal('⚠️ 오류', '서버와 통신 중 오류가 발생했습니다.');
+    }
   };
 
   return (
@@ -134,7 +214,7 @@ export default function SignUpScreen() {
       <View style={styles.inputGroup}>
         <TextInput
           style={[styles.input, styles.disabledInput]}
-          value={name || "김단국"}
+          value={name}
           editable={false}
         />
       </View>

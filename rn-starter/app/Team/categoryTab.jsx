@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { View, Text, Pressable, Animated, StyleSheet, Dimensions } from 'react-native';
 
-const categories = ['모든 모집글', '내가 쓴 모집글', '내가 쓴 지원글'];
+const categories = ['내가 쓴 모집글', '내가 쓴 지원글'];
 
 export default function CategoryTab({ activeIndex, onChangeIndex }) {
   const underlineX = useRef(new Animated.Value(0)).current;

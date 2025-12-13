@@ -37,6 +37,14 @@ export default function SignUpScreen() {
     if (pConfirm) setConfirmPassword(pConfirm);
   }, [pEmail, pCode, pPass, pConfirm]);
 
+<<<<<<< HEAD
+=======
+    if (params.email) setEmail(params.email);
+    if (params.verificationCode) setVerificationCode(params.verificationCode);
+    if (params.password) setPassword(params.password);
+    if (params.confirmPassword) setConfirmPassword(params.confirmPassword);
+  }, []); // 컴포넌트 마운트 시 한 번만 실행
+>>>>>>> e11aab9c0880d7792d5c87573043f3b069b751af
   const [campus, setCampus] = useState('');
   const [college, setCollege] = useState('');
   const [showCollegeModal, setShowCollegeModal] = useState(false);
