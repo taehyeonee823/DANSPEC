@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useRouter } from 'expo-router';
-import { View, Text, ScrollView, KeyboardAvoidingView, TouchableOpacity, StyleSheet, TextInput, Platform, Modal } from 'react-native';
+import { View, Text, ScrollView, KeyboardAvoidingView, TouchableOpacity, StyleSheet, TextInput, Platform, Modal, Alert } from 'react-native';
 import { Image } from 'expo-image';
 import DateTimePicker from '@react-native-community/datetimepicker'; 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Button from '../../components/Button';
+import { API_ENDPOINTS } from '../../config/api';
 
 export default function etcteamRecruitmentForm() {
   const router = useRouter();
@@ -61,12 +63,20 @@ export default function etcteamRecruitmentForm() {
     setInputs(newInputs);
   };
 
-  // 날짜 포맷팅 함수
+  // 날짜 포맷팅 함수 (화면 표시용)
   const formatDate = (date) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}.${month}.${day}`;
+  };
+
+  // 날짜를 YYYY-MM-DD 형식으로 변환하는 함수 (API 전송용)
+  const formatDateForAPI = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   };
 
   // 날짜 비교 헬퍼 함수 (시간 제외)
@@ -141,25 +151,82 @@ export default function etcteamRecruitmentForm() {
 
 
   // 모집글 저장 함수
-  const saveRecruitment = () => {
+  const saveRecruitment = async () => {
     const roles = inputs.map(input => input.value.trim()).filter(value => value !== '');
 
+    // 필수 입력값 검증
+    if (!titleInfo.trim()) {
+      Alert.alert('알림', '제목을 입력해주세요.');
+      return;
+    }
+    if (roles.length === 0) {
+      Alert.alert('알림', '최소 한 개 이상의 역할을 입력해주세요.');
+      return;
+    }
+    if (!traitInfo.trim()) {
+      Alert.alert('알림', '특성을 입력해주세요.');
+      return;
+    }
+    if (!introductionInfo.trim()) {
+      Alert.alert('알림', '진행 방식 및 한 줄 소개를 입력해주세요.');
+      return;
+    }
+
+    // 백엔드 API 형식에 맞게 데이터 구성 (기타 카테고리는 eventId가 null)
     const newRecruitment = {
+      eventId: null,
       title: titleInfo,
-      tag: "기타",
-      name: teamLeaderName,
-      department: "SW융합대학",
-      grade: "3학년",
-      recruitCount: recruitCount,
-      startDate: formatDate(startDate),
-      endDate: formatDate(endDate),
+      promotionText: introductionInfo || "",
       role: roles,
-      trait: traitInfo,
-      description: introductionInfo,
+      characteristic: traitInfo || "",
+      capacity: recruitCount,
+      recruitmentStartDate: formatDateForAPI(startDate),
+      recruitmentEndDate: formatDateForAPI(endDate),
     };
 
-    console.log("저장할 데이터:", newRecruitment);
-    router.replace('/Activity/recruitmentConfirmed');
+    try {
+      console.log("=== 기타 모집글 등록 ===");
+      console.log("eventId: null (기타 카테고리)");
+      console.log("저장할 데이터:", JSON.stringify(newRecruitment, null, 2));
+      console.log("요청 URL:", API_ENDPOINTS.CREATE_TEAM);
+
+      // 토큰 가져오기
+      const accessToken = await AsyncStorage.getItem('accessToken');
+      
+      if (!accessToken) {
+        Alert.alert('알림', '로그인이 필요합니다.', [
+          { text: '확인', onPress: () => router.replace('/login') }
+        ]);
+        return;
+      }
+
+      const response = await fetch(API_ENDPOINTS.CREATE_TEAM, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(newRecruitment),
+      });
+
+      console.log("응답 상태:", response.status);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("에러 응답 내용:", errorText);
+        throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+      }
+
+      const result = await response.json();
+      console.log("서버 응답:", result);
+
+      Alert.alert('성공', '팀 모집글이 등록되었습니다.', [
+        { text: '확인', onPress: () => router.replace('/Activity/recruitmentConfirmed') }
+      ]);
+    } catch (error) {
+      console.error("모집글 저장 오류:", error);
+      Alert.alert('오류', `모집글 등록에 실패했습니다.\n${error.message}`);
+    }
   };
 
   const teamLeaderName = "김단국";
