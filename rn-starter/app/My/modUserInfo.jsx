@@ -1,11 +1,6 @@
 import { useState, useEffect } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, Text, View, Modal, Image, ScrollView } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-<<<<<<< HEAD
-=======
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
->>>>>>> e11aab9c0880d7792d5c87573043f3b069b751af
 import { API_ENDPOINTS } from '@/config/api';
 
 
