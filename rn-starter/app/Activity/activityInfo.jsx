@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text, ScrollView, Dimensions,Image, Linking } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import { useFocusEffect } from '@react-navigation/native';
 import { API_ENDPOINTS } from '@/config/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -24,57 +25,63 @@ export default function ActivityInfo() {
   const [teams, setTeams] = useState([]);
   const [loadingTeams, setLoadingTeams] = useState(true);
 
-  useEffect(() => {
-    const fetchTeams = async () => {
-      if (!eventData?.id) {
-        console.log('eventData.id가 없습니다:', eventData);
-        setLoadingTeams(false);
-        return;
+  const fetchTeams = useCallback(async () => {
+    if (!eventData?.id) {
+      console.log('eventData.id가 없습니다:', eventData);
+      setLoadingTeams(false);
+      return;
+    }
+    
+    try {
+      const token = await AsyncStorage.getItem('accessToken');
+      const url = API_ENDPOINTS.GET_TEAMS({ eventId: eventData.id });
+      console.log('=== 팀 목록 조회 ===');
+      console.log('요청 URL:', url);
+      console.log('eventData.id:', eventData.id);
+      
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      
+      console.log('응답 상태:', response.status);
+      const data = await response.json();
+      console.log('응답 데이터:', JSON.stringify(data, null, 2));
+      
+      // 응답이 배열이면 그대로, 객체 안에 배열이 있으면 추출
+      let teamList = [];
+      if (Array.isArray(data)) {
+        teamList = data;
+      } else if (data && Array.isArray(data.data)) {
+        teamList = data.data;
+      } else if (data && Array.isArray(data.teams)) {
+        teamList = data.teams;
+      } else if (data && Array.isArray(data.content)) {
+        teamList = data.content;
       }
       
-      try {
-        const token = await AsyncStorage.getItem('accessToken');
-        const url = API_ENDPOINTS.GET_TEAMS({ eventId: eventData.id });
-        console.log('=== 팀 목록 조회 ===');
-        console.log('요청 URL:', url);
-        console.log('eventData.id:', eventData.id);
-        
-        const response = await fetch(url, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-        
-        console.log('응답 상태:', response.status);
-        const data = await response.json();
-        console.log('응답 데이터:', JSON.stringify(data, null, 2));
-        
-        // 응답이 배열이면 그대로, 객체 안에 배열이 있으면 추출
-        let teamList = [];
-        if (Array.isArray(data)) {
-          teamList = data;
-        } else if (data && Array.isArray(data.data)) {
-          teamList = data.data;
-        } else if (data && Array.isArray(data.teams)) {
-          teamList = data.teams;
-        } else if (data && Array.isArray(data.content)) {
-          teamList = data.content;
-        }
-        
-        console.log('팀 목록:', teamList.length, '개');
-        setTeams(teamList);
-      } catch (error) {
-        console.error('팀 목록 불러오기 실패:', error);
-        setTeams([]);
-      } finally {
-        setLoadingTeams(false);
-      }
-    };
-
-    fetchTeams();
+      console.log('팀 목록:', teamList.length, '개');
+      setTeams(teamList);
+    } catch (error) {
+      console.error('팀 목록 불러오기 실패:', error);
+      setTeams([]);
+    } finally {
+      setLoadingTeams(false);
+    }
   }, [eventData?.id]);
+
+  useEffect(() => {
+    fetchTeams();
+  }, [fetchTeams]);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchTeams();
+    }, [fetchTeams])
+  );
 
   // 카테고리 한글 변환
   const getCategoryName = (category) => {
