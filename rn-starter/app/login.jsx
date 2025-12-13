@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity, Modal, Image, View, Text } from 'react-native';
+import { StyleSheet, TextInput, TouchableOpacity, Modal, Image, View, Text, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { API_ENDPOINTS } from '@/config/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -130,8 +130,6 @@ export default function LoginScreen() {
 
         // 홈으로 이동
         router.replace('/Home/home');
-        
-=======
         // 자동 로그인 체크된 경우에만 AsyncStorage에 저장
         if (autoLogin) {
           if (data.token) {
@@ -140,11 +138,9 @@ export default function LoginScreen() {
           await AsyncStorage.setItem('userName', data.user.name);
           await AsyncStorage.setItem('userEmail', data.user.email || email);
         }
-
         Alert.alert('👋 환영합니다', `${data.user.name}님, 로그인이 완료되었습니다.`, [
           { text: '확인', onPress: () => router.push('/home') }
         ]);
->>>>>>> e11aab9c0880d7792d5c87573043f3b069b751af
       } else {
         showModal('⚠️ 로그인 실패', data.message || '이메일 또는 비밀번호가 올바르지 않습니다.');
       }
