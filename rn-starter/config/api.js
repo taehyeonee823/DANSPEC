@@ -43,9 +43,11 @@ export const API_ENDPOINTS = {
 
   // 팀 모집 관련 API
   CREATE_TEAM: `${EVENT_SERVER_URL}/api/teams`,
-  GET_TEAMS: (myPosts) =>
-    `${EVENT_SERVER_URL}/api/teams?myPosts=${myPosts}`,
-
+  GET_TEAMS: (params = {}) => {
+    const query = new URLSearchParams(params).toString();
+    return `${EVENT_SERVER_URL}/api/teams${query ? `?${query}` : ''}`;
+  },
+  
   // 사용자 정보 관련 API
   USER_ME: `${EVENT_SERVER_URL}/api/users/me`,
   UPDATE_USER_INFO: `${EVENT_SERVER_URL}/api/users/me`,
