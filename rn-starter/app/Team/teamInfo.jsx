@@ -6,6 +6,7 @@ import { Image } from 'expo-image';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { API_ENDPOINTS } from '@/config/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Button from '../../components/Button';
 
 export default function TeamInfo() {
   const router = useRouter();
@@ -137,6 +138,41 @@ export default function TeamInfo() {
     fetchData();
   }, [teamId, isMyTeam]);
 
+  const deleteTeam = async () => {
+    if (!teamId) {
+      return;
+    }
+
+    try {
+      const token = await AsyncStorage.getItem('accessToken');
+      if (!token) {
+        return;
+      }
+
+      const teamIdNum = Number(teamId);
+      if (Number.isNaN(teamIdNum)) {
+        return;
+      }
+
+      const deleteUrl = API_ENDPOINTS.DELETE_TEAM(teamIdNum);
+      const response = await fetch(deleteUrl, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        return;
+      }
+
+      router.replace('/Team/teamDeletedConfirmed');
+    } catch (error) {
+      console.error('모집글 삭제 오류:', error);
+    }
+  };
+
   if (loading) {
     return (
       <View style={styles.center}>
@@ -179,14 +215,9 @@ export default function TeamInfo() {
 
         <TouchableOpacity
           style={{ padding: 8 }}
-          onPress={() => {
-            router.push({
-              pathname: '/Team/teamRecruitmentFormModify',
-              params: { teamId: teamId }
-            });
-          }}
+          onPress={deleteTeam}
         >
-          <Text style={{ fontSize: 17, color: '#000', fontFamily: 'Pretendard-SemiBold' }}>수정하기</Text>
+          <Text style={{ fontSize: 17, color: '#000', fontFamily: 'Pretendard-SemiBold' }}>삭제하기</Text>
         </TouchableOpacity>
       </View>
 
@@ -199,19 +230,19 @@ export default function TeamInfo() {
 
           <Text style={styles.sectionTitle}>팀장 이름</Text>
           <Text style={styles.readOnlyText}>
-            {isMyTeam && userInfo ? userInfo.name : (team.leaderName || team.name || '')}
+            {(isMyTeam && userInfo && team.leader !== false) ? userInfo.name : (team.leaderName || team.name || '')}
           </Text>
 
           <Text style={styles.sectionTitle}>학과</Text>
           <View style={styles.departmentRow}>
             <View style={styles.collegeBox}>
               <Text style={styles.collegeText}>
-                {isMyTeam && userInfo ? userInfo.college : (team.leaderCollege || team.college || '')}
+                {(isMyTeam && userInfo && team.leader !== false) ? userInfo.college : (team.leaderCollege || team.college || '')}
               </Text>
             </View>
             <View style={styles.majorBox}>
               <Text style={styles.majorText}>
-                {isMyTeam && userInfo ? userInfo.major : (team.leaderMajor || team.major || '')}
+                {(isMyTeam && userInfo && team.leader !== false) ? userInfo.major : (team.leaderMajor || team.major || '')}
               </Text>
             </View>
           </View>
@@ -220,7 +251,7 @@ export default function TeamInfo() {
           <View style={styles.departmentRow}>
             <View style={styles.collegeBox}>
               <Text style={styles.collegeText}>
-                {isMyTeam && userInfo
+                {(isMyTeam && userInfo && team.leader !== false)
                   ? (userInfo.grade ? `${userInfo.grade}학년` : '')
                   : (team.leaderGrade ? `${team.leaderGrade}학년` : (team.grade ? `${team.grade}학년` : ''))}
               </Text>
@@ -291,7 +322,18 @@ export default function TeamInfo() {
 
           <Text style={styles.sectionTitle}>진행 방식 및 소개</Text>
           <Text style={styles.descriptionBox}>{team.promotionText || team.description || ''}</Text>
-          
+
+          <View style={{ height: 20 }} />
+          <Button
+            title="수정하기"
+            onPress={() => {
+              router.push({
+                pathname: '/Team/teamRecruitmentFormModify',
+                params: { teamId: teamId }
+              });
+            }}
+          />
+
         </ScrollView>
       </KeyboardAvoidingView>
     </View>

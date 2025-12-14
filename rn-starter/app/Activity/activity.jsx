@@ -212,7 +212,7 @@ export default function Activity() {
                 <TouchableOpacity 
                   key={team.id} 
                   style={styles.etcCard}
-                  onPress={() => router.push({ pathname: '/Team/teamInfo', params: { teamId: team.id } })}
+                  onPress={() => router.push({ pathname: '/Team/teamInfo2', params: { teamId: team.id } })}
                 >
                   <View style={styles.etcHeader}>
                     <Text style={styles.etcStatus}>모집 중</Text>

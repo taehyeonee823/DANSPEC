@@ -343,21 +343,6 @@ export default function teamRecruitmentForm() {
             contentFit="contain"
           />
         </TouchableOpacity>
-
-        <TouchableOpacity
-          style={{ padding: 8 }}
-          onPress={deleteTeam}
-        >
-          <Text
-            style={{
-              fontSize: 17,
-              color: "#000",
-              fontFamily: "Pretendard-SemiBold",
-            }}
-          >
-            삭제하기
-          </Text>
-        </TouchableOpacity>
       </View>
 
       <KeyboardAvoidingView
