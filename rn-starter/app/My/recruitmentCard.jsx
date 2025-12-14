@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 
-export default function RecruitmentCard({ id, status, dueDate, title, capacity }) {
+export default function RecruitmentCard({ id, status, dueDate, title, capacity, currentMemberCount = 0 }) {
   const router = useRouter();
 
   // 마감 여부에 따른 스타일 결정
@@ -37,7 +37,7 @@ export default function RecruitmentCard({ id, status, dueDate, title, capacity }
             source={require('../../assets/images/users.svg')}
             style={{ width: 15, height: 15 ,marginRight: 10}}
         />
-        <Text style={styles.capacity}>{isClosed ? capacity : '?'} / {capacity}</Text>
+        <Text style={styles.capacity}>{currentMemberCount} / {capacity}</Text>
       </View>
     </TouchableOpacity>
   );

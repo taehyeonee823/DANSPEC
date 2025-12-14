@@ -41,6 +41,7 @@ export const API_ENDPOINTS = {
 
   // 팀 지원자 관련 API
   GET_TEAM_APPLICATIONS: (teamId) => `${EVENT_SERVER_URL}/api/teams/${teamId}/applications`,
+  UPDATE_APPLICATION: (applicationId, isApproved) => `${EVENT_SERVER_URL}/api/teams/applications/${applicationId}?isApproved=${isApproved}`,
   GET_TEAM_DETAIL: (teamId) => `${EVENT_SERVER_URL}/api/teams/${teamId}`,
   UPDATE_TEAM: (teamId) => `${EVENT_SERVER_URL}/api/teams/${teamId}`,
   DELETE_TEAM: (teamId) => `${EVENT_SERVER_URL}/api/teams/${teamId}`,

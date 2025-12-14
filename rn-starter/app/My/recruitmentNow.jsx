@@ -143,6 +143,7 @@ export default function RecruitmentNow() {
                     dueDate={team.recruitmentEndDate || team.dueDate}
                     title={team.title}
                     capacity={team.capacity}
+                    currentMemberCount={team.currentMemberCount || team.currentMember || 0}
                   />
                 ))}
               </>
@@ -164,6 +165,7 @@ export default function RecruitmentNow() {
                 dueDate={team.recruitmentEndDate || team.dueDate}
                 title={team.title}
                 capacity={team.capacity}
+                currentMemberCount={team.currentMemberCount || team.currentMember || 0}
               />
             ))}
           </>
