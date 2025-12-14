@@ -41,6 +41,7 @@ export const API_ENDPOINTS = {
 
   // 팀 지원자 관련 API
   GET_TEAM_APPLICATIONS: (teamId) => `${EVENT_SERVER_URL}/api/teams/${teamId}/applications`,
+  GET_TEAM_DETAIL: (teamId) => `${EVENT_SERVER_URL}/api/teams/${teamId}`,
   
   // 사용자 정보 관련 API
   USER_ME: `${EVENT_SERVER_URL}/api/users/me`,

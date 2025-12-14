@@ -125,7 +125,10 @@ export default function Team() {
                 tag={`연결된 활동: ${team.connectedActivityTitle || '자율 모집'}`}
                 onPress={() => {
                   console.log('팀 카드 클릭, team.id:', team.id);
-                  router.push(`/Team/teamInfoModify?id=${team.id}`);
+                  router.push({
+                    pathname: '/Team/teamInfo',
+                    params: { teamId: String(team.id) }
+                  });
                 }}
               />
             ))}
