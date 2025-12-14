@@ -4,7 +4,7 @@ import { Image } from 'expo-image';
 import { BlurView } from 'expo-blur';
 import { useRouter } from 'expo-router';
 
-export default function Applier({id, name, grade, campus, college, major, introduction, description, time, onAccept, onReject, hideButtons = false}) {
+export default function Applier({id, name, grade, campus, college, major, introduction, description, time, onAccept, onReject, hideButtons = false, navigateToApplyCheck = true}) {
 
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -29,10 +29,18 @@ export default function Applier({id, name, grade, campus, college, major, introd
   const createdAt = time
   const formattedTime = getTimeAgo(createdAt);
 
+  const handleCardPress = () => {
+    if (navigateToApplyCheck) {
+      router.push('/My/applyCheck');
+    } else {
+      setIsExpanded(!isExpanded);
+    }
+  };
+
   return (
     <TouchableOpacity
       style={styles.card}
-      onPress={() => setIsExpanded(!isExpanded)}
+      onPress={handleCardPress}
     >
 
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>

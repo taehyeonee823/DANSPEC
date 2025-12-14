@@ -10,7 +10,7 @@ export default function recruitmentConfirmed() {
     <View style={styles.container}>
       <TouchableOpacity
         style={{ position: 'absolute', top: 60, right: 20, zIndex: 999, padding: 8 }}
-        onPress={() => router.back()}
+        onPress={() => router.push('/Activity/activity')}
       >
       <Image
         source={require('@/assets/images/cancel.svg')}

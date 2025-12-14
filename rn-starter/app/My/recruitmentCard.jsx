@@ -14,7 +14,13 @@ export default function RecruitmentCard({ id, status, dueDate, title, capacity }
   return (
     <TouchableOpacity
       style={styles.card}
-      onPress={() => router.push('/My/applyCheck')}
+      onPress={() => {
+        console.log('RecruitmentCard 클릭, teamId:', id, 'type:', typeof id);
+        router.push({
+          pathname: '/My/applyCheck',
+          params: { teamId: String(id) }
+        });
+      }}
     >
 
       <View style={styles.header}>

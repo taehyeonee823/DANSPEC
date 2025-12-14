@@ -51,6 +51,12 @@ export const API_ENDPOINTS = {
     const query = new URLSearchParams(params).toString();
     return `${EVENT_SERVER_URL}/api/teams${query ? `?${query}` : ''}`;
   },
+  GET_APPLICATIONS: (params = {}) => {
+    const query = new URLSearchParams(params).toString();
+    return `${EVENT_SERVER_URL}/api/applications${query ? `?${query}` : ''}`;
+  },
+  GET_TEAM_DETAIL: (teamId) => `${EVENT_SERVER_URL}/api/teams/${teamId}`,
+  GET_TEAM_APPLICATIONS: (teamId) => `${EVENT_SERVER_URL}/api/teams/${teamId}/applications`,
   
   // 사용자 정보 관련 API
   USER_ME: `${EVENT_SERVER_URL}/api/users/me`,

@@ -123,7 +123,10 @@ export default function Team() {
                 title={team.title}
                 description={team.promotionText}
                 tag={`연결된 활동: ${team.connectedActivityTitle || '자율 모집'}`}
-                onPress={() => router.push(`/Team/teamInfoModify?id=${team.id}&title=${encodeURIComponent(team.title)}`)}
+                onPress={() => {
+                  console.log('팀 카드 클릭, team.id:', team.id);
+                  router.push(`/Team/teamInfoModify?id=${team.id}`);
+                }}
               />
             ))}
           </>
