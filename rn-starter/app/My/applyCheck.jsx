@@ -265,18 +265,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   headerBar: {
-    height: 60,
+    height: 44,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#ffffff',
-    paddingHorizontal: 20,
-    position: 'relative',
+    paddingHorizontal: 10,
   },
   backButton: {
+    padding: 8,
     position: 'absolute',
     left: 20,
-    padding: 8,
+    zIndex: 1,
   },
   backButtonText: {
     fontSize: 28,
@@ -308,6 +308,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
+    marginTop: 15,
     marginLeft: 20,
     marginBottom: 20,
     paddingTop: 10,
