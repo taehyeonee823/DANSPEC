@@ -506,6 +506,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Pretendard-SemiBold',
     color: '#000',
+    marginBottom: 5,
+  },
+  teamCardTag: {
+    fontSize: 13,
+    fontFamily: 'Pretendard-regular',
+    color: '#000',
+    marginBottom: 3,
   },
   loadingText: {
     fontSize: 14,
