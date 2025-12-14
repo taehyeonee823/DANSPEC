@@ -179,7 +179,8 @@ export default function Activity() {
         />
       </TouchableOpacity>
 
-      <ScrollView style={styles.contentArea}>
+      {/* 고정된 부분: DeptTab + CategoryChips */}
+      <View style={styles.fixedHeader}>
         <DeptTab
           selectedDepartment={selectedDepartment}
           onSelectDepartment={setSelectedDepartment}
@@ -198,7 +199,10 @@ export default function Activity() {
             />
           </ScrollView>
         </View>
+      </View>
 
+      {/* 스크롤 가능한 부분: 이벤트 목록 */}
+      <ScrollView style={styles.contentArea} contentContainerStyle={styles.scrollContentContainer}>
         {loading ? (
           <Text style={styles.loadingText}>로딩 중...</Text>
         ) : events.length > 0 ? (
@@ -272,10 +276,22 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
+  fixedHeader: {
+    position: 'absolute',
+    top: 40,
+    left: 0,
+    right: 0,
+    zIndex: 1,
+    backgroundColor: '#FFFFFF',
+  },
   contentArea: {
-    marginTop: 30,
+    marginTop: 220,
     marginBottom: 90,
     flex: 1, 
+  },
+  scrollContentContainer: {
+    paddingTop: 10,
+    paddingBottom: 20,
   },
   title: {
     fontSize: 24,
@@ -288,7 +304,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
   chipsWrapper: {
-    paddingTop: 15,
+    paddingTop: 20,
     paddingLeft: 15,
   },
   chipScrollViewContent: {

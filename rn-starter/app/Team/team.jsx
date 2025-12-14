@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   },
   fixedHeader: {
     position: 'absolute',
-    top: 35,
+    top: 45,
     left: 0,
     right: 0,
     backgroundColor: '#FFFFFF',

@@ -118,7 +118,8 @@ export default function Home() {
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.scrollContent}>
+      {/* 고정된 부분: 슬라이드 + 제목 */}
+      <View style={styles.fixedHeader}>
         <View style={styles.imageContainer}>
           <ScrollView
             ref={scrollViewRef}
@@ -128,88 +129,90 @@ export default function Home() {
             onScroll={handleScroll}
             scrollEventThrottle={16}
           >
-          {/* 첫 번째 슬라이드 */}
-          <View style={{ width }}>
-            <LinearGradient
-              colors={['#4D90CC', '#fff']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              style={{ flex: 1, paddingTop: 150 }}
-            >
-              <View style={styles.slideContent}>
-                <View style={styles.leftBox}>
-                  <TouchableOpacity style={styles.button} onPress={() => 
-                    router.push('/Activity/activity')}>
-                    <Text style={styles.buttonText}>추천 보러가기</Text>
-                  </TouchableOpacity>
+            {/* 첫 번째 슬라이드 */}
+            <View style={{ width }}>
+              <LinearGradient
+                colors={['#4D90CC', '#fff']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={{ flex: 1, paddingTop: 150 }}
+              >
+                <View style={styles.slideContent}>
+                  <View style={styles.leftBox}>
+                    <TouchableOpacity style={styles.button} onPress={() => 
+                      router.push('/Activity/activity')}>
+                      <Text style={styles.buttonText}>추천 보러가기</Text>
+                    </TouchableOpacity>
 
-                  <Text style={styles.slideTitle}>지금 시작해 볼만한 활동</Text>
+                    <Text style={styles.slideTitle}>지금 시작해 볼만한 활동</Text>
 
-                  <Text style={styles.sub}>
-                    공모전부터 교내 · 대외 활동까지!{'\n'}드림이가 나만을 위해 골라봤어요
-                  </Text>
+                    <Text style={styles.sub}>
+                      공모전부터 교내 · 대외 활동까지!{'\n'}드림이가 나만을 위해 골라봤어요
+                    </Text>
+                  </View>
+
+                  <Image
+                    source={require('@/assets/images/dreame.png')}
+                    style={styles.logo1}
+                    resizeMode="contain"
+                  />
                 </View>
+              </LinearGradient>
+            </View>
 
-                <Image
-                  source={require('@/assets/images/dreame.png')}
-                  style={styles.logo1}
-                  resizeMode="contain"
-                />
-              </View>
-            </LinearGradient>
-          </View>
+            {/* 두 번째 슬라이드 */}
+            <View style={{ width }}>
+              <LinearGradient
+                colors={['#957DAD', '#fff']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={{ flex: 1, paddingTop: 150 }}
+              >
+                <View style={styles.slideContent}>
+                  <View style={styles.leftBox}>
+                    <TouchableOpacity style={styles.button} onPress={() => 
+                      router.push('/Activity/activity')}>
+                      <Text style={styles.buttonText}>활동 둘러보기</Text>
+                    </TouchableOpacity>
 
-          {/* 두 번째 슬라이드 */}
-          <View style={{ width }}>
-            <LinearGradient
-              colors={['#957DAD', '#fff']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              style={{ flex: 1, paddingTop: 150 }}
-            >
-              <View style={styles.slideContent}>
-                <View style={styles.leftBox}>
-                  <TouchableOpacity style={styles.button} onPress={() => 
-                    router.push('/Activity/activity')}>
-                    <Text style={styles.buttonText}>활동 둘러보기</Text>
-                  </TouchableOpacity>
+                    <Text style={styles.slideTitle}>단과대별 활동 한눈에 보기</Text>
 
-                  <Text style={styles.slideTitle}>단과대별 활동 한눈에 보기</Text>
+                    <Text style={styles.sub}>
+                      문과부터 SW융합, 음예대까지!{'\n'}
+                      단과대별로 맞는 활동을 골라보세요
+                    </Text>
+                  </View>
 
-                  <Text style={styles.sub}>
-                    문과부터 SW융합, 음예대까지!{'\n'}
-                    단과대별로 맞는 활동을 골라보세요
-                  </Text>
+                  <Image
+                    source={require('@/assets/images/danspecLogo.png')}
+                    style={styles.logo2}
+                    resizeMode="contain"
+                  />
                 </View>
-
-                <Image
-                  source={require('@/assets/images/danspecLogo.png')}
-                  style={styles.logo2}
-                  resizeMode="contain"
-                />
-              </View>
-            </LinearGradient>
-          </View>
-        </ScrollView>
+              </LinearGradient>
+            </View>
+          </ScrollView>
+        </View>
+        <Text style={styles.title}>{userName} 님을 위한 맞춤활동 </Text>
       </View>
-      <Text style={styles.title}>{userName} 님을 위한 맞춤활동 </Text> 
 
-      {/*api 연결 후 맞춤형 리스트로 변경*/}
-
-      <View style={styles.activitiesContainer}>
-        {activities.map((activity, index) => (
-          <ActivityApplyBox
-            key={activity.id || index}
-            event={activity}
-            tag={activity.category}
-            title={activity.title}
-            summarizedDescription={activity.summarizedDescription || activity.description}
-            dueDate={activity.dueDate}
-            startDate={activity.startDate}
-            endDate={activity.endDate}
-          />
-        ))}
-      </View>
+      {/* 스크롤 가능한 부분: 활동 목록 */}
+      <ScrollView style={styles.scrollContent} contentContainerStyle={styles.scrollContentContainer}>
+        {/*api 연결 후 맞춤형 리스트로 변경*/}
+        <View style={styles.activitiesContainer}>
+          {activities.map((activity, index) => (
+            <ActivityApplyBox
+              key={activity.id || index}
+              event={activity}
+              tag={activity.category}
+              title={activity.title}
+              summarizedDescription={activity.summarizedDescription || activity.description}
+              dueDate={activity.dueDate}
+              startDate={activity.startDate}
+              endDate={activity.endDate}
+            />
+          ))}
+        </View>
       </ScrollView>
 
       <NaviBar currentPage="home" />
@@ -222,9 +225,21 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
+  fixedHeader: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1,
+    backgroundColor: '#FFFFFF',
+  },
   scrollContent: {
     flex: 1,
     marginBottom: 70,
+    marginTop: 390,
+  },
+  scrollContentContainer: {
+    paddingBottom: 20,
   },
   imageContainer: {
     height: 330,
