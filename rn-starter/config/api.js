@@ -48,6 +48,13 @@ export const API_ENDPOINTS = {
   UPDATE_TEAM: (teamId) => `${EVENT_SERVER_URL}/api/teams/${teamId}`,
   DELETE_TEAM: (teamId) => `${EVENT_SERVER_URL}/api/teams/${teamId}`,
 
+  // 팀 지원서(내 지원글) 단건 조회
+  GET_TEAM_APPLICATION_DETAIL: (applicationId) => `${EVENT_SERVER_URL}/api/teams/applications/${applicationId}`,
+
+  // 팀 지원서(내 지원글) 수정/삭제
+  UPDATE_TEAM_APPLICATION: (applicationId) => `${EVENT_SERVER_URL}/api/teams/applications/${applicationId}`,
+  DELETE_TEAM_APPLICATION: (applicationId) => `${EVENT_SERVER_URL}/api/teams/applications/${applicationId}`,
+
   // 사용자 정보 관련 API
   USER_ME: `${EVENT_SERVER_URL}/api/users/me`,
   UPDATE_USER_INFO: `${EVENT_SERVER_URL}/api/users/me`,

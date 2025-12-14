@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Image, ScrollView, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
 import NaviBar from '../naviBar';
@@ -13,7 +13,9 @@ export default function Team() {
   const router = useRouter();
   const [activeTabIndex, setActiveTabIndex] = useState(0); // 0: 내가 쓴 모집글, 1: 내가 쓴 지원글
   const [teams, setTeams] = useState([]);
+  const [myApplications, setMyApplications] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [loadingApplications, setLoadingApplications] = useState(false);
 
   const fetchMyTeams = useCallback(async () => {
     try {
@@ -74,9 +76,84 @@ export default function Team() {
     }
   }, []);
 
+  const fetchMyApplications = useCallback(async () => {
+    try {
+      setLoadingApplications(true);
+      const token = await AsyncStorage.getItem('accessToken');
+      if (!token) {
+        console.warn('액세스 토큰이 없습니다. 로그인 후 다시 시도하세요.');
+        setMyApplications([]);
+        return;
+      }
+
+      const url = API_ENDPOINTS.GET_MY_APPLICATIONS;
+      console.log('내 지원글 조회 URL:', url);
+
+      const response = await fetch(url, {
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const text = await response.text();
+
+      if (!response.ok) {
+        console.error('내 지원글 응답 상태 코드:', response.status, text.slice(0, 200));
+        setMyApplications([]);
+        return;
+      }
+
+      if (!text || text.trim().length === 0) {
+        console.warn('내 지원글 응답이 비어 있습니다.');
+        setMyApplications([]);
+        return;
+      }
+
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        console.error('내 지원글 JSON 파싱 실패:', e, text.slice(0, 200));
+        setMyApplications([]);
+        return;
+      }
+
+      const appArray = Array.isArray(data) ? data : (Array.isArray(data.data) ? data.data : []);
+
+      // 최신 지원이 위로
+      const sorted = [...appArray].sort((a, b) => {
+        const aDate = new Date(a.createdAt);
+        const bDate = new Date(b.createdAt);
+        return bDate - aDate;
+      });
+
+      setMyApplications(sorted);
+    } catch (error) {
+      console.error('내 지원글 불러오기 실패:', error);
+      setMyApplications([]);
+    } finally {
+      setLoadingApplications(false);
+    }
+  }, []);
+
   useEffect(() => {
     fetchMyTeams();
   }, [fetchMyTeams]);
+
+  useEffect(() => {
+    if (activeTabIndex === 1) {
+      fetchMyApplications();
+    }
+  }, [activeTabIndex, fetchMyApplications]);
+
+  useFocusEffect(
+    useCallback(() => {
+      if (activeTabIndex === 1) {
+        fetchMyApplications();
+      }
+    }, [activeTabIndex, fetchMyApplications])
+  );
 
   useFocusEffect(
     useCallback(() => {
@@ -138,8 +215,38 @@ export default function Team() {
           </>
         )}
         {activeTabIndex === 1 && (
-          <></>
-          // TODO: 내가 쓴 지원글 구현 예정
+          <>
+            {loadingApplications ? (
+              <Text style={{ textAlign: 'center', marginTop: 40 }}>로딩 중...</Text>
+            ) : myApplications.length === 0 ? (
+              <Text style={{ textAlign: 'center', marginTop: 40 }}>지원글이 없습니다.</Text>
+            ) : (
+              myApplications.map((app) => (
+                <TeamApplyBox
+                  key={app.applicationId ?? `${app.teamId}-${app.createdAt}`}
+                  dueDate={'-'}
+                  title={app.teamTitle || '(제목 없음)'}
+                  description={app.introduction || app.message || ''}
+                  tag={`상태: ${app.status || '-'}`}
+                  onPress={() => {
+                    router.push({
+                      pathname: '/Team/teamApplicationForm2',
+                      params: {
+                        teamId: String(app.teamId),
+                        applicationId: String(app.applicationId ?? ''),
+                        introduction: app.introduction ?? '',
+                        message: app.message ?? '',
+                        contactNumber: app.contactNumber ?? '',
+                        portfolioUrl: app.portfolioUrl ?? '',
+                        status: app.status ?? '',
+                        teamTitle: app.teamTitle ?? '',
+                      },
+                    });
+                  }}
+                />
+              ))
+            )}
+          </>
         )}
       </ScrollView>
       <NaviBar currentPage="team" />

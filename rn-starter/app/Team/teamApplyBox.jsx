@@ -25,15 +25,23 @@ export default function teamApplyBox({ dueDate, title, description, tag, onPress
     },
   ];
 
+  // '상태: XXX' 형태를 뱃지로 분리해서 노출
+  const extraBadgeText = typeof tag === 'string' && tag.startsWith('상태:') ? tag.replace('상태:', '').trim() : null;
+
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
       <View style={styles.header}>
-        <Text style={statusStyle}>{status}</Text>
+        <View style={styles.badgeRow}>
+          <Text style={statusStyle}>{status}</Text>
+          {extraBadgeText ? (
+            <Text style={styles.extraBadge}>{extraBadgeText}</Text>
+          ) : null}
+        </View>
         <Text style={styles.dueDate}>{dueDate}</Text>
       </View>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.description}>{description}</Text>
-      <Text style={styles.tag}>{tag}</Text>
+      {!extraBadgeText ? <Text style={styles.tag}>{tag}</Text> : null}
     </TouchableOpacity>
   );
 }
@@ -56,11 +64,25 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 12,
   },
+  badgeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
   status: {
     fontSize: 12,
     fontFamily: 'Pretendard-Medium',
     color: '#166534',
     backgroundColor: '#DCFCE6',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 15,
+  },
+  extraBadge: {
+    fontSize: 12,
+    fontFamily: 'Pretendard-Medium',
+    color: '#FFFFFF',
+    backgroundColor: '#301386',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 15,
