@@ -16,7 +16,6 @@ export default function ApplyCheck() {
   const [members, setMembers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [teamTitle, setTeamTitle] = useState('');
-  const [teamCapacity, setTeamCapacity] = useState(0);
 
   const fetchTeamApplications = useCallback(async () => {
     console.log('fetchTeamApplications 호출, teamId:', teamId, 'type:', typeof teamId);
@@ -59,7 +58,6 @@ export default function ApplyCheck() {
       const text = await response.text();
       console.log('응답 상태:', response.status);
       console.log('응답 본문:', text.slice(0, 500));
-      console.log('전체 응답 데이터:', text);
 
       if (!response.ok) {
         console.error('팀 지원자 목록 응답 상태 코드:', response.status);
@@ -90,28 +88,10 @@ export default function ApplyCheck() {
       const approvedMembers = [];
       
       applicationsArray.forEach((app) => {
-        // grade 값 정규화 (숫자만 추출하거나 "?/2" 같은 형태 처리)
-        let normalizedGrade = app.applicant?.grade || '';
-        // "?/2" 같은 형태를 처리하거나, 숫자만 추출
-        if (normalizedGrade && typeof normalizedGrade === 'string') {
-          // "?/2" 같은 형태면 빈 문자열로 처리하거나, 숫자만 추출
-          if (normalizedGrade.includes('?') || normalizedGrade.includes('/')) {
-            // 숫자만 추출 시도 (예: "?/2" -> "2", "1/2" -> "1")
-            const match = normalizedGrade.match(/\d+/);
-            normalizedGrade = match ? `${match[0]}학년` : '';
-          } else if (!normalizedGrade.includes('학년')) {
-            // 숫자만 있으면 "학년" 추가
-            const match = normalizedGrade.match(/\d+/);
-            normalizedGrade = match ? `${match[0]}학년` : normalizedGrade;
-          }
-        }
-        
-        console.log('원본 grade:', app.applicant?.grade, '-> 정규화된 grade:', normalizedGrade);
-        
         const mappedApp = {
           id: app.applicationId,
           name: app.applicant?.name || '',
-          grade: normalizedGrade,
+          grade: app.applicant?.grade || '',
           campus: app.applicant?.campus || '',
           college: app.applicant?.college || '',
           major: app.applicant?.major || '',
@@ -138,44 +118,9 @@ export default function ApplyCheck() {
         }
       });
 
-      // 첫 번째 지원자의 teamTitle과 capacity를 가져옴
-      if (applicationsArray.length > 0) {
-        if (applicationsArray[0].teamTitle) {
-          setTeamTitle(applicationsArray[0].teamTitle);
-        }
-        if (applicationsArray[0].capacity) {
-          setTeamCapacity(applicationsArray[0].capacity);
-        }
-      }
-
-      // 팀 상세 정보에서 capacity 가져오기
-      try {
-        const teamDetailUrl = API_ENDPOINTS.GET_TEAM_DETAIL(teamIdNum);
-        const teamDetailResponse = await fetch(teamDetailUrl, {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-
-        if (teamDetailResponse.ok) {
-          const teamDetailText = await teamDetailResponse.text();
-          if (teamDetailText && teamDetailText.trim().length > 0) {
-            try {
-              const teamDetailData = JSON.parse(teamDetailText);
-              const teamData = teamDetailData.success && teamDetailData.data ? teamDetailData.data : teamDetailData;
-              if (teamData.capacity) {
-                setTeamCapacity(teamData.capacity);
-              }
-            } catch (e) {
-              console.error('팀 상세 정보 JSON 파싱 실패:', e);
-            }
-          }
-        }
-      } catch (error) {
-        console.error('팀 상세 정보 가져오기 실패:', error);
+      // 첫 번째 지원자의 teamTitle을 가져옴
+      if (applicationsArray.length > 0 && applicationsArray[0].teamTitle) {
+        setTeamTitle(applicationsArray[0].teamTitle);
       }
 
       setApplications(pendingApplications);
@@ -258,7 +203,7 @@ export default function ApplyCheck() {
       </View>
 
       <ScrollView style={styles.contentArea} contentContainerStyle={styles.scrollContent}>
-        <Text style={styles.title}>가입 요청</Text>
+        <Text style={styles.title}>가입요청</Text>
         {loading ? (
           <View style={styles.loadingContainer}>
             <Text>로딩 중...</Text>
@@ -287,12 +232,7 @@ export default function ApplyCheck() {
           ))
         )}
         
-        <View style={styles.memberHeader}>
-          <Text style={styles.title}>현재 멤버</Text>
-          {teamCapacity > 0 && (
-            <Text style={styles.memberCount}>{members.length} / {teamCapacity}</Text>
-          )}
-        </View>
+        <Text style={styles.title}>현재 인원</Text>
         {loading ? null : members.length === 0 ? (
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>멤버가 없습니다.</Text>
@@ -373,19 +313,6 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     color: '#000',
     textAlign: 'left',
-  },
-  memberHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingRight: 20,
-  },
-  memberCount: {
-    fontSize: 16,
-    fontFamily: 'Pretendard-Medium',
-    color: '#666',
-    marginBottom: 20,
-    paddingTop: 10,
   },
   titleContainer: {
     paddingHorizontal: 24,
