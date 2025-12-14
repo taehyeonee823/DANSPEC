@@ -146,6 +146,9 @@ export default function teamRecruitmentForm() {
       const result = await response.json();
       console.log("서버 응답:", result);
 
+      // 등록 완료 화면으로 이동
+      router.push('/Activity/recruitmentConfirmed');
+
 
     } catch (error) {
       console.error("모집글 저장 오류:", error);
