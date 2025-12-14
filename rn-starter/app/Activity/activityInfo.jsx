@@ -256,8 +256,11 @@ export default function ActivityInfo() {
                 key={team.id}
                 style={styles.teamCard}
                 onPress={() => router.push({
-                  pathname: '/Team/teamInfo',
-                  params: { teamData: JSON.stringify(team) }
+                  pathname: '/Team/teamInfo2',
+                  params: {
+                    teamId: team.id,
+                    teamData: JSON.stringify(team)
+                  }
                 })}
               >
                 <Text style={styles.teamCardTitle}>{team.title}</Text>

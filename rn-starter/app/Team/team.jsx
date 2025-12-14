@@ -127,7 +127,10 @@ export default function Team() {
                   console.log('팀 카드 클릭, team.id:', team.id);
                   router.push({
                     pathname: '/Team/teamInfo',
-                    params: { teamId: String(team.id) }
+                    params: {
+                      teamId: String(team.id),
+                      isMyTeam: 'true'
+                    }
                   });
                 }}
               />
