@@ -24,6 +24,8 @@ export default function ActivityInfo() {
   }
   const [teams, setTeams] = useState([]);
   const [loadingTeams, setLoadingTeams] = useState(true);
+  const [userInfo, setUserInfo] = useState(null);
+  const [myTeamIds, setMyTeamIds] = useState([]);
 
   const fetchTeams = useCallback(async () => {
     if (!eventData?.id) {
@@ -63,7 +65,6 @@ export default function ActivityInfo() {
         teamList = data.content;
       }
       
-      console.log('팀 목록:', teamList.length, '개');
       setTeams(teamList);
     } catch (error) {
       console.error('팀 목록 불러오기 실패:', error);
@@ -77,11 +78,73 @@ export default function ActivityInfo() {
     fetchTeams();
   }, [fetchTeams]);
 
+  useEffect(() => {
+    const fetchUserInfoAndMyTeams = async () => {
+      try {
+        const token = await AsyncStorage.getItem('accessToken');
+        if (!token) return;
+
+        // 사용자 정보 가져오기
+        const userResponse = await fetch(API_ENDPOINTS.USER_ME, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (userResponse.ok) {
+          const data = await userResponse.json();
+          const user = data.success && data.data ? data.data : data;
+          setUserInfo(user);
+        }
+
+        // 내가 작성한 팀 목록 가져오기
+        const myTeamsUrl = API_ENDPOINTS.GET_TEAMS({ myPosts: true });
+        const myTeamsResponse = await fetch(myTeamsUrl, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (myTeamsResponse.ok) {
+          const myTeamsData = await myTeamsResponse.json();
+          let myTeamsList = [];
+
+          if (Array.isArray(myTeamsData)) {
+            myTeamsList = myTeamsData;
+          } else if (myTeamsData && Array.isArray(myTeamsData.data)) {
+            myTeamsList = myTeamsData.data;
+          } else if (myTeamsData && Array.isArray(myTeamsData.teams)) {
+            myTeamsList = myTeamsData.teams;
+          } else if (myTeamsData && Array.isArray(myTeamsData.content)) {
+            myTeamsList = myTeamsData.content;
+          }
+
+          const myIds = myTeamsList.map(team => team.id);
+          setMyTeamIds(myIds);
+        }
+      } catch (error) {
+        console.error('사용자 정보 및 팀 목록 불러오기 실패:', error);
+      }
+    };
+
+    fetchUserInfoAndMyTeams();
+  }, []);
+
   useFocusEffect(
     useCallback(() => {
       fetchTeams();
     }, [fetchTeams])
   );
+
+  // 내가 모집중인 팀인지 확인
+  const isMyTeam = (team) => {
+    if (!team) return false;
+    return myTeamIds.includes(team.id);
+  };
 
   // 카테고리 한글 변환
   const getCategoryName = (category) => {
@@ -255,14 +318,31 @@ export default function ActivityInfo() {
               <TouchableOpacity
                 key={team.id}
                 style={styles.teamCard}
-                onPress={() => router.push({
-                  pathname: '/Team/teamInfo2',
-                  params: {
-                    teamId: team.id,
-                    teamData: JSON.stringify(team)
+                onPress={() => {
+                  if (isMyTeam(team)) {
+                    router.push({
+                      pathname: '/Team/teamInfo',
+                      params: {
+                        teamId: team.id,
+                        isMyTeam: 'true'
+                      }
+                    });
+                  } else {
+                    router.push({
+                      pathname: '/Team/teamInfo2',
+                      params: {
+                        teamId: team.id,
+                        teamData: JSON.stringify(team)
+                      }
+                    });
                   }
-                })}
+                }}
               >
+                {isMyTeam(team) && (
+                  <View style={styles.myTeamBadge}>
+                    <Text style={styles.myTeamBadgeText}>내가 모집중인 팀</Text>
+                  </View>
+                )}
                 <Text style={styles.teamCardTitle}>{team.title}</Text>
                 <Text style={styles.teamCardTag}>{team.promotionText}</Text>
                 <Text style={styles.teamCardTag}>{team.connectedActivityTitle}</Text>
@@ -504,6 +584,22 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 4,
     elevation: 2,
+    position: 'relative',
+  },
+  myTeamBadge: {
+    position: 'absolute',
+    top: 12,
+    right: 12,
+    backgroundColor: '#34C759',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+    zIndex: 1,
+  },
+  myTeamBadgeText: {
+    fontSize: 11,
+    fontFamily: 'Pretendard-SemiBold',
+    color: '#FFFFFF',
   },
   teamCardTitle: {
     fontSize: 16,

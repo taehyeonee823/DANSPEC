@@ -108,6 +108,10 @@ export default function teamRecruitmentForm() {
       capacity: recruitCount,
       recruitmentStartDate: formatDateForAPI(startDate),
       recruitmentEndDate: formatDateForAPI(endDate),
+      leaderName: userInfo.name || "",
+      leaderCollege: userInfo.college || "",
+      leaderMajor: userInfo.major || "",
+      leaderGrade: userInfo.grade || "",
     };
 
     try {
