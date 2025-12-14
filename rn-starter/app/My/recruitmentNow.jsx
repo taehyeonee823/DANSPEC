@@ -26,7 +26,7 @@ export default function RecruitmentNow() {
 
       // 수신함: 내가 지원한 팀 모집글 조회 (또는 받은 요청들)
       // TODO: API 엔드포인트 확인 필요 - 현재는 모든 팀을 가져오도록 설정
-      const url = API_ENDPOINTS.GET_TEAMS();
+      const url = API_ENDPOINTS.GET_TEAMS({myPosts: true});
       console.log('수신함 팀 조회 URL:', url);
       const response = await fetch(url, {
         headers: {

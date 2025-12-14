@@ -1,21 +1,5 @@
 import Constants from 'expo-constants';
 
-// Expo의 개발 서버 호스트를 자동으로 감지
-const getApiUrl = () => {
-  // Expo 개발 서버의 호스트 주소 가져오기 (예: "192.168.1.5:8081")
-  const expoHost = Constants.expoConfig?.hostUri?.split(':')[0];
-
-  // 개발 환경에서는 Expo가 감지한 호스트 사용, 없으면 localhost 사용
-  const host = expoHost || 'localhost';
-
-  // FastAPI 서버 포트
-  const port = 6000;
-
-  return `http://${host}:${port}`;
-};
-
-export const API_BASE_URL = getApiUrl();
-
 // 외부 이벤트 서버 URL
 export const EVENT_SERVER_URL = 'http://43.203.191.87:8080';
 
@@ -23,7 +7,6 @@ export const EVENT_SERVER_URL = 'http://43.203.191.87:8080';
 export const API_ENDPOINTS = {
   LOGIN: `${EVENT_SERVER_URL}/api/auth/login`,
   REFRESH_TOKEN: `${EVENT_SERVER_URL}/api/auth/token/refresh`,
-  CHECK_EMAIL: `${API_BASE_URL}/api/check-email`,
 
   // 이메일 인증 및 회원가입 관련 API
   EMAIL_REQUEST: `${EVENT_SERVER_URL}/api/auth/email/request`,
@@ -55,7 +38,8 @@ export const API_ENDPOINTS = {
     const query = new URLSearchParams(params).toString();
     return `${EVENT_SERVER_URL}/api/applications${query ? `?${query}` : ''}`;
   },
-  GET_TEAM_DETAIL: (teamId) => `${EVENT_SERVER_URL}/api/teams/${teamId}`,
+
+  // 팀 지원자 관련 API
   GET_TEAM_APPLICATIONS: (teamId) => `${EVENT_SERVER_URL}/api/teams/${teamId}/applications`,
   
   // 사용자 정보 관련 API
