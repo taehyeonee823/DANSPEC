@@ -78,9 +78,14 @@ export default function RecruitmentNow() {
     }, [fetchTeams])
   );
 
-  // status 계산 함수
+  // status 계산 함수 (정원 도달 시 마감)
   const today = new Date();
-  const getStatus = (dueDate) => {
+  const getStatus = (team) => {
+    const current = team.currentMemberCount ?? team.currentMember ?? 0;
+    const capacity = team.capacity ?? 0;
+    if (capacity > 0 && current >= capacity) return '마감';
+
+    const dueDate = team.recruitmentEndDate || team.dueDate;
     if (!dueDate || dueDate === '상시 모집') return '팀 모집 중';
     const due = new Date(dueDate);
     if (!isNaN(due) && due < new Date(today.getFullYear(), today.getMonth(), today.getDate())) {
@@ -91,10 +96,10 @@ export default function RecruitmentNow() {
 
   // status를 동적으로 계산하여 분류
   const activeTeams = teamData
-    .map(team => ({ ...team, status: getStatus(team.recruitmentEndDate || team.dueDate) }))
+    .map(team => ({ ...team, status: getStatus(team) }))
     .filter(team => team.status !== '마감');
   const closedTeams = teamData
-    .map(team => ({ ...team, status: getStatus(team.recruitmentEndDate || team.dueDate) }))
+    .map(team => ({ ...team, status: getStatus(team) }))
     .filter(team => team.status === '마감');
 
   return (

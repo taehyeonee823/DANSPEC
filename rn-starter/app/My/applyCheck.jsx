@@ -101,9 +101,12 @@ export default function ApplyCheck() {
           status: app.status || '',
         };
 
-        // status가 'APPROVED'이거나 'ACCEPTED'인 경우 멤버로 분류
+        // status가 승인된 경우 멤버로 분류
         if (app.status === 'APPROVED' || app.status === 'ACCEPTED') {
           approvedMembers.push(mappedApp);
+        } else if (app.status === 'REJECTED' || app.status === 'DENIED') {
+          // 거절된 항목은 표시하지 않음
+          return;
         } else {
           // 대기 중인 지원자는 승인/거절 함수 추가
           pendingApplications.push({
