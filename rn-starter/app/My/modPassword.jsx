@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, TextInput, TouchableOpacity, Text, Modal } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Image } from 'expo-image';
+import { API_ENDPOINTS } from '@/config/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ModPassword() {
   const router = useRouter();
@@ -14,6 +16,36 @@ export default function ModPassword() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [focusedInput, setFocusedInput] = useState(null);
 
+  useEffect(() => {
+    const token = AsyncStorage.getItem('accessToken');
+    if (!token) {
+      router.replace('/login');
+    }
+  }, []);
+  const changePassword = async () => {
+    const token = await AsyncStorage.getItem('accessToken');
+    const response = await fetch(API_ENDPOINTS.UPDATE_USER_PASSWORD, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        oldPassword: currentPassword,
+        newPassword,
+        newPasswordConfirm: confirmPassword,
+      }),
+    });
+    const data = await response.json();
+    if (response.ok) {
+      setIsSuccess(true);
+      showModal('✅ 성공', '비밀번호가 변경되었습니다.');
+      router.back();
+    } else {
+      showModal('⚠️ 알림', data.message);
+      return;
+    }
+  };
   const showModal = (title, message, success = false) => {
     setModalTitle(title);
     setModalMessage(message);
@@ -121,7 +153,7 @@ export default function ModPassword() {
 
         <TouchableOpacity
           style={styles.button}
-          onPress={handleChangePassword}
+          onPress={changePassword}
         >
           <Text style={styles.buttonText}>변경하기</Text>
         </TouchableOpacity>

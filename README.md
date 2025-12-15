@@ -14,5 +14,3 @@ cd rn-starter
 npm install
 npm run start
 ```
-
-
