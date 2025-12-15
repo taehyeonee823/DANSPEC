@@ -33,25 +33,29 @@ export default function TeamInfo() {
 
   const [team, setTeam] = useState(initialTeamData);
   const [userInfo, setUserInfo] = useState(null);
-  const [loading, setLoading] = useState(true);
+  // 초기 데이터가 있으면 첫 페인트는 로딩으로 막지 않음
+  const [loading, setLoading] = useState(!initialTeamData);
 
   useEffect(() => {
+    let cancelled = false;
+
     const fetchData = async () => {
       if (!teamId) {
         console.warn('팀 ID가 없습니다.');
-        setLoading(false);
+        if (!cancelled) setLoading(false);
         return;
       }
 
       const teamIdNum = Number(teamId);
       if (Number.isNaN(teamIdNum)) {
         console.error('유효하지 않은 팀 ID:', teamId);
-        setLoading(false);
+        if (!cancelled) setLoading(false);
         return;
       }
 
       try {
-        setLoading(true);
+        // 이미 initialTeamData가 있으면 로딩 UI를 띄우지 않고 백그라운드 갱신
+        if (!initialTeamData && !cancelled) setLoading(true);
 
         const fetchedTeam = await dedupeRequest(
           `teamDetail:${teamIdNum}`,
@@ -65,8 +69,10 @@ export default function TeamInfo() {
             const json = await res.json();
             return (json && json.success && json.data) ? json.data : json;
           },
-          { ttlMs: 3000 }
+          { ttlMs: 5000 }
         );
+
+        if (cancelled) return;
 
         // leader/hasApplied
         if (typeof fetchedTeam?.hasApplied !== 'undefined') {
@@ -74,66 +80,36 @@ export default function TeamInfo() {
         }
 
         // 전달받은 초기 데이터와 API 데이터를 병합 (API 데이터 우선)
-        setTeam(prevTeam => ({
+        setTeam((prevTeam) => ({
           ...prevTeam,
-          ...fetchedTeam
+          ...fetchedTeam,
         }));
 
-        // 내가 쓴 모집글인 경우 사용자 정보도 가져오기
-        if (isMyTeam) {
-          const userRes = await fetchWithAuth(API_ENDPOINTS.USER_ME, { method: 'GET' });
-          if (userRes.ok) {
-            const json = await userRes.json().catch(() => null);
-            const u = json && json.success && json.data ? json.data : json;
-            if (u) setUserInfo(u);
-          }
+        // leader=true면 teamInfo 화면으로 교체(이동 전 API 호출 금지 정책 대응)
+        if (fetchedTeam?.leader === true) {
+          router.replace({
+            pathname: '/Team/teamInfo',
+            params: { teamId: String(teamIdNum) },
+          });
+          return;
         }
+
+        // isMyTeam일 때만 USER_ME를 호출하던 로직은 체감 지연이 커서 제거.
+        // 필요 정보는 fetchedTeam.leader* 필드로 표시하도록 유지.
       } catch (error) {
         console.error('네트워크 에러:', error);
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
 
     fetchData();
+    return () => {
+      cancelled = true;
+    };
   }, [teamId, isMyTeam]);
 
-  const deleteTeam = async () => {
-    if (!teamId) {
-      return;
-    }
-
-    try {
-      const token = await AsyncStorage.getItem('accessToken');
-      if (!token) {
-        return;
-      }
-
-      const teamIdNum = Number(teamId);
-      if (Number.isNaN(teamIdNum)) {
-        return;
-      }
-
-      const deleteUrl = API_ENDPOINTS.DELETE_TEAM(teamIdNum);
-      const response = await fetch(deleteUrl, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        return;
-      }
-
-      router.replace('/Team/teamDeletedConfirmed');
-    } catch (error) {
-      console.error('모집글 삭제 오류:', error);
-    }
-  };
-
-  if (loading) {
+  if (loading && !team) {
     return (
       <View style={styles.center}>
         <Text>로딩 중...</Text>
