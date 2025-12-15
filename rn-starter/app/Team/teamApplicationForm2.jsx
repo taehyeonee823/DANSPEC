@@ -289,26 +289,11 @@ export default function Index() {
           />
         </TouchableOpacity>
 
-        {/* 삭제하기: PENDING이면 삭제 가능, APPROVED/REJECTED이면 모달 */}
-        {canEdit ? (
+        {/* 삭제하기: PENDING일 때만 표시 */}
+        {canEdit && (
           <TouchableOpacity
             style={styles.topBarButton}
             onPress={handleDelete}
-            disabled={submitting}
-          >
-            <Text style={[styles.topBarActionText, submitting && styles.disabledText]}>삭제하기</Text>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            style={styles.topBarButton}
-            onPress={() => {
-              if (isFinalStatus) {
-                setShowStatusBlockedModal(true);
-                return;
-              }
-
-              Alert.alert('삭제 불가', '지원 상태가 PENDING일 때만 삭제할 수 있습니다.');
-            }}
             disabled={submitting}
           >
             <Text style={[styles.topBarActionText, submitting && styles.disabledText]}>삭제하기</Text>
@@ -384,12 +369,15 @@ export default function Index() {
             editable={canEdit}
           />
 
-          <Button
-            title={submitting ? '제출 중...' : '수정하기'}
-            onPress={handleSubmit}
-            disabled={submitting || !canEdit}
-            style={{ marginTop: 20 }}
-          />
+          {/* 수정하기: PENDING일 때만 표시 */}
+          {canEdit && (
+            <Button
+              title={submitting ? '제출 중...' : '수정하기'}
+              onPress={handleSubmit}
+              disabled={submitting}
+              style={{ marginTop: 20 }}
+            />
+          )}
         </ScrollView>
       </KeyboardAvoidingView>
 
