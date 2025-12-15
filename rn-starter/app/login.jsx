@@ -130,16 +130,9 @@ export default function LoginScreen() {
 
         // 홈으로 이동
         router.replace('/Home/home');
-        // 자동 로그인 체크된 경우에만 AsyncStorage에 저장
-        if (autoLogin) {
-          if (data.token) {
-            await AsyncStorage.setItem('authToken', data.token);
-          }
-          await AsyncStorage.setItem('userEmail', data.user.email || email);
-        }
-            } else {
+      } else {
         showModal('⚠️ 로그인 실패', data.message || '이메일 또는 비밀번호가 올바르지 않습니다.');
-            }
+      }
 
     } catch (error) {
       console.error('로그인 오류:', error);
