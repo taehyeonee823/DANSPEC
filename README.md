@@ -12,5 +12,5 @@
 git clone https://github.com/taehyeonee823/DANSPEC.git
 cd rn-starter
 npm install
-npm run stat
+npm run start
 ```
