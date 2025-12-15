@@ -62,7 +62,37 @@ export default function Team() {
 
       const teamArray = Array.isArray(data) ? data : (Array.isArray(data.data) ? data.data : []);
 
-      const sorted = teamArray.sort((a, b) => {
+      // 각 팀의 모집 상태 계산
+      const teamsWithRecruitingStatus = teamArray.map(team => {
+        const currentMemberCount = team.currentMemberCount || team.currentMember || 0;
+        const capacity = team.capacity;
+        const recruitmentEndDate = team.recruitmentEndDate;
+
+        // 정원이 찼거나 마감일이 지난 경우 recruiting을 false로 설정
+        let recruiting = team.recruiting !== undefined ? team.recruiting : true;
+
+        // 정원이 찬 경우
+        if (capacity && currentMemberCount >= capacity) {
+          recruiting = false;
+        }
+
+        // 마감일이 지난 경우
+        if (recruitmentEndDate && recruitmentEndDate !== '상시 모집') {
+          const endDate = new Date(recruitmentEndDate);
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          if (!isNaN(endDate) && endDate < today) {
+            recruiting = false;
+          }
+        }
+
+        return {
+          ...team,
+          recruiting
+        };
+      });
+
+      const sorted = teamsWithRecruitingStatus.sort((a, b) => {
         const aDate = new Date(a.recruitmentEndDate);
         const bDate = new Date(b.recruitmentEndDate);
         return aDate - bDate;
@@ -201,6 +231,9 @@ export default function Team() {
                 title={team.title}
                 description={team.promotionText}
                 tag={`연결된 활동: ${team.connectedActivityTitle || '자율 모집'}`}
+                recruiting={team.recruiting}
+                currentMemberCount={team.currentMemberCount || team.currentMember || 0}
+                capacity={team.capacity}
                 onPress={() => {
                   console.log('팀 카드 클릭, team.id:', team.id);
                   router.push({
