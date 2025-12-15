@@ -2,10 +2,17 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 
-export default function teamApplyBox({ dueDate, title, description, tag, onPress }) {
+export default function teamApplyBox({ dueDate, title, description, tag, onPress, recruiting, currentMemberCount, capacity }) {
   // status 계산 로직
   let status = '팀 모집 중';
-  if (dueDate === '상시 모집') {
+
+  // recruiting prop이 있으면 우선 사용
+  if (recruiting === false) {
+    status = '마감';
+  } else if (capacity && currentMemberCount >= capacity) {
+    // 정원이 찬 경우
+    status = '마감';
+  } else if (dueDate === '상시 모집') {
     status = '팀 모집 중';
   } else {
     const today = new Date();
