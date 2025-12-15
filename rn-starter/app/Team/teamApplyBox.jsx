@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 
 export default function teamApplyBox({ dueDate, title, description, tag, onPress, recruiting, currentMemberCount, capacity }) {
@@ -63,7 +64,16 @@ export default function teamApplyBox({ dueDate, title, description, tag, onPress
             <Text style={extraBadgeStyle}>{extraBadgeText}</Text>
           ) : null}
         </View>
-        <Text style={styles.dueDate}>{dueDate}</Text>
+        <View style={styles.memberCountContainer}>
+          <Image
+            source={require('../../assets/images/users.svg')}
+            style={styles.usersIcon}
+            contentFit="contain"
+          />
+          <Text style={styles.memberCount}>
+            {currentMemberCount} / {capacity}
+          </Text>
+        </View>
       </View>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.description}>{description}</Text>
@@ -115,7 +125,17 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     borderRadius: 15,
   },
-  dueDate: {
+  memberCountContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  usersIcon: {
+    width: 16,
+    height: 16,
+    marginRight: 4
+  },
+  memberCount: {
     fontSize: 12,
     color: '#666',
   },

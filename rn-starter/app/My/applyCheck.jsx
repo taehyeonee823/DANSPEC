@@ -17,6 +17,39 @@ export default function ApplyCheck() {
   const [loading, setLoading] = useState(false);
   const [teamTitle, setTeamTitle] = useState('');
 
+  const fetchTeamDetail = useCallback(async () => {
+    if (!teamId) return;
+
+    try {
+      const token = await AsyncStorage.getItem('accessToken');
+      if (!token) return;
+
+      const teamIdNum = typeof teamId === 'string' ? parseInt(teamId, 10) : teamId;
+      if (isNaN(teamIdNum)) return;
+
+      const url = API_ENDPOINTS.GET_TEAM_DETAIL(teamIdNum);
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) return;
+
+      const data = await response.json();
+      if (data && data.title) {
+        setTeamTitle(data.title);
+      } else if (data && data.data && data.data.title) {
+        setTeamTitle(data.data.title);
+      }
+    } catch (error) {
+      console.error('팀 정보 불러오기 실패:', error);
+    }
+  }, [teamId]);
+
   const fetchTeamApplications = useCallback(async () => {
     console.log('fetchTeamApplications 호출, teamId:', teamId, 'type:', typeof teamId);
     
@@ -121,11 +154,6 @@ export default function ApplyCheck() {
         }
       });
 
-      // 첫 번째 지원자의 teamTitle을 가져옴
-      if (applicationsArray.length > 0 && applicationsArray[0].teamTitle) {
-        setTeamTitle(applicationsArray[0].teamTitle);
-      }
-
       setApplications(pendingApplications);
       setMembers(approvedMembers);
     } catch (error) {
@@ -171,16 +199,18 @@ export default function ApplyCheck() {
 
   useEffect(() => {
     if (teamId) {
+      fetchTeamDetail();
       fetchTeamApplications();
     }
-  }, [teamId, fetchTeamApplications]);
+  }, [teamId, fetchTeamDetail, fetchTeamApplications]);
 
   useFocusEffect(
     useCallback(() => {
       if (teamId) {
+        fetchTeamDetail();
         fetchTeamApplications();
       }
-    }, [teamId, fetchTeamApplications])
+    }, [teamId, fetchTeamDetail, fetchTeamApplications])
   );
 
   return (
@@ -192,7 +222,7 @@ export default function ApplyCheck() {
         >
           <Text style={styles.backButtonText}>←</Text>
         </TouchableOpacity>
-        <Text style={styles.screenTitle}>수신함</Text>
+        <Text style={styles.screenTitle}>{teamTitle || '수신함'}</Text>
         <TouchableOpacity
           style={styles.closeButton}
           onPress={() => router.back()}
