@@ -71,8 +71,8 @@ const styles = StyleSheet.create({
   statusPending: {
     fontSize: 12,
     fontFamily: 'Pretendard-Medium',
-    color: '#FFFFFF',
-    backgroundColor: '#F59E0B',
+    color: '#FF0000',
+    backgroundColor: '#F9CBCB',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 15,
@@ -80,8 +80,8 @@ const styles = StyleSheet.create({
   statusApproved: {
     fontSize: 12,
     fontFamily: 'Pretendard-Medium',
-    color: '#FFFFFF',
-    backgroundColor: '#10B981',
+    color: '#166534',
+    backgroundColor: '#DCFCE6',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 15,

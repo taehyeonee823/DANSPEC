@@ -1,16 +1,33 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ApplyConfirmed() {
   const router = useRouter();
+
+  useEffect(() => {
+    // 화면이 마운트될 때 로그아웃 처리
+    const handleLogout = async () => {
+      try {
+        await AsyncStorage.removeItem('accessToken');
+        await AsyncStorage.removeItem('refreshToken');
+        await AsyncStorage.removeItem('autoLogin');
+        await AsyncStorage.removeItem('savedEmail');
+      } catch (error) {
+        console.error('로그아웃 오류:', error);
+      }
+    };
+    
+    handleLogout();
+  }, []);
 
   return (
     <View style={styles.container}>
         <TouchableOpacity
           style={{ position: 'absolute', top: 60, right: 20, zIndex: 999, padding: 8 }}
-          onPress={() => router.push('../login')}
+          onPress={() => router.replace('/login')}
         >
           <Image
             source={require('@/assets/images/cancel.svg')}
