@@ -222,7 +222,7 @@ export default function ApplyCheck() {
         >
           <Text style={styles.backButtonText}>←</Text>
         </TouchableOpacity>
-        <Text style={styles.screenTitle}>{teamTitle || '수신함'}</Text>
+        <Text style={styles.screenTitle}>팀원 관리하기</Text>
         <TouchableOpacity
           style={styles.closeButton}
           onPress={() => router.back()}
