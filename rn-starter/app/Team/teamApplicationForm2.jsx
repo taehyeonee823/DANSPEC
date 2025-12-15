@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpacity, Alert, Modal } from "react-native";
+import { Text, View, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpacity, Modal } from "react-native";
 import React, { useState, useEffect } from "react";
 import { Image } from 'expo-image';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -38,6 +38,7 @@ export default function Index() {
   const canEdit = applicationStatus === 'PENDING';
 
   const [showStatusBlockedModal, setShowStatusBlockedModal] = useState(false);
+  const [showMemberCountModal, setShowMemberCountModal] = useState(false);
 
   const isFinalStatus = applicationStatus === 'APPROVED' || applicationStatus === 'REJECTED';
 
@@ -158,18 +159,14 @@ export default function Index() {
 
   const handleSubmit = async () => {
     if (!canEdit) {
-      // APPROVED/REJECTED이면 Alert 대신 모달
       if (isFinalStatus) {
         setShowStatusBlockedModal(true);
         return;
       }
-
-      Alert.alert('수정 불가', '지원 상태가 PENDING일 때만 수정할 수 있습니다.');
       return;
     }
 
     if (!applicationId) {
-      Alert.alert('오류', '지원글 정보를 찾을 수 없습니다.');
       return;
     }
 
@@ -177,7 +174,6 @@ export default function Index() {
       setSubmitting(true);
       const token = await AsyncStorage.getItem('accessToken');
       if (!token) {
-        Alert.alert('오류', '로그인이 필요합니다.');
         return;
       }
 
@@ -191,9 +187,6 @@ export default function Index() {
         portfolioUrl: portfolioLink.trim() || null,
       };
 
-      console.log('지원글 수정 URL:', url);
-      console.log('지원글 수정 데이터:', requestBody);
-
       const response = await fetch(url, {
         method: 'PUT',
         headers: {
@@ -204,12 +197,7 @@ export default function Index() {
         body: JSON.stringify(requestBody),
       });
 
-      const text = await response.text();
-      console.log('수정 응답 상태:', response.status);
-      console.log('수정 응답 본문:', text);
-
       if (!response.ok) {
-        Alert.alert('오류', '지원글 수정에 실패했습니다. 다시 시도해주세요.');
         return;
       }
 
@@ -221,22 +209,19 @@ export default function Index() {
         },
       });
     } catch (error) {
-      console.error('지원글 수정 중 오류:', error);
-      Alert.alert('오류', '지원글 수정 중 문제가 발생했습니다.');
+      // ignore
     } finally {
       setSubmitting(false);
     }
   };
 
   const handleDelete = async () => {
-    // APPROVED/REJECTED이면 Alert 대신 모달
     if (isFinalStatus) {
       setShowStatusBlockedModal(true);
       return;
     }
 
     if (!applicationId) {
-      Alert.alert('오류', '지원글 정보를 찾을 수 없습니다.');
       return;
     }
 
@@ -244,13 +229,11 @@ export default function Index() {
       setSubmitting(true);
       const token = await AsyncStorage.getItem('accessToken');
       if (!token) {
-        Alert.alert('오류', '로그인이 필요합니다.');
         return;
       }
 
       const applicationIdNum = typeof applicationId === 'string' ? parseInt(applicationId, 10) : applicationId;
       const url = API_ENDPOINTS.DELETE_TEAM_APPLICATION(applicationIdNum);
-      console.log('지원글 삭제 URL:', url);
 
       const response = await fetch(url, {
         method: 'DELETE',
@@ -260,19 +243,13 @@ export default function Index() {
         },
       });
 
-      const text = await response.text();
-      console.log('삭제 응답 상태:', response.status);
-      console.log('삭제 응답 본문:', text);
-
       if (!response.ok) {
-        Alert.alert('오류', '지원글 삭제에 실패했습니다.');
         return;
       }
 
       router.back();
     } catch (error) {
-      console.error('지원글 삭제 중 오류:', error);
-      Alert.alert('오류', '지원글 삭제 중 문제가 발생했습니다.');
+      // ignore
     } finally {
       setSubmitting(false);
     }
@@ -289,7 +266,6 @@ export default function Index() {
           />
         </TouchableOpacity>
 
-        {/* 삭제하기: PENDING이면 삭제 가능, APPROVED/REJECTED이면 모달 */}
         {canEdit ? (
           <TouchableOpacity
             style={styles.topBarButton}
@@ -306,8 +282,6 @@ export default function Index() {
                 setShowStatusBlockedModal(true);
                 return;
               }
-
-              Alert.alert('삭제 불가', '지원 상태가 PENDING일 때만 삭제할 수 있습니다.');
             }}
             disabled={submitting}
           >
@@ -491,14 +465,6 @@ const styles = StyleSheet.create({
     marginBottom: 28,
     flex: 1,
   },
-  inputBox: {
-    borderWidth: 1,
-    borderColor: '#eee',
-    backgroundColor: '#ffffff',
-    borderRadius: 8,
-    paddingHorizontal: 4,
-    paddingVertical: 6,
-  },
   departmentRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -546,42 +512,6 @@ const styles = StyleSheet.create({
     borderColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  roleText: {
-    fontSize: 16,
-    fontFamily: 'Pretendard-Medium',
-    color: '#A6A6A6',
-    borderBottomColor: '#1A1A1A',
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    borderBottomWidth: 1,
-    marginBottom: 28,
-    flex: 1,
-  },
-  blueBox: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: '#3E6AF433',
-    borderRadius: 8,
-    paddingVertical: 24,
-    paddingHorizontal: 12,
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    marginBottom: 20,
-    backgroundColor: '#fff',
-  },
-  blueBoxText: {
-    fontSize: 14,
-    fontFamily: 'Pretendard-Medium',
-    color: '#A6A6A6',
-    textAlign: 'left',
-    width: '100%',
-  },
-  applyTitle: {
-    fontSize: 20,
-    fontFamily: 'Pretendard-SemiBold',
-    marginTop: 10,
-    marginBottom: 10,
   },
   connectBox: {
     flex: 1,

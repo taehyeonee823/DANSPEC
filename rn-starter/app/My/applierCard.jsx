@@ -11,6 +11,15 @@ export default function Applier({id, name, grade, campus, college, major, introd
   const [showAcceptModal, setShowAcceptModal] = useState(false);
   const [showRejectModal, setShowRejectModal] = useState(false);
 
+  const campusMap = {
+    'JUKJEON': '죽전',
+    'CHEONAN': '천안'
+  };
+
+  const getCampusName = (campusCode) => {
+    return campusMap[campusCode] || campusCode;
+  };
+
   const getTimeAgo = (timestamp) => {
     const diff = Date.now() - new Date(timestamp).getTime();
     const minutes = Math.floor(diff / 1000 / 60);
@@ -48,7 +57,7 @@ export default function Applier({id, name, grade, campus, college, major, introd
         <Text style={styles.label}>{formattedTime}</Text>
       </View>
 
-      <Text style={styles.college}>{grade} | {campus}캠퍼스 {college} {major}</Text>
+      <Text style={styles.college}>{grade}학년 | {getCampusName(campus)}캠퍼스 {college} {major}</Text>
 
       {isExpanded && (
         <>

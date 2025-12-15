@@ -29,6 +29,7 @@ export default function TeamInfo() {
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showMemberCountBlockedModal, setShowMemberCountBlockedModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -140,6 +141,14 @@ export default function TeamInfo() {
 
   const handleConfirmDelete = async () => {
     setShowDeleteModal(false);
+
+    // currentMemberCount가 1 이상이면 삭제 불가
+    const currentMemberCount = team?.currentMemberCount || 0;
+    if (currentMemberCount >= 1) {
+      setShowMemberCountBlockedModal(true);
+      return;
+    }
+
     await deleteTeam();
   };
 
@@ -388,6 +397,33 @@ export default function TeamInfo() {
                     onPress={handleConfirmDelete}
                   >
                     <Text style={styles.deleteConfirmButtonText}>삭제</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
+
+          {/* 현재 인원이 있을 때 삭제 불가 모달 */}
+          <Modal
+            visible={showMemberCountBlockedModal}
+            transparent={true}
+            animationType="fade"
+            onRequestClose={() => setShowMemberCountBlockedModal(false)}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContainer}>
+                <Image
+                  source={require('@/assets/images/alert.svg')}
+                  style={styles.alertIcon}
+                  contentFit="contain"
+                />
+                <Text style={styles.modalTitle}>가입 승인된 인원이 있어 모집글을{'\n'}삭제할 수 없습니다.</Text>
+                <View style={styles.modalButtonContainer}>
+                  <TouchableOpacity
+                    style={[styles.modalButton, styles.confirmButton]}
+                    onPress={() => setShowMemberCountBlockedModal(false)}
+                  >
+                    <Text style={styles.confirmButtonText}>확인</Text>
                   </TouchableOpacity>
                 </View>
               </View>
