@@ -1,12 +1,11 @@
 // 모집글 작성자가 '나'일 경우에 보는 팀 정보 화면
 
 import React, { useEffect, useState } from "react";
-import { Text, View, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpacity, Modal } from "react-native";
 import { Image } from 'expo-image';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { API_ENDPOINTS } from '@/config/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Button from '../../components/Button';
 
 export default function TeamInfo() {
   const router = useRouter();
@@ -29,6 +28,7 @@ export default function TeamInfo() {
   const [team, setTeam] = useState(initialTeamData);
   const [userInfo, setUserInfo] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -138,6 +138,11 @@ export default function TeamInfo() {
     fetchData();
   }, [teamId, isMyTeam]);
 
+  const handleConfirmDelete = async () => {
+    setShowDeleteModal(false);
+    await deleteTeam();
+  };
+
   const deleteTeam = async () => {
     if (!teamId) {
       return;
@@ -215,9 +220,15 @@ export default function TeamInfo() {
 
         <TouchableOpacity
           style={{ padding: 8 }}
-          onPress={deleteTeam}
+          onPress={() => {
+            if (!teamId) return;
+            router.push({
+              pathname: '/My/applyCheck',
+              params: { teamId: String(teamId) },
+            });
+          }}
         >
-          <Text style={{ fontSize: 17, color: '#000', fontFamily: 'Pretendard-SemiBold' }}>삭제하기</Text>
+          <Text style={{ fontSize: 17, color: '#000', fontFamily: 'Pretendard-SemiBold' }}>관리하기</Text>
         </TouchableOpacity>
       </View>
 
@@ -324,15 +335,64 @@ export default function TeamInfo() {
           <Text style={styles.descriptionBox}>{team.promotionText || team.description || ''}</Text>
 
           <View style={{ height: 20 }} />
-          <Button
-            title="수정하기"
-            onPress={() => {
-              router.push({
-                pathname: '/Team/teamRecruitmentFormModify',
-                params: { teamId: teamId }
-              });
-            }}
-          />
+          <View style={styles.actionRow}>
+            <View style={styles.actionCol}>
+              <TouchableOpacity
+                style={[styles.baseButton, styles.editButton]}
+                activeOpacity={0.8}
+                onPress={() => {
+                  router.push({
+                    pathname: '/Team/teamRecruitmentFormModify',
+                    params: { teamId: teamId }
+                  });
+                }}
+              >
+                <Text style={[styles.baseButtonText, styles.editButtonText]}>수정하기</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.actionCol}>
+              <TouchableOpacity
+                style={[styles.baseButton, styles.deleteButton]}
+                activeOpacity={0.8}
+                onPress={() => setShowDeleteModal(true)}
+              >
+                <Text style={[styles.baseButtonText, styles.deleteButtonText]}>삭제하기</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {/* 삭제 확인 모달 */}
+          <Modal
+            visible={showDeleteModal}
+            transparent={true}
+            animationType="fade"
+            onRequestClose={() => setShowDeleteModal(false)}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContainer}>
+                <Image
+                  source={require('@/assets/images/alert.svg')}
+                  style={styles.alertIcon}
+                  contentFit="contain"
+                />
+                <Text style={styles.modalTitle}>모집글을 삭제하겠어요?</Text>
+                <View style={styles.modalButtonContainer}>
+                  <TouchableOpacity
+                    style={[styles.modalButton, styles.confirmButton]}
+                    onPress={() => setShowDeleteModal(false)}
+                  >
+                    <Text style={styles.confirmButtonText}>취소</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.modalButton, styles.deleteConfirmButton]}
+                    onPress={handleConfirmDelete}
+                  >
+                    <Text style={styles.deleteConfirmButtonText}>삭제</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
 
         </ScrollView>
       </KeyboardAvoidingView>
@@ -503,5 +563,92 @@ const styles = StyleSheet.create({
   datePickerArrow: {
     width: 24,
     height: 24,
+  },
+  actionRow: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  actionCol: {
+    flex: 1,
+    height: 45,
+  },
+  baseButton: {
+    height: 45,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 25,
+  },
+  baseButtonText: {
+    fontSize: 16,
+    fontFamily: 'Pretendard-SemiBold',
+  },
+  editButton: {
+    backgroundColor: '#3E6AF4',
+  },
+  editButtonText: {
+    color: '#FFFFFF',
+  },
+  deleteButton: {
+    backgroundColor: '#FFFFFF',
+    borderWidth: 2,
+    borderColor: '#FF3B30',
+  },
+  deleteButtonText: {
+    color: '#FF3B30',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    width: '80%',
+    alignItems: 'center',
+  },
+  alertIcon: {
+    width: 48,
+    height: 48,
+    flexShrink: 0,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontFamily: 'Pretendard-SemiBold',
+    color: '#000',
+    marginTop: 10,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  modalButtonContainer: {
+    flexDirection: 'row',
+    gap: 12,
+    width: '100%',
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  confirmButton: {
+    backgroundColor: '#f0f0f0',
+  },
+  confirmButtonText: {
+    fontSize: 16,
+    fontFamily: 'Pretendard-Medium',
+    color: '#000',
+  },
+  deleteConfirmButton: {
+    backgroundColor: '#FF3B30',
+  },
+  deleteConfirmButtonText: {
+    fontSize: 16,
+    fontFamily: 'Pretendard-Medium',
+    color: '#FFFFFF',
   },
 });
