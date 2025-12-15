@@ -634,11 +634,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   confirmButton: {
-    backgroundColor: '#3E6AF4',
+    backgroundColor: '#f0f0f0',
   },
   confirmButtonText: {
     fontSize: 16,
     fontFamily: 'Pretendard-Medium',
-    color: '#FFFFFF',
+    color: '#000',
   },
 });

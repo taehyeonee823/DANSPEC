@@ -6,40 +6,26 @@ export default function teamApplyBox2({ dueDate, title, description, tag, onPres
   // '상태: XXX' 형태를 파싱해서 상태 뱃지 텍스트 결정
   let statusBadgeText = null;
   let statusBadgeStyle = styles.statusPending;
-  let isRejected = false;
-  
+
   if (typeof tag === 'string' && tag.trim()) {
     const match = /^상태\s*:\s*(.+)$/i.exec(tag.trim());
-    if (match) {
-      const statusValue = match[1].trim().toLowerCase();
-      console.log('teamApplyBox2 tag:', tag, 'statusValue:', statusValue);
-      
-      if (statusValue === 'approved' || statusValue === 'accepted' || statusValue === '승인') {
-        statusBadgeText = '승인';
-        statusBadgeStyle = styles.statusApproved;
-      } else if (statusValue === 'rejected' || statusValue === 'denied' || statusValue === '거절') {
-        // 거절된 경우 렌더링하지 않음
-        isRejected = true;
-      } else {
-        // pending / 기타 값은 모두 승인 대기
-        statusBadgeText = '대기';
-        statusBadgeStyle = styles.statusPending;
-      }
+    const raw = match ? match[1].trim() : '';
+    const upper = raw.toUpperCase();
+
+    if (upper === 'APPROVED' || upper === 'ACCEPTED' || raw === '승인' || raw === '승인됨') {
+      statusBadgeText = '승인';
+      statusBadgeStyle = styles.statusApproved;
+    } else if (upper === 'REJECTED' || upper === 'DENIED' || raw === '거절' || raw === '거절됨') {
+      statusBadgeText = '거절';
+      statusBadgeStyle = styles.statusRejected;
     } else {
-      // "상태:"로 시작하지 않으면 기본적으로 "승인 대기"로 표시
-      console.log('teamApplyBox2 tag 파싱 실패, 기본값 사용:', tag);
-      statusBadgeText = '승인 대기';
+      // pending / 기타
+      statusBadgeText = '대기';
       statusBadgeStyle = styles.statusPending;
     }
   } else {
-    // tag가 없거나 빈 값이면 기본적으로 "승인 대기"로 표시
-    statusBadgeText = '승인 대기';
+    statusBadgeText = '대기';
     statusBadgeStyle = styles.statusPending;
-  }
-
-  // 거절된 경우 렌더링하지 않음
-  if (isRejected) {
-    return null;
   }
 
   return (
