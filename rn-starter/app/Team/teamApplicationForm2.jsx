@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpacity, Alert } from "react-native";
+import { Text, View, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpacity, Alert, Modal } from "react-native";
 import React, { useState, useEffect } from "react";
 import { Image } from 'expo-image';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -36,6 +36,10 @@ export default function Index() {
   const [teamDetail, setTeamDetail] = useState(null);
   const [applicationStatus, setApplicationStatus] = useState(params.status ? (Array.isArray(params.status) ? params.status[0] : params.status) : null);
   const canEdit = applicationStatus === 'PENDING';
+
+  const [showStatusBlockedModal, setShowStatusBlockedModal] = useState(false);
+
+  const isFinalStatus = applicationStatus === 'APPROVED' || applicationStatus === 'REJECTED';
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -154,6 +158,12 @@ export default function Index() {
 
   const handleSubmit = async () => {
     if (!canEdit) {
+      // APPROVED/REJECTED이면 Alert 대신 모달
+      if (isFinalStatus) {
+        setShowStatusBlockedModal(true);
+        return;
+      }
+
       Alert.alert('수정 불가', '지원 상태가 PENDING일 때만 수정할 수 있습니다.');
       return;
     }
@@ -219,6 +229,12 @@ export default function Index() {
   };
 
   const handleDelete = async () => {
+    // APPROVED/REJECTED이면 Alert 대신 모달
+    if (isFinalStatus) {
+      setShowStatusBlockedModal(true);
+      return;
+    }
+
     if (!applicationId) {
       Alert.alert('오류', '지원글 정보를 찾을 수 없습니다.');
       return;
@@ -273,10 +289,26 @@ export default function Index() {
           />
         </TouchableOpacity>
 
-        {canEdit && (
+        {/* 삭제하기: PENDING이면 삭제 가능, APPROVED/REJECTED이면 모달 */}
+        {canEdit ? (
           <TouchableOpacity
             style={styles.topBarButton}
             onPress={handleDelete}
+            disabled={submitting}
+          >
+            <Text style={[styles.topBarActionText, submitting && styles.disabledText]}>삭제하기</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={styles.topBarButton}
+            onPress={() => {
+              if (isFinalStatus) {
+                setShowStatusBlockedModal(true);
+                return;
+              }
+
+              Alert.alert('삭제 불가', '지원 상태가 PENDING일 때만 삭제할 수 있습니다.');
+            }}
             disabled={submitting}
           >
             <Text style={[styles.topBarActionText, submitting && styles.disabledText]}>삭제하기</Text>
@@ -352,16 +384,41 @@ export default function Index() {
             editable={canEdit}
           />
 
-          {canEdit && (
-            <Button
-              title={submitting ? '제출 중...' : '수정하기'}
-              onPress={handleSubmit}
-              disabled={submitting}
-              style={{ marginTop: 20 }}
-            />
-          )}
+          <Button
+            title={submitting ? '제출 중...' : '수정하기'}
+            onPress={handleSubmit}
+            disabled={submitting || !canEdit}
+            style={{ marginTop: 20 }}
+          />
         </ScrollView>
       </KeyboardAvoidingView>
+
+      {/* 상태 제한 모달 (my.jsx 로그아웃 모달 스타일 참조) */}
+      <Modal
+        visible={showStatusBlockedModal}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setShowStatusBlockedModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Image
+              source={require('@/assets/images/alert.svg')}
+              style={styles.alertIcon}
+              contentFit="contain"
+            />
+            <Text style={styles.modalTitle}>이미 승인/거절된 지원글입니다.</Text>
+            <View style={styles.modalButtonContainer}>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.confirmButton]}
+                onPress={() => setShowStatusBlockedModal(false)}
+              >
+                <Text style={styles.confirmButtonText}>확인</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -537,5 +594,51 @@ const styles = StyleSheet.create({
     marginBottom: 28,
     fontFamily: 'Pretendard-SemiBold',
     color: '#A6A6A6',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    width: '80%',
+    alignItems: 'center',
+  },
+  alertIcon: {
+    width: 48,
+    height: 48,
+    flexShrink: 0,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontFamily: 'Pretendard-SemiBold',
+    color: '#000',
+    marginTop: 10,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  modalButtonContainer: {
+    flexDirection: 'row',
+    gap: 12,
+    width: '100%',
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  confirmButton: {
+    backgroundColor: '#3E6AF4',
+  },
+  confirmButtonText: {
+    fontSize: 16,
+    fontFamily: 'Pretendard-Medium',
+    color: '#FFFFFF',
   },
 });

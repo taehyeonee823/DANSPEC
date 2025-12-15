@@ -264,7 +264,7 @@ export default function Team() {
                 return (
                 <TeamApplyBox2
                   key={app.applicationId ?? `${app.teamId}-${app.createdAt}`}
-                  dueDate={'-'}
+                  dueDate={app.createdAt ? new Date(app.createdAt).toLocaleDateString('ko-KR') : '-'}
                   title={app.teamTitle || '(제목 없음)'}
                   description={app.introduction || app.message || ''}
                   tag={`상태: ${app.status || '-'}`}
