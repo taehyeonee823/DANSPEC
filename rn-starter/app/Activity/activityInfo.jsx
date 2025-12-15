@@ -318,105 +318,15 @@ export default function ActivityInfo() {
               <TouchableOpacity
                 key={team.id}
                 style={styles.teamCard}
-                onPress={async () => {
-                  try {
-                    const token = await AsyncStorage.getItem('accessToken');
-                    const teamIdNum = Number(team.id);
-
-                    // 토큰이 없거나 teamId가 비정상이면 기존 분기 로직으로 fallback
-                    if (!token || Number.isNaN(teamIdNum)) {
-                      if (isMyTeam(team)) {
-                        router.push({
-                          pathname: '/Team/teamInfo',
-                          params: {
-                            teamId: team.id,
-                            isMyTeam: 'true'
-                          }
-                        });
-                      } else {
-                        router.push({
-                          pathname: '/Team/teamInfo2',
-                          params: {
-                            teamId: team.id,
-                            teamData: JSON.stringify(team)
-                          }
-                        });
-                      }
-                      return;
-                    }
-
-                    const res = await fetch(API_ENDPOINTS.GET_TEAM_DETAIL(teamIdNum), {
-                      method: 'GET',
-                      headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`,
-                      },
-                    });
-
-                    if (!res.ok) {
-                      // 실패 시 기존 분기 로직
-                      if (isMyTeam(team)) {
-                        router.push({
-                          pathname: '/Team/teamInfo',
-                          params: {
-                            teamId: team.id,
-                            isMyTeam: 'true'
-                          }
-                        });
-                      } else {
-                        router.push({
-                          pathname: '/Team/teamInfo2',
-                          params: {
-                            teamId: team.id,
-                            teamData: JSON.stringify(team)
-                          }
-                        });
-                      }
-                      return;
-                    }
-
-                    const json = await res.json();
-                    const teamDetail = (json && json.success && json.data) ? json.data : json;
-
-                    const isLeader = !!teamDetail?.leader;
-                    const hasApplied = !!teamDetail?.hasApplied;
-
-                    if (isLeader) {
-                      router.push({
-                        pathname: '/Team/teamInfo',
-                        params: { teamId: teamIdNum, isMyTeam: 'true' },
-                      });
-                    } else {
-                      router.push({
-                        pathname: '/Team/teamInfo2',
-                        params: {
-                          teamId: teamIdNum,
-                          // 기존 화면에서 활용할 수 있게 전달
-                          hasApplied: hasApplied ? 'true' : 'false',
-                          teamData: JSON.stringify(team),
-                        },
-                      });
-                    }
-                  } catch (e) {
-                    // 예외 시 기존 분기 로직
-                    if (isMyTeam(team)) {
-                      router.push({
-                        pathname: '/Team/teamInfo',
-                        params: {
-                          teamId: team.id,
-                          isMyTeam: 'true'
-                        }
-                      });
-                    } else {
-                      router.push({
-                        pathname: '/Team/teamInfo2',
-                        params: {
-                          teamId: team.id,
-                          teamData: JSON.stringify(team)
-                        }
-                      });
-                    }
-                  }
+                onPress={() => {
+                  // 화면 이동 전에 팀 상세 API 호출하지 않음
+                  router.push({
+                    pathname: '/Team/teamInfo2',
+                    params: {
+                      teamId: String(team.id),
+                      teamData: JSON.stringify(team),
+                    },
+                  });
                 }}
               >
                 {isMyTeam(team) && (

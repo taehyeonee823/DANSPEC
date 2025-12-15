@@ -23,44 +23,7 @@ export default function ModPassword() {
     }
   }, []);
   const changePassword = async () => {
-    const token = await AsyncStorage.getItem('accessToken');
-    const response = await fetch(API_ENDPOINTS.UPDATE_USER_PASSWORD, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        oldPassword: currentPassword,
-        newPassword,
-        newPasswordConfirm: confirmPassword,
-      }),
-    });
-    const data = await response.json();
-    if (response.ok) {
-      setIsSuccess(true);
-      showModal('✅ 성공', '비밀번호가 변경되었습니다.');
-      router.back();
-    } else {
-      showModal('⚠️ 알림', data.message);
-      return;
-    }
-  };
-  const showModal = (title, message, success = false) => {
-    setModalTitle(title);
-    setModalMessage(message);
-    setIsSuccess(success);
-    setModalVisible(true);
-  };
-
-  const handleModalClose = () => {
-    setModalVisible(false);
-    if (isSuccess) {
-      router.back();
-    }
-  };
-
-  const handleChangePassword = () => {
+    // 유효성 검사
     if (!currentPassword || !newPassword || !confirmPassword) {
       showModal('⚠️ 알림', '모든 필드를 입력해주세요.');
       return;
@@ -76,8 +39,40 @@ export default function ModPassword() {
       return;
     }
 
-    // 유효성 검사 통과 시 modPasswordConfirm으로 이동
-    router.push('./modPasswordConfirm');
+    const token = await AsyncStorage.getItem('accessToken');
+    const response = await fetch(API_ENDPOINTS.UPDATE_USER_PASSWORD, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        currentPassword: currentPassword,
+        newPassword,
+        newPasswordConfirm: confirmPassword,
+      }),
+    });
+    
+    const data = await response.json();
+    if (response.ok) {
+      showModal('✅ 성공', '비밀번호가 변경되었습니다.', true);
+    } else {
+      showModal('⚠️ 알림', data.message || '비밀번호 변경에 실패했습니다.');
+    }
+  };
+  const showModal = (title, message, success = false) => {
+    setModalTitle(title);
+    setModalMessage(message);
+    setIsSuccess(success);
+    setModalVisible(true);
+  };
+
+  const handleModalClose = () => {
+    setModalVisible(false);
+    if (isSuccess) {
+      // 비밀번호 변경 성공 시 modPasswordConfirm 화면으로 이동
+      router.push('./modPasswordConfirm');
+    }
   };
   return (
     <View style={styles.container}>
