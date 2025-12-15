@@ -1,7 +1,7 @@
 // 모집글 지원자가 '나'일 경우에 보는 팀 정보 화면
 
 import React, { useEffect, useState } from "react";
-import { Text, View, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpacity, Modal } from "react-native";
 import { Image } from 'expo-image';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { API_ENDPOINTS } from '@/config/api';
@@ -15,6 +15,10 @@ export default function TeamInfo() {
   // teamId가 배열로 올 수 있으므로 처리
   const teamId = params.teamId ? (Array.isArray(params.teamId) ? params.teamId[0] : params.teamId) : null;
   const isMyTeam = params.isMyTeam === 'true';
+  const hasAppliedParam = params.hasApplied === 'true';
+
+  const [showAlreadyAppliedModal, setShowAlreadyAppliedModal] = useState(false);
+  const [hasApplied, setHasApplied] = useState(hasAppliedParam);
 
   // activityInfo에서 전달받은 팀 데이터 파싱
   let initialTeamData = null;
@@ -94,6 +98,11 @@ export default function TeamInfo() {
           fetchedTeam = teamData.data;
         } else {
           fetchedTeam = teamData;
+        }
+
+        // leader/hasApplied 
+        if (typeof fetchedTeam?.hasApplied !== 'undefined') {
+          setHasApplied(!!fetchedTeam.hasApplied);
         }
 
         // 전달받은 초기 데이터와 API 데이터를 병합 (API 데이터 우선)
@@ -320,12 +329,44 @@ export default function TeamInfo() {
           <Button
             title="지원하기"
             onPress={() => {
+              if (hasApplied) {
+                setShowAlreadyAppliedModal(true);
+                return;
+              }
               router.push({
                 pathname: '/Team/teamApplicationForm',
                 params: { teamId: teamId }
               });
             }}
           />
+
+          {/* 
+...existing code... */}
+          <Modal
+            visible={showAlreadyAppliedModal}
+            transparent={true}
+            animationType="fade"
+            onRequestClose={() => setShowAlreadyAppliedModal(false)}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContainer}>
+                <Image
+                  source={require('../../assets/images/alert.svg')}
+                  style={styles.alertIcon}
+                  contentFit="contain"
+                />
+                <Text style={styles.modalTitle}>이미 지원한 모집글입니다.</Text>
+                <View style={styles.modalButtonContainer}>
+                  <TouchableOpacity
+                    style={[styles.modalButton, styles.cancelButton]}
+                    onPress={() => setShowAlreadyAppliedModal(false)}
+                  >
+                    <Text style={styles.cancelButtonText}>확인</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
 
         </ScrollView>
       </KeyboardAvoidingView>
@@ -496,5 +537,48 @@ const styles = StyleSheet.create({
   datePickerArrow: {
     width: 24,
     height: 24,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    width: '80%',
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 24,
+    alignItems: 'center',
+  },
+  alertIcon: {
+    width: 50,
+    height: 50,
+    marginBottom: 16,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontFamily: 'Pretendard-SemiBold',
+    marginBottom: 24,
+    color: '#000',
+    textAlign: 'center',
+  },
+  modalButtonContainer: {
+    flexDirection: 'row',
+    width: '100%',
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  cancelButton: {
+    backgroundColor: '#f0f0f0',
+  },
+  cancelButtonText: {
+    fontSize: 16,
+    fontFamily: 'Pretendard-SemiBold',
+    color: '#000',
   },
 });

@@ -33,7 +33,26 @@ export default function teamApplyBox({ dueDate, title, description, tag, onPress
   ];
 
   // '상태: XXX' 형태를 뱃지로 분리해서 노출
-  const extraBadgeText = typeof tag === 'string' && tag.startsWith('상태:') ? tag.replace('상태:', '').trim() : null;
+  const extraBadgeRaw = typeof tag === 'string' && tag.startsWith('상태:') ? tag.replace('상태:', '').trim() : null;
+  const statusKoMap = {
+    REJECTED: '거절',
+    APPROVED: '승인',
+    PENDING: '대기',
+  };
+  const extraBadgeText = extraBadgeRaw ? (statusKoMap[extraBadgeRaw] ?? extraBadgeRaw) : null;
+
+  // 상태 뱃지: 배경은 통일(#555), 텍스트 색만 상태별로 변경
+  const statusTextColorMap = {
+    REJECTED: '#FF3B30',
+    APPROVED: '#301386',
+    PENDING: '#000',
+  };
+
+  const extraBadgeStyle = [
+    styles.extraBadge,
+    { backgroundColor: '#F0F0F0' },
+    extraBadgeRaw && statusTextColorMap[extraBadgeRaw] ? { color: statusTextColorMap[extraBadgeRaw] } : null,
+  ];
 
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
@@ -41,7 +60,7 @@ export default function teamApplyBox({ dueDate, title, description, tag, onPress
         <View style={styles.badgeRow}>
           <Text style={statusStyle}>{status}</Text>
           {extraBadgeText ? (
-            <Text style={styles.extraBadge}>{extraBadgeText}</Text>
+            <Text style={extraBadgeStyle}>{extraBadgeText}</Text>
           ) : null}
         </View>
         <Text style={styles.dueDate}>{dueDate}</Text>
@@ -88,8 +107,10 @@ const styles = StyleSheet.create({
   extraBadge: {
     fontSize: 12,
     fontFamily: 'Pretendard-Medium',
-    color: '#FFFFFF',
-    backgroundColor: '#301386',
+    // 기본 텍스트 색(상태값이 없거나 매핑이 없을 때)
+    color: '#301386',
+    // 배경은 상단에서 #555로 통일해서 덮어씀
+    backgroundColor: '#555',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 15,

@@ -211,12 +211,59 @@ export default function Activity() {
             events.map((team) => {
               const dueDate = calculateDueDate(team.recruitmentEndDate);
               if (dueDate === '마감' || !team.recruiting) return null;
-              
+
               return (
                 <TouchableOpacity 
                   key={team.id} 
                   style={styles.etcCard}
-                  onPress={() => router.push({ pathname: '/Team/teamInfo2', params: { teamId: team.id } })}
+                  onPress={async () => {
+                    try {
+                      const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
+                      const { API_ENDPOINTS } = await import('@/config/api');
+
+                      const token = await AsyncStorage.getItem('accessToken');
+                      const teamIdNum = Number(team.id);
+
+                      // 토큰이 없거나 teamId가 비정상이면 기존처럼 teamInfo2로 fallback
+                      if (!token || Number.isNaN(teamIdNum)) {
+                        router.push({ pathname: '/Team/teamInfo2', params: { teamId: team.id } });
+                        return;
+                      }
+
+                      const res = await fetch(API_ENDPOINTS.GET_TEAM_DETAIL(teamIdNum), {
+                        method: 'GET',
+                        headers: {
+                          'Content-Type': 'application/json',
+                          'Authorization': `Bearer ${token}`,
+                        },
+                      });
+
+                      if (!res.ok) {
+                        router.push({ pathname: '/Team/teamInfo2', params: { teamId: team.id } });
+                        return;
+                      }
+
+                      const json = await res.json();
+                      const teamDetail = (json && json.success && json.data) ? json.data : json;
+
+                      const isLeader = !!teamDetail?.leader;
+                      const hasApplied = !!teamDetail?.hasApplied;
+
+                      if (isLeader) {
+                        router.push({
+                          pathname: '/Team/teamInfo',
+                          params: { teamId: teamIdNum, isMyTeam: 'true' },
+                        });
+                      } else {
+                        router.push({
+                          pathname: '/Team/teamInfo2',
+                          params: { teamId: teamIdNum, hasApplied: hasApplied ? 'true' : 'false' },
+                        });
+                      }
+                    } catch (e) {
+                      router.push({ pathname: '/Team/teamInfo2', params: { teamId: team.id } });
+                    }
+                  }}
                 >
                   <View style={styles.etcHeader}>
                     <Text style={styles.etcStatus}>모집 중</Text>

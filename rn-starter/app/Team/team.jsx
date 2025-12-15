@@ -18,6 +18,16 @@ export default function Team() {
   const [loading, setLoading] = useState(false);
   const [loadingApplications, setLoadingApplications] = useState(false);
 
+  const formatDate = (value) => {
+    if (!value || value === '-' || value === '상시 모집') return value || '-';
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) return String(value);
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return `${yyyy}. ${mm}. ${dd}`;
+  };
+
   const fetchMyTeams = useCallback(async () => {
     try {
       setLoading(true);
@@ -227,7 +237,7 @@ export default function Team() {
             {teams.map((team) => (
               <TeamApplyBox
                 key={team.id}
-                dueDate={team.recruitmentEndDate}
+                dueDate={formatDate(team.recruitmentEndDate)}
                 title={team.title}
                 description={team.promotionText}
                 tag={`연결된 활동: ${team.connectedActivityTitle || '자율 모집'}`}
@@ -264,7 +274,7 @@ export default function Team() {
                 return (
                 <TeamApplyBox2
                   key={app.applicationId ?? `${app.teamId}-${app.createdAt}`}
-                  dueDate={'-'}
+                  dueDate={app.createdAt ? formatDate(app.createdAt) : '-'}
                   title={app.teamTitle || '(제목 없음)'}
                   description={app.introduction || app.message || ''}
                   tag={`상태: ${app.status || '-'}`}
