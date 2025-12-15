@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { TextInput, StyleSheet, View } from 'react-native';
 
-export default function DynamicInputByFocus() {
-  const [text, setText] = useState('');
+export default function DynamicInputByFocus({ value, onChangeText, placeholder, ...props }) {
   const [isFocused, setIsFocused] = useState(false);
 
   // 1. 포커스 상태에 따라 색상을 결정합니다.
@@ -17,16 +16,17 @@ export default function DynamicInputByFocus() {
     <View style={styles.container}>
       <TextInput
         style={inputStyle}
-        onChangeText={setText}
-        value={text}
-        placeholder="여기에 입력하세요"
-        placeholderTextColor="gray" 
-        
+        onChangeText={onChangeText}
+        value={value}
+        placeholder={placeholder || "여기에 입력하세요"}
+        placeholderTextColor="gray"
+
         // 2. 입력 필드를 터치하면 isFocused를 true로 설정
         onFocus={() => setIsFocused(true)}
-        
+
         // 3. 입력 필드 밖을 터치하면 isFocused를 false로 설정
         onBlur={() => setIsFocused(false)}
+        {...props}
       />
     </View>
   );

@@ -1,6 +1,6 @@
-import { Text, View, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpacity, Image } from "react-native";
+import { Text, View, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpacity, Image, Alert } from "react-native";
 import React, { useState, useEffect } from "react";
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_ENDPOINTS } from '@/config/api';
 import Button from '../../components/Button';
@@ -9,6 +9,9 @@ import SinglelineInput from '../../components/SinglelineInput';
 
 export default function Index() {
   const router = useRouter();
+  const params = useLocalSearchParams();
+  const teamId = params.teamId ? (Array.isArray(params.teamId) ? params.teamId[0] : params.teamId) : null;
+
   const [motivationInfo, setMotivation] = useState("");
   const [introductionInfo, setIntroduction] = useState("");
   const [portfolioLink, setPortfolioLink] = useState("");
@@ -21,6 +24,7 @@ export default function Index() {
     grade: '',
   });
   const [loadingUser, setLoadingUser] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -56,6 +60,63 @@ export default function Index() {
     };
     fetchUserInfo();
   }, []);
+
+  const handleSubmit = async () => {
+    if (!teamId) {
+      Alert.alert('오류', '팀 정보를 찾을 수 없습니다.');
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      const token = await AsyncStorage.getItem('accessToken');
+      if (!token) {
+        Alert.alert('오류', '로그인이 필요합니다.');
+        return;
+      }
+
+      const teamIdNum = typeof teamId === 'string' ? parseInt(teamId, 10) : teamId;
+      const url = API_ENDPOINTS.APPLY_TO_TEAM(teamIdNum);
+
+      const requestBody = {
+        introduction: introductionInfo,
+        message: motivationInfo,
+        contactNumber: contactInfo.trim() || null,
+        portfolioUrl: portfolioLink.trim() || null,
+      };
+
+      console.log('지원서 제출 URL:', url);
+      console.log('지원서 데이터:', requestBody);
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      const text = await response.text();
+      console.log('응답 상태:', response.status);
+      console.log('응답 본문:', text);
+
+      if (!response.ok) {
+        console.error('지원서 제출 실패:', response.status, text);
+        Alert.alert('오류', '지원서 제출에 실패했습니다. 다시 시도해주세요.');
+        return;
+      }
+
+      console.log('지원서 제출 성공');
+      router.push('/Activity/recruitmentConfirmed');
+    } catch (error) {
+      console.error('지원서 제출 중 오류:', error);
+      Alert.alert('오류', '지원서 제출 중 문제가 발생했습니다.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
       <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
@@ -122,12 +183,9 @@ export default function Index() {
                 placeholder="연락처를 입력해주세요."
             />
             <Button
-                title="신청하기"
-                onPress={() => {
-                    // 추후에 fetch로 지원서 제출 로직 추가 예정
-                    console.log("지원서 제출됨");
-                    router.push('/Team/applyConfirmed');
-                }}
+                title={submitting ? "제출 중..." : "신청하기"}
+                onPress={handleSubmit}
+                disabled={submitting}
                 style={{ marginTop: 20 }}
             />
           </ScrollView>

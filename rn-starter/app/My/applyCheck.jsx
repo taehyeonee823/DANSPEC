@@ -203,7 +203,7 @@ export default function ApplyCheck() {
       </View>
 
       <ScrollView style={styles.contentArea} contentContainerStyle={styles.scrollContent}>
-        <Text style={styles.title}>가입요청</Text>
+        <Text style={styles.title}>가입 요청</Text>
         {loading ? (
           <View style={styles.loadingContainer}>
             <Text>로딩 중...</Text>
