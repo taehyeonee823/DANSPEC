@@ -59,5 +59,6 @@ export const API_ENDPOINTS = {
   USER_ME: `${EVENT_SERVER_URL}/api/users/me`,
   UPDATE_USER_INFO: `${EVENT_SERVER_URL}/api/users/me`,
   UPDATE_USER_PASSWORD: `${EVENT_SERVER_URL}/api/users/password/change`,
+  GET_USER_INFO: `${EVENT_SERVER_URL}/api/users/mypage`,
 };
 

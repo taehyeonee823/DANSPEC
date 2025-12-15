@@ -18,6 +18,8 @@ export default function My() {
     interestJobPrimary: '',
     interestJobSecondary: '',
     interestJobTertiary: '',
+    dreamyReport: null,
+    participatedActivities: [],
   });
   const [loading, setLoading] = useState(true);
 
@@ -36,7 +38,7 @@ export default function My() {
         return;
       }
 
-      const response = await fetch(API_ENDPOINTS.USER_ME, {
+      const response = await fetch(API_ENDPOINTS.GET_USER_INFO, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -57,6 +59,8 @@ export default function My() {
             interestJobPrimary: data.data.interestJobPrimary || '',
             interestJobSecondary: data.data.interestJobSecondary || '',
             interestJobTertiary: data.data.interestJobTertiary || '',
+            dreamyReport: data.data.dreamyReport || null,
+            participatedActivities: data.data.participatedActivities || [],
           });
         }
       } else {
@@ -87,6 +91,17 @@ export default function My() {
       router.replace('/login');
     } catch (error) {
       console.error('로그아웃 오류:', error);
+    }
+  };
+
+  // 점수를 3단계로 분류하는 함수
+  const getScoreLevel = (score) => {
+    if (score >= 70) {
+      return { level: '양호', color: '#4CAF50' };
+    } else if (score >= 40) {
+      return { level: '보완', color: '#FF9800' };
+    } else {
+      return { level: '개선', color: '#F44336' };
     }
   };
 
@@ -166,6 +181,70 @@ export default function My() {
           />
           <Text style={styles.reportText}>드림이 리포트</Text>
         </View>
+
+        {/* 드림이 리포트 내용 */}
+        {userInfo.dreamyReport && (() => {
+          const scoreLevel = getScoreLevel(userInfo.dreamyReport.score);
+          return (
+            <View style={styles.reportContent}>
+              <View style={styles.scoreContainer}>
+                <Text style={styles.scoreLabel}>종합 분석</Text>
+                <Text style={[styles.scoreValue, { color: scoreLevel.color }]}>
+                  {scoreLevel.level}
+                </Text>
+              </View>
+
+              <View style={styles.reportSection}>
+                <Text style={styles.reportSectionTitle}>강점</Text>
+                <Text style={styles.reportSectionText}>{userInfo.dreamyReport.strength}</Text>
+              </View>
+
+              <View style={styles.reportSection}>
+                <Text style={styles.reportSectionTitle}>약점</Text>
+                <Text style={styles.reportSectionText}>{userInfo.dreamyReport.weakness}</Text>
+              </View>
+
+              <View style={styles.reportSection}>
+                <Text style={styles.reportSectionTitle}>추천 활동</Text>
+                <Text style={styles.reportSectionText}>{userInfo.dreamyReport.recommendedAction}</Text>
+              </View>
+            </View>
+          );
+        })()}
+
+        {/* 참여 활동 섹션 */}
+        {userInfo.participatedActivities && userInfo.participatedActivities.length > 0 && (
+          <>
+            <View style={styles.activitiesHeader}>
+              <Text style={styles.activitiesTitle}>참여 활동</Text>
+            </View>
+            {userInfo.participatedActivities.map((activity, index) => (
+              <TouchableOpacity
+                key={activity.id || index}
+                style={styles.activityCard}
+                onPress={() => {
+                  // 팀 정보 페이지로 이동
+                  router.push({
+                    pathname: '/Team/teamInfo2',
+                    params: {
+                      teamId: String(activity.id),
+                    },
+                  });
+                }}
+              >
+                <View style={styles.activityContent}>
+                  <Text style={styles.activityTitle}>{activity.title}</Text>
+                  <Text style={styles.activityCategory}>{activity.category}</Text>
+                </View>
+                <Image
+                  source={require('../../assets/images/right.svg')}
+                  style={styles.rightIcon}
+                  contentFit="contain"
+                />
+              </TouchableOpacity>
+            ))}
+          </>
+        )}
 
         <View style={styles.divider} />
 
@@ -354,6 +433,81 @@ const styles = StyleSheet.create({
     height: 40,
     marginRight: 10,
     opacity: 1,
+  },
+  reportContent: {
+    backgroundColor: '#F8F9FA',
+    borderRadius: 12,
+    padding: 20,
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  scoreContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+    paddingBottom: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0',
+  },
+  scoreLabel: {
+    fontSize: 16,
+    fontFamily: 'Pretendard-Medium',
+    color: '#666',
+  },
+  scoreValue: {
+    fontSize: 24,
+    fontFamily: 'Pretendard-SemiBold',
+    color: '#4869EC',
+  },
+  reportSection: {
+    marginBottom: 16,
+  },
+  reportSectionTitle: {
+    fontSize: 14,
+    fontFamily: 'Pretendard-SemiBold',
+    color: '#000',
+    marginBottom: 8,
+  },
+  reportSectionText: {
+    fontSize: 14,
+    fontFamily: 'Pretendard-Regular',
+    color: '#555',
+    lineHeight: 20,
+  },
+  activitiesHeader: {
+    marginTop: 20,
+    marginBottom: 15,
+  },
+  activitiesTitle: {
+    fontSize: 22,
+    fontFamily: 'Pretendard-SemiBold',
+    color: '#000',
+  },
+  activityCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+  },
+  activityContent: {
+    flex: 1,
+  },
+  activityTitle: {
+    fontSize: 16,
+    fontFamily: 'Pretendard-Medium',
+    color: '#000',
+    marginBottom: 4,
+  },
+  activityCategory: {
+    fontSize: 14,
+    fontFamily: 'Pretendard-Regular',
+    color: '#666',
   },
   modalOverlay: {
     flex: 1,

@@ -268,13 +268,13 @@ export default function Index() {
 
         {/* 삭제하기: PENDING일 때만 표시 */}
         {canEdit && (
-          <TouchableOpacity
-            style={styles.topBarButton}
-            onPress={handleDelete}
-            disabled={submitting}
-          >
-            <Text style={[styles.topBarActionText, submitting && styles.disabledText]}>삭제하기</Text>
-          </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.topBarButton}
+          onPress={handleDelete}
+          disabled={submitting}
+        >
+          <Text style={[styles.topBarActionText, submitting && styles.disabledText]}>삭제하기</Text>
+        </TouchableOpacity>
         )}
       </View>
 
@@ -348,12 +348,12 @@ export default function Index() {
 
           {/* 수정하기: PENDING일 때만 표시 */}
           {canEdit && (
-            <Button
-              title={submitting ? '제출 중...' : '수정하기'}
+          <Button
+            title={submitting ? '제출 중...' : '수정하기'}
               onPress={handleSubmit}
               disabled={submitting}
-              style={{ marginTop: 20 }}
-            />
+            style={{ marginTop: 20 }}
+          />
           )}
         </ScrollView>
       </KeyboardAvoidingView>
