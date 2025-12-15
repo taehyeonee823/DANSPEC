@@ -34,7 +34,7 @@ export default function Index() {
   const [submitting, setSubmitting] = useState(false);
   const [teamTitle, setTeamTitle] = useState(params.title ? (Array.isArray(params.title) ? params.title[0] : params.title) : '');
   const [teamDetail, setTeamDetail] = useState(null);
-  const [applicationStatus, setApplicationStatus] = useState(null);
+  const [applicationStatus, setApplicationStatus] = useState(params.status ? (Array.isArray(params.status) ? params.status[0] : params.status) : null);
   const canEdit = applicationStatus === 'PENDING';
 
   useEffect(() => {
@@ -273,13 +273,15 @@ export default function Index() {
           />
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.topBarButton}
-          onPress={handleDelete}
-          disabled={submitting}
-        >
-          <Text style={[styles.topBarActionText, submitting && styles.disabledText]}>삭제하기</Text>
-        </TouchableOpacity>
+        {canEdit && (
+          <TouchableOpacity
+            style={styles.topBarButton}
+            onPress={handleDelete}
+            disabled={submitting}
+          >
+            <Text style={[styles.topBarActionText, submitting && styles.disabledText]}>삭제하기</Text>
+          </TouchableOpacity>
+        )}
       </View>
 
       <KeyboardAvoidingView behavior="height" style={styles.body}>
@@ -350,19 +352,14 @@ export default function Index() {
             editable={canEdit}
           />
 
-          <Button
-            title={submitting ? '제출 중...' : '수정하기'}
-            onPress={() => {
-              if (!canEdit) {
-                Alert.alert('수정 불가', '지원 상태가 PENDING일 때만 수정할 수 있습니다.');
-                return;
-              }
-
-              handleSubmit();
-            }}
-            disabled={submitting || !canEdit}
-            style={{ marginTop: 20 }}
-          />
+          {canEdit && (
+            <Button
+              title={submitting ? '제출 중...' : '수정하기'}
+              onPress={handleSubmit}
+              disabled={submitting}
+              style={{ marginTop: 20 }}
+            />
+          )}
         </ScrollView>
       </KeyboardAvoidingView>
     </View>

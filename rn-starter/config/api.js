@@ -58,5 +58,6 @@ export const API_ENDPOINTS = {
   // 사용자 정보 관련 API
   USER_ME: `${EVENT_SERVER_URL}/api/users/me`,
   UPDATE_USER_INFO: `${EVENT_SERVER_URL}/api/users/me`,
+  UPDATE_USER_PASSWORD: `${EVENT_SERVER_URL}/api/users/password/change`,
 };
 

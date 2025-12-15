@@ -5,6 +5,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import NaviBar from '../naviBar';
 import CategoryChips from '@/components/CategoryChips';
 import TeamApplyBox from './teamApplyBox';
+import TeamApplyBox2 from './teamApplyBox2';
 import CategoryTab from './categoryTab';
 import { API_ENDPOINTS } from '@/config/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -221,8 +222,14 @@ export default function Team() {
             ) : myApplications.length === 0 ? (
               <Text style={{ textAlign: 'center', marginTop: 40 }}>지원글이 없습니다.</Text>
             ) : (
-              myApplications.map((app) => (
-                <TeamApplyBox
+              myApplications.map((app) => {
+                console.log('내 지원글 app 객체:', {
+                  applicationId: app.applicationId,
+                  status: app.status,
+                  teamTitle: app.teamTitle,
+                });
+                return (
+                <TeamApplyBox2
                   key={app.applicationId ?? `${app.teamId}-${app.createdAt}`}
                   dueDate={'-'}
                   title={app.teamTitle || '(제목 없음)'}
@@ -244,7 +251,8 @@ export default function Team() {
                     });
                   }}
                 />
-              ))
+              );
+              })
             )}
           </>
         )}
