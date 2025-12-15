@@ -7,9 +7,6 @@ import { Swipeable } from 'react-native-gesture-handler';
 import { useWebSocket } from '@/hooks/useWebSocket';
 import AlarmTab from './alarmTab';
 
-// ⚠️ 실제로는 로그인 상태에서 가져온 사용자 ID를 사용해야 합니다.
-const CURRENT_USER_ID = 'user-123';
-
 // 상대 시간을 계산하는 함수
 const getRelativeTime = (timestamp) => {
     const now = new Date();
@@ -37,8 +34,8 @@ const getRelativeTime = (timestamp) => {
 const NotificationScreen = () => {
     const router = useRouter();
     const insets = useSafeAreaInsets();
-    // 웹소켓 훅을 통해 실시간 알림 데이터를 가져옴
-    const { notifications, deleteNotification } = useWebSocket(CURRENT_USER_ID);
+    // SSE 훅을 통해 실시간 알림 데이터를 가져옴 (액세스 토큰으로 사용자 식별)
+    const { notifications, deleteNotification } = useWebSocket();
 
     // 읽지 않은 알림 개수 계산 ('read: false'인 항목)
     const unreadCount = notifications.filter(n => !n.read).length;
