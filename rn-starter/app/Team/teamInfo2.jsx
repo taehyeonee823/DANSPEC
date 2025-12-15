@@ -5,7 +5,8 @@ import { Text, View, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpac
 import { Image } from 'expo-image';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { API_ENDPOINTS } from '@/config/api';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { fetchWithAuth } from '@/utils/auth';
+import { dedupeRequest } from '@/utils/requestCache';
 import Button from '../../components/Button';
 
 export default function TeamInfo() {
@@ -51,56 +52,23 @@ export default function TeamInfo() {
 
       try {
         setLoading(true);
-        const token = await AsyncStorage.getItem('accessToken');
 
-        if (!token) {
-          console.warn('액세스 토큰이 없습니다.');
-          setLoading(false);
-          return;
-        }
-
-        // 팀 정보 가져오기
-        const teamUrl = API_ENDPOINTS.GET_TEAM_DETAIL(teamIdNum);
-        const teamResponse = await fetch(teamUrl, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
+        const fetchedTeam = await dedupeRequest(
+          `teamDetail:${teamIdNum}`,
+          async () => {
+            const teamUrl = API_ENDPOINTS.GET_TEAM_DETAIL(teamIdNum);
+            const res = await fetchWithAuth(teamUrl, { method: 'GET' });
+            if (!res.ok) {
+              const t = await res.text().catch(() => '');
+              throw new Error(`GET_TEAM_DETAIL failed: ${res.status} ${t.slice(0, 120)}`);
+            }
+            const json = await res.json();
+            return (json && json.success && json.data) ? json.data : json;
           },
-        });
+          { ttlMs: 3000 }
+        );
 
-        const teamText = await teamResponse.text();
-
-        if (!teamResponse.ok) {
-          console.error('API 에러:', teamResponse.status, teamText);
-          setLoading(false);
-          return;
-        }
-
-        if (!teamText || teamText.trim().length === 0) {
-          console.warn('빈 응답');
-          setLoading(false);
-          return;
-        }
-
-        let teamData;
-        try {
-          teamData = JSON.parse(teamText);
-        } catch (e) {
-          console.error('JSON 파싱 실패:', e);
-          setLoading(false);
-          return;
-        }
-
-        // API 응답이 {success: true, data: {...}} 형식이므로 data.data를 사용
-        let fetchedTeam;
-        if (teamData.success && teamData.data) {
-          fetchedTeam = teamData.data;
-        } else {
-          fetchedTeam = teamData;
-        }
-
-        // leader/hasApplied 
+        // leader/hasApplied
         if (typeof fetchedTeam?.hasApplied !== 'undefined') {
           setHasApplied(!!fetchedTeam.hasApplied);
         }
@@ -113,28 +81,11 @@ export default function TeamInfo() {
 
         // 내가 쓴 모집글인 경우 사용자 정보도 가져오기
         if (isMyTeam) {
-          const userUrl = API_ENDPOINTS.USER_ME;
-          const userResponse = await fetch(userUrl, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`,
-            },
-          });
-
-          const userText = await userResponse.text();
-
-          if (userResponse.ok && userText && userText.trim().length > 0) {
-            try {
-              const userData = JSON.parse(userText);
-              if (userData.success && userData.data) {
-                setUserInfo(userData.data);
-              } else {
-                setUserInfo(userData);
-              }
-            } catch (e) {
-              console.error('사용자 정보 JSON 파싱 실패:', e);
-            }
+          const userRes = await fetchWithAuth(API_ENDPOINTS.USER_ME, { method: 'GET' });
+          if (userRes.ok) {
+            const json = await userRes.json().catch(() => null);
+            const u = json && json.success && json.data ? json.data : json;
+            if (u) setUserInfo(u);
           }
         }
       } catch (error) {
@@ -340,8 +291,6 @@ export default function TeamInfo() {
             }}
           />
 
-          {/* 
-...existing code... */}
           <Modal
             visible={showAlreadyAppliedModal}
             transparent={true}

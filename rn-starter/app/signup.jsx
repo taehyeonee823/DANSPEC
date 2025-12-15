@@ -49,7 +49,7 @@ export default function SignUpScreen() {
   const [interestJobTertiary, setInterestJobTertiary] = useState('');
   const [tagline, setTagline] = useState('');
 
-  const grades = ['1', '2', '3', '4'];
+  const grades = ['1', '2', '3', '4', '5', '6'];
 
   const jukjeonColleges = [
     '문과대학','법과대학','경영경제대학','사회과학대학','공과대학','SW융합대학','사범대학','음악·예술대학'

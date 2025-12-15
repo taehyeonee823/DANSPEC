@@ -79,7 +79,7 @@ export default function SignUpScreen() {
   const [thirdJobPreference, setThirdJobPreference] = useState('');
   const [introduction, setIntroduction] = useState('');
 
-  const grades = ['1', '2', '3', '4'];
+  const grades = ['1', '2', '3', '4', '5', '6'];
 
   const jukjeonDepartments = [
     '문과대학','법과대학','경영경제대학','사회과학대학','공과대학','SW융합대학','사범대학','음악·예술대학'
@@ -169,7 +169,18 @@ export default function SignUpScreen() {
       const data = await response.json();
 
       if (response.ok && data.success) {
-        showModal('✅ 성공', '회원정보가 수정되었습니다.', true);
+        // 수정 반영 확인용 GET(응답은 사용하지 않음)
+        await fetch(API_ENDPOINTS.USER_ME, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }).catch(() => {});
+
+        // 성공 모달 없이 바로 이동
+        router.push('./modUserInfoConfirmed');
+        return;
       } else {
         showModal('⚠️ 오류', data.message || '회원정보 수정에 실패했습니다.');
       }
