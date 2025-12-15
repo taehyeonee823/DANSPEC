@@ -5,7 +5,8 @@ import { Text, View, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpac
 import { Image } from 'expo-image';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { API_ENDPOINTS } from '@/config/api';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { fetchWithAuth } from '@/utils/auth';
+import { dedupeRequest } from '@/utils/requestCache';
 import Button from '../../components/Button';
 
 export default function TeamInfo() {
@@ -32,157 +33,83 @@ export default function TeamInfo() {
 
   const [team, setTeam] = useState(initialTeamData);
   const [userInfo, setUserInfo] = useState(null);
-  const [loading, setLoading] = useState(true);
+  // 초기 데이터가 있으면 첫 페인트는 로딩으로 막지 않음
+  const [loading, setLoading] = useState(!initialTeamData);
 
   useEffect(() => {
+    let cancelled = false;
+
     const fetchData = async () => {
       if (!teamId) {
         console.warn('팀 ID가 없습니다.');
-        setLoading(false);
+        if (!cancelled) setLoading(false);
         return;
       }
 
       const teamIdNum = Number(teamId);
       if (Number.isNaN(teamIdNum)) {
         console.error('유효하지 않은 팀 ID:', teamId);
-        setLoading(false);
+        if (!cancelled) setLoading(false);
         return;
       }
 
       try {
-        setLoading(true);
-        const token = await AsyncStorage.getItem('accessToken');
+        // 이미 initialTeamData가 있으면 로딩 UI를 띄우지 않고 백그라운드 갱신
+        if (!initialTeamData && !cancelled) setLoading(true);
 
-        if (!token) {
-          console.warn('액세스 토큰이 없습니다.');
-          setLoading(false);
-          return;
-        }
-
-        // 팀 정보 가져오기
-        const teamUrl = API_ENDPOINTS.GET_TEAM_DETAIL(teamIdNum);
-        const teamResponse = await fetch(teamUrl, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
+        const fetchedTeam = await dedupeRequest(
+          `teamDetail:${teamIdNum}`,
+          async () => {
+            const teamUrl = API_ENDPOINTS.GET_TEAM_DETAIL(teamIdNum);
+            const res = await fetchWithAuth(teamUrl, { method: 'GET' });
+            if (!res.ok) {
+              const t = await res.text().catch(() => '');
+              throw new Error(`GET_TEAM_DETAIL failed: ${res.status} ${t.slice(0, 120)}`);
+            }
+            const json = await res.json();
+            return (json && json.success && json.data) ? json.data : json;
           },
-        });
+          { ttlMs: 5000 }
+        );
 
-        const teamText = await teamResponse.text();
+        if (cancelled) return;
 
-        if (!teamResponse.ok) {
-          console.error('API 에러:', teamResponse.status, teamText);
-          setLoading(false);
-          return;
-        }
-
-        if (!teamText || teamText.trim().length === 0) {
-          console.warn('빈 응답');
-          setLoading(false);
-          return;
-        }
-
-        let teamData;
-        try {
-          teamData = JSON.parse(teamText);
-        } catch (e) {
-          console.error('JSON 파싱 실패:', e);
-          setLoading(false);
-          return;
-        }
-
-        // API 응답이 {success: true, data: {...}} 형식이므로 data.data를 사용
-        let fetchedTeam;
-        if (teamData.success && teamData.data) {
-          fetchedTeam = teamData.data;
-        } else {
-          fetchedTeam = teamData;
-        }
-
-        // leader/hasApplied 
+        // leader/hasApplied
         if (typeof fetchedTeam?.hasApplied !== 'undefined') {
           setHasApplied(!!fetchedTeam.hasApplied);
         }
 
         // 전달받은 초기 데이터와 API 데이터를 병합 (API 데이터 우선)
-        setTeam(prevTeam => ({
+        setTeam((prevTeam) => ({
           ...prevTeam,
-          ...fetchedTeam
+          ...fetchedTeam,
         }));
 
-        // 내가 쓴 모집글인 경우 사용자 정보도 가져오기
-        if (isMyTeam) {
-          const userUrl = API_ENDPOINTS.USER_ME;
-          const userResponse = await fetch(userUrl, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`,
-            },
+        // leader=true면 teamInfo 화면으로 교체(이동 전 API 호출 금지 정책 대응)
+        if (fetchedTeam?.leader === true) {
+          router.replace({
+            pathname: '/Team/teamInfo',
+            params: { teamId: String(teamIdNum) },
           });
-
-          const userText = await userResponse.text();
-
-          if (userResponse.ok && userText && userText.trim().length > 0) {
-            try {
-              const userData = JSON.parse(userText);
-              if (userData.success && userData.data) {
-                setUserInfo(userData.data);
-              } else {
-                setUserInfo(userData);
-              }
-            } catch (e) {
-              console.error('사용자 정보 JSON 파싱 실패:', e);
-            }
-          }
+          return;
         }
+
+        // isMyTeam일 때만 USER_ME를 호출하던 로직은 체감 지연이 커서 제거.
+        // 필요 정보는 fetchedTeam.leader* 필드로 표시하도록 유지.
       } catch (error) {
         console.error('네트워크 에러:', error);
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
 
     fetchData();
+    return () => {
+      cancelled = true;
+    };
   }, [teamId, isMyTeam]);
 
-  const deleteTeam = async () => {
-    if (!teamId) {
-      return;
-    }
-
-    try {
-      const token = await AsyncStorage.getItem('accessToken');
-      if (!token) {
-        return;
-      }
-
-      const teamIdNum = Number(teamId);
-      if (Number.isNaN(teamIdNum)) {
-        return;
-      }
-
-      const deleteUrl = API_ENDPOINTS.DELETE_TEAM(teamIdNum);
-      const response = await fetch(deleteUrl, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        return;
-      }
-
-      router.replace('/Team/teamDeletedConfirmed');
-    } catch (error) {
-      console.error('모집글 삭제 오류:', error);
-    }
-  };
-
-  if (loading) {
+  if (loading && !team) {
     return (
       <View style={styles.center}>
         <Text>로딩 중...</Text>
@@ -340,8 +267,6 @@ export default function TeamInfo() {
             }}
           />
 
-          {/* 
-...existing code... */}
           <Modal
             visible={showAlreadyAppliedModal}
             transparent={true}

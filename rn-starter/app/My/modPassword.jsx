@@ -55,7 +55,9 @@ export default function ModPassword() {
     
     const data = await response.json();
     if (response.ok) {
-      showModal('✅ 성공', '비밀번호가 변경되었습니다.', true);
+      // 성공 모달 없이 바로 이동
+      router.push('./modPasswordConfirm');
+      return;
     } else {
       showModal('⚠️ 알림', data.message || '비밀번호 변경에 실패했습니다.');
     }
