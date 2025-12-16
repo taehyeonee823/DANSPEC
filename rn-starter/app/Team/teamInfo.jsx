@@ -30,6 +30,7 @@ export default function TeamInfo() {
   const [loading, setLoading] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showMemberCountBlockedModal, setShowMemberCountBlockedModal] = useState(false);
+  const [showRecruitmentClosedModal, setShowRecruitmentClosedModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -138,6 +139,20 @@ export default function TeamInfo() {
 
     fetchData();
   }, [teamId, isMyTeam]);
+
+  // 모집 마감 체크
+  useEffect(() => {
+    if (!team) return;
+
+    const currentMemberCount = team.currentMemberCount || 0;
+    const capacity = team.capacity || 0;
+    const recruitmentEndDate = team.recruitmentEndDate;
+
+    // capacity == currentMemberCount 이거나 recruitmentEndDate가 지났으면 모달 표시
+    if (capacity === currentMemberCount || (recruitmentEndDate && new Date() > new Date(recruitmentEndDate))) {
+      setShowRecruitmentClosedModal(true);
+    }
+  }, [team]);
 
   const handleConfirmDelete = async () => {
     setShowDeleteModal(false);
@@ -384,7 +399,7 @@ export default function TeamInfo() {
                   style={styles.alertIcon}
                   contentFit="contain"
                 />
-                <Text style={styles.modalTitle}>모집글을 삭제하겠어요?</Text>
+                <Text style={styles.modalTitle}>모집글을 삭제할까요?</Text>
                 <View style={styles.modalButtonContainer}>
                   <TouchableOpacity
                     style={[styles.modalButton, styles.confirmButton]}
@@ -422,6 +437,33 @@ export default function TeamInfo() {
                   <TouchableOpacity
                     style={[styles.modalButton, styles.confirmButton]}
                     onPress={() => setShowMemberCountBlockedModal(false)}
+                  >
+                    <Text style={styles.confirmButtonText}>확인</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
+
+          {/* 팀원 모집 마감 모달 */}
+          <Modal
+            visible={showRecruitmentClosedModal}
+            transparent={true}
+            animationType="fade"
+            onRequestClose={() => setShowRecruitmentClosedModal(false)}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContainer}>
+                <Image
+                  source={require('@/assets/images/info.svg')}
+                  style={styles.alertIcon}
+                  contentFit="contain"
+                />
+                <Text style={styles.modalTitle}>팀원 모집이 마감되었습니다</Text>
+                <View style={styles.modalButtonContainer}>
+                  <TouchableOpacity
+                    style={[styles.modalButton, styles.confirmButton]}
+                    onPress={() => setShowRecruitmentClosedModal(false)}
                   >
                     <Text style={styles.confirmButtonText}>확인</Text>
                   </TouchableOpacity>

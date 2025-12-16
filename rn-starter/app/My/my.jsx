@@ -290,7 +290,7 @@ export default function My() {
               style={styles.alertIcon}
               contentFit="contain"
             />
-            <Text style={styles.modalTitle}>로그아웃 하시겠어요?</Text>
+            <Text style={styles.modalTitle}>로그아웃을 진행할까요?</Text>
             <View style={styles.modalButtonContainer}>
               <TouchableOpacity
                 style={[styles.modalButton, styles.cancelButton]}

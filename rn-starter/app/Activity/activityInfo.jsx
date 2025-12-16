@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, ScrollView, Dimensions,Image, Linking } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, ScrollView, Dimensions, Linking, Image as RNImage } from 'react-native';
+import { Image } from 'expo-image';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
 import { API_ENDPOINTS } from '@/config/api';
@@ -331,9 +332,16 @@ export default function ActivityInfo() {
                 )}
                 <Text style={styles.teamCardTitle}>{team.title}</Text>
                 <Text style={styles.teamCardTag}>{team.promotionText}</Text>
-                <Text style={styles.teamCardTag}>
-                  {`현재 인원: ${team.currentMemberCount ?? team.currentMember ?? 0} / ${team.capacity ?? '-'}`}
-                </Text>
+                <View style={styles.memberCountRow}>
+                  <Image
+                    source={require('@/assets/images/users.svg')}
+                    style={styles.usersIcon}
+                    contentFit="contain"
+                  />
+                  <Text style={styles.memberCountText}>
+                    {`${team.currentMemberCount ?? team.currentMember ?? 0} / ${team.capacity ?? '-'}`}
+                  </Text>
+                </View>
               </TouchableOpacity>
             ))
           )}
@@ -565,7 +573,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E0E0E0',
     borderRadius: 12,
-    padding: 16,
+    padding: 14,
     marginBottom: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -599,7 +607,21 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: 'Pretendard-regular',
     color: '#000',
-    marginBottom: 3,
+    marginBottom: 5,
+  },
+  memberCountRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6
+  },
+  usersIcon: {
+    width: 16,
+    height: 16,
+  },
+  memberCountText: {
+    fontSize: 13,
+    fontFamily: 'Pretendard-regular',
+    color: '#000',
   },
   loadingText: {
     fontSize: 14,
@@ -623,18 +645,18 @@ const AutoHeightImage = ({ source, width, style }) => {
   React.useEffect(() => {
     if (source?.uri) {
       // 웹 이미지(URL) 크기 계산
-      Image.getSize(source.uri, (w, h) => {
+      RNImage.getSize(source.uri, (w, h) => {
         setHeight(h * (width / w));
       });
     } else {
       // 로컬 파일 크기 계산
-      const { width: w, height: h } = Image.resolveAssetSource(source);
+      const { width: w, height: h } = RNImage.resolveAssetSource(source);
       setHeight(h * (width / w));
     }
   }, [source, width]);
 
   return (
-    <Image
+    <RNImage
       source={source}
       style={[style, { width: width, height: height }]}
       resizeMode="contain"
