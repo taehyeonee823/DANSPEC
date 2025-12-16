@@ -206,7 +206,7 @@ export default function Home() {
           </View>
         </ScrollView>
       </View>
-      <Text style={styles.title}>{userName} 님을 위한 맞춤활동 </Text> 
+      <Text style={styles.title}>{userName}님을 위한 맞춤활동 </Text> 
       </View>
 
       {/* 스크롤 가능한 부분: 활동 목록 */}
@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
     opacity: 0.4
   },
   title: {
-    fontSize: 24,
+    fontSize: 22,
     fontFamily: 'Pretendard-SemiBold',
     marginTop: 10,
     marginLeft: 20,
@@ -324,7 +324,7 @@ const styles = StyleSheet.create({
     textAlign: 'left',
   },
   activitiesContainer: {
-    marginTop: 16,
+    marginTop: 14,
     paddingBottom: 20,
   },
   emptyStateText: {
