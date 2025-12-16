@@ -206,11 +206,14 @@ export default function Home() {
           </View>
         </ScrollView>
       </View>
-      <Text style={styles.title}>{userName}님을 위한 맞춤활동 </Text> 
       </View>
 
       {/* 스크롤 가능한 부분: 활동 목록 */}
       <ScrollView style={styles.scrollContent} contentContainerStyle={styles.scrollContentContainer}>
+      {/* 오늘의 미션 */}
+      <Text style={styles.title}>오늘의 맞춤미션</Text> 
+      <View style={styles.missionContainer}></View>
+      <Text style={styles.title}>{userName}님을 위한 맞춤활동 </Text> 
       {/*api 연결 후 맞춤형 리스트로 변경*/}
       <View style={styles.activitiesContainer}>
         {loadingActivities ? (
@@ -244,6 +247,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
+  missionContainer: {
+    marginTop: 10,
+    marginLeft: 20,
+    marginRight: 20,
+    padding: 20,
+    marginBottom: 10,
+    backgroundColor: '#F0F0F0',
+    borderRadius: 10,
+  },
   fixedHeader: {
     position: 'absolute',
     top: 0,
@@ -255,7 +267,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     flex: 1,
     marginBottom: 70,
-    marginTop: 390,
+    marginTop: 340,
   },
   scrollContentContainer: {
     paddingBottom: 20,
