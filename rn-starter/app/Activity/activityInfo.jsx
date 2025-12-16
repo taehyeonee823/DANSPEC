@@ -76,7 +76,8 @@ export default function ActivityInfo() {
 
   useEffect(() => {
     fetchTeams();
-  }, [fetchTeams]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [eventData?.id]);
 
   useEffect(() => {
     const fetchUserInfoAndMyTeams = async () => {
@@ -133,12 +134,6 @@ export default function ActivityInfo() {
 
     fetchUserInfoAndMyTeams();
   }, []);
-
-  useFocusEffect(
-    useCallback(() => {
-      fetchTeams();
-    }, [fetchTeams])
-  );
 
   // 내가 모집중인 팀인지 확인
   const isMyTeam = (team) => {

@@ -137,7 +137,7 @@ export default function My() {
           <Image
             source={hasNotification
               ? require('../../assets/images/notificationBell.svg')
-              : require('../../assets/images/bell.svg')
+              : require('../../assets/images/bellDot.svg')
             }
             style={{ width: 33, height: 33 }}
             contentFit="contain"
@@ -438,7 +438,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8F9FA',
     borderRadius: 12,
     padding: 20,
-    marginTop: 10,
+    marginTop: 0,
     marginBottom: 20,
   },
   scoreContainer: {

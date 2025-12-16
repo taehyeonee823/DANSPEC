@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, StyleSheet, TouchableOpacity, Image, ScrollView, Text } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import { useFocusEffect } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ApplierCard from './applierCard';
 import { API_ENDPOINTS } from '@/config/api';
@@ -202,16 +201,8 @@ export default function ApplyCheck() {
       fetchTeamDetail();
       fetchTeamApplications();
     }
-  }, [teamId, fetchTeamDetail, fetchTeamApplications]);
-
-  useFocusEffect(
-    useCallback(() => {
-      if (teamId) {
-        fetchTeamDetail();
-        fetchTeamApplications();
-      }
-    }, [teamId, fetchTeamDetail, fetchTeamApplications])
-  );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [teamId]);
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
