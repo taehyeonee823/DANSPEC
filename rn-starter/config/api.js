@@ -39,6 +39,10 @@ export const API_ENDPOINTS = {
     return `${EVENT_SERVER_URL}/api/applications${query ? `?${query}` : ''}`;
   },
 
+  // 홈 관련 API
+  GET_AI_MISSION: `${EVENT_SERVER_URL}/api/ai/mission`,
+  AI_CHATBOT: `${EVENT_SERVER_URL}/api/ai/chat`,
+
   // 팀 지원자 관련 API
   GET_TEAM_APPLICATIONS: (teamId) => `${EVENT_SERVER_URL}/api/teams/${teamId}/applications`,
   UPDATE_APPLICATION: (applicationId, isApproved) => `${EVENT_SERVER_URL}/api/teams/applications/${applicationId}?isApproved=${isApproved}`,
