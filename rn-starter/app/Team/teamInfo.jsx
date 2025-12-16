@@ -472,7 +472,7 @@ export default function TeamInfo() {
                   style={styles.alertIcon}
                   contentFit="contain"
                 />
-                <Text style={styles.modalTitle}>팀원 모집이 마감되었습니다</Text>
+                <Text style={styles.modalTitle}>팀원 모집이 마감되었어요.</Text>
                 <View style={styles.modalButtonContainer}>
                   <TouchableOpacity
                     style={[styles.modalButton, styles.confirmButton]}

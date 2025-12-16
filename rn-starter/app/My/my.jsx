@@ -216,7 +216,7 @@ export default function My() {
         {userInfo.participatedActivities && userInfo.participatedActivities.length > 0 && (
           <>
             <View style={styles.activitiesHeader}>
-              <Text style={styles.activitiesTitle}>참여 활동</Text>
+              <Text style={styles.activitiesTitle}>참여한 활동</Text>
             </View>
             {userInfo.participatedActivities.map((activity, index) => (
               <TouchableOpacity
@@ -421,12 +421,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 30,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   reportText: {
     fontSize: 22,
     fontFamily: 'Pretendard-SemiBold',
-    color: '#000',
+    color: '#000'
   },
   dreame: {
     width: 40,
@@ -438,8 +438,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8F9FA',
     borderRadius: 12,
     padding: 20,
-    marginTop: 0,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   scoreContainer: {
     flexDirection: 'row',
