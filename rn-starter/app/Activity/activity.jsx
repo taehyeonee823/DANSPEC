@@ -165,7 +165,7 @@ export default function Activity() {
               style={styles.searchInput}
               value={searchQuery}
               onChangeText={setSearchQuery}
-              placeholder="검색어 입력"
+              placeholder="검색어를 입력하세요"
               placeholderTextColor="#999"
               autoCapitalize="none"
               autoCorrect={false}
