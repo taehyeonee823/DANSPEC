@@ -363,9 +363,9 @@ const styles = StyleSheet.create({
   floatingButton: {
     position: 'absolute',
     right: 20,
-    bottom: 130,
-    width: 56,
-    height: 56,
+    bottom: 110,
+    width: 60,
+    height: 60,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
