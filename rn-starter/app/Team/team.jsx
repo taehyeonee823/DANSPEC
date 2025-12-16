@@ -180,27 +180,15 @@ export default function Team() {
 
   useEffect(() => {
     fetchMyTeams();
-  }, [fetchMyTeams]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (activeTabIndex === 1) {
       fetchMyApplications();
     }
-  }, [activeTabIndex, fetchMyApplications]);
-
-  useFocusEffect(
-    useCallback(() => {
-      if (activeTabIndex === 1) {
-        fetchMyApplications();
-      }
-    }, [activeTabIndex, fetchMyApplications])
-  );
-
-  useFocusEffect(
-    useCallback(() => {
-      fetchMyTeams();
-    }, [fetchMyTeams])
-  );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTabIndex]);
 
   return (
     <View style={styles.container}>

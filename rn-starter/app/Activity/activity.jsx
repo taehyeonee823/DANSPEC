@@ -26,17 +26,23 @@ export default function Activity() {
     "교내": "SCHOOL",
   };
 
-  // API에서 데이터 가져오기
+  // API에서 데이터 가져오기 (디바운싱 적용: 500ms 대기)
   useEffect(() => {
-    fetchEvents();
+    const timer = setTimeout(() => {
+      fetchEvents();
+    }, 500);
+
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDepartment, selectedCategory]);
 
-  // 화면 포커스 시 최신 데이터 재조회 (기타 모집글 작성 후 복귀 등)
-  useFocusEffect(
-    useCallback(() => {
-      fetchEvents();
-    }, [selectedDepartment, selectedCategory])
-  );
+  // 중복 호출 방지: useEffect가 이미 필터 변경 시 호출하므로 useFocusEffect 재조회는 제거
+  // (필요하면 pull-to-refresh 또는 명시적 새로고침 버튼으로 대체 권장)
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     fetchEvents();
+  //   }, [selectedDepartment, selectedCategory])
+  // );
 
   const fetchEvents = async () => {
     if (selectedCategory === "기타") {

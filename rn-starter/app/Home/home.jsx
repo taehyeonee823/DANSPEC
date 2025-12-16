@@ -14,6 +14,7 @@ export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [userName, setUserName] = useState('사용자');
   const [activities, setActivities] = useState([]);
+  const [loadingActivities, setLoadingActivities] = useState(true);
   const scrollViewRef = useRef(null);
 
   // 사용자 정보 불러오기
@@ -56,7 +57,10 @@ export default function Home() {
 
   // 활동 데이터 불러오기
   useEffect(() => {
+    let cancelled = false;
+
     const loadActivities = async () => {
+      setLoadingActivities(true);
       try {
         const token = await AsyncStorage.getItem('accessToken');
         const response = await fetch(API_ENDPOINTS.RECOMMENDED_EVENTS, {
@@ -70,10 +74,10 @@ export default function Home() {
         if (response.ok) {
           const data = await response.json();
 
-          // data가 배열인지 확인
-          const activitiesArray = Array.isArray(data) ? data : (Array.isArray(data.data) ? data.data : []);
+          const activitiesArray = Array.isArray(data)
+            ? data
+            : (Array.isArray(data.data) ? data.data : []);
 
-          // 각 카테고리에서 하나씩 선택
           const categories = ['CONTEST', 'EXTERNAL', 'SCHOOL'];
           const selectedActivities = [];
 
@@ -84,13 +88,22 @@ export default function Home() {
             }
           });
 
-          setActivities(selectedActivities);
+          if (!cancelled) setActivities(selectedActivities);
+        } else {
+          if (!cancelled) setActivities([]);
         }
       } catch (error) {
         console.error('활동 데이터 불러오기 실패:', error);
+        if (!cancelled) setActivities([]);
+      } finally {
+        if (!cancelled) setLoadingActivities(false);
       }
     };
+
     loadActivities();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   // 슬라이드 자동 전환
@@ -200,18 +213,24 @@ export default function Home() {
       <ScrollView style={styles.scrollContent} contentContainerStyle={styles.scrollContentContainer}>
       {/*api 연결 후 맞춤형 리스트로 변경*/}
       <View style={styles.activitiesContainer}>
-        {activities.map((activity, index) => (
-          <ActivityApplyBox
-            key={activity.id || index}
-            event={activity}
-            tag={activity.category}
-            title={activity.title}
-            summarizedDescription={activity.summarizedDescription || activity.description}
-            dueDate={activity.dueDate}
-            startDate={activity.startDate}
-            endDate={activity.endDate}
-          />
-        ))}
+        {loadingActivities ? (
+          <Text style={styles.emptyStateText}>로딩중...</Text>
+        ) : activities.length === 0 ? (
+          <Text style={styles.emptyStateText}>모집중인 글이 없습니다</Text>
+        ) : (
+          activities.map((activity, index) => (
+            <ActivityApplyBox
+              key={activity.id || index}
+              event={activity}
+              tag={activity.category}
+              title={activity.title}
+              summarizedDescription={activity.summarizedDescription || activity.description}
+              dueDate={activity.dueDate}
+              startDate={activity.startDate}
+              endDate={activity.endDate}
+            />
+          ))
+        )}
       </View>
       </ScrollView>
 
@@ -307,5 +326,12 @@ const styles = StyleSheet.create({
   activitiesContainer: {
     marginTop: 16,
     paddingBottom: 20,
+  },
+  emptyStateText: {
+    textAlign: 'center',
+    color: '#666',
+    marginTop: 16,
+    fontSize: 14,
+    fontFamily: 'Pretendard-Medium',
   },
 });

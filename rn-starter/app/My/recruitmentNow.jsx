@@ -12,11 +12,11 @@ export default function RecruitmentNow() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const [teamData, setTeamData] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const fetchTeams = useCallback(async () => {
+    setLoading(true);
     try {
-      setLoading(true);
       const token = await AsyncStorage.getItem('accessToken');
       if (!token) {
         console.warn('액세스 토큰이 없습니다. 로그인 후 다시 시도하세요.');
@@ -24,9 +24,7 @@ export default function RecruitmentNow() {
         return;
       }
 
-      // 수신함: 내가 지원한 팀 모집글 조회 (또는 받은 요청들)
-      // TODO: API 엔드포인트 확인 필요 - 현재는 모든 팀을 가져오도록 설정
-      const url = API_ENDPOINTS.GET_TEAMS({myPosts: true});
+      const url = API_ENDPOINTS.GET_TEAMS({ myPosts: true });
       console.log('수신함 팀 조회 URL:', url);
       const response = await fetch(url, {
         headers: {
@@ -70,13 +68,8 @@ export default function RecruitmentNow() {
 
   useEffect(() => {
     fetchTeams();
-  }, [fetchTeams]);
-
-  useFocusEffect(
-    useCallback(() => {
-      fetchTeams();
-    }, [fetchTeams])
-  );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // status 계산 함수 (정원 도달 시 마감)
   const today = new Date();
@@ -136,7 +129,7 @@ export default function RecruitmentNow() {
           <>
             {activeTeams.length === 0 && closedTeams.length === 0 ? (
               <View style={styles.emptyContainer}>
-                <Text style={styles.emptyText}>수신된 팀 모집 요청이 없습니다.</Text>
+                <Text style={styles.emptyText}>모집중인 글이 없습니다</Text>
               </View>
             ) : (
               <>
