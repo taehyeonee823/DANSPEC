@@ -64,5 +64,5 @@ export const API_ENDPOINTS = {
   // 알림 관련 API
   NOTIFICATIONS: `${EVENT_SERVER_URL}/api/notifications`,
   NOTIFICATIONS_SUBSCRIBE: `${EVENT_SERVER_URL}/api/notifications/subscribe`,
-};
 
+}
