@@ -314,9 +314,15 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginLeft: 20,
     marginRight: 20,
+<<<<<<< HEAD
     padding: 20,
     marginBottom: 10,
     backgroundColor: '#F5F5F5',
+=======
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: '#F0F0F0',
+>>>>>>> 3b4632ada183f11fd77ea387558f07aec50959b5
     borderRadius: 10,
   },
   missionText: {
@@ -418,9 +424,9 @@ const styles = StyleSheet.create({
   floatingButton: {
     position: 'absolute',
     right: 20,
-    bottom: 130,
-    width: 56,
-    height: 56,
+    bottom: 110,
+    width: 60,
+    height: 60,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',

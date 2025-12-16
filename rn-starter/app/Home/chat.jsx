@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Animated } from 'react-native';
 import { Image } from 'expo-image';
@@ -5,16 +6,35 @@ import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { API_ENDPOINTS } from '@/config/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+=======
+import React, { useState, useRef, useEffect } from "react";
+import {View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform} from "react-native";
+import { Image } from "expo-image";
+import { useRouter } from "expo-router";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { API_ENDPOINTS } from "@/config/api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+>>>>>>> 3b4632ada183f11fd77ea387558f07aec50959b5
 
 export default function Chat() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const [messages, setMessages] = useState([
-    { id: '1', text: '안녕하세요! 무엇을 도와드릴까요?', isBot: true, timestamp: new Date() },
+    {
+      id: "1",
+      text: "안녕하세요! 무엇을 도와드릴까요?",
+      isBot: true,
+      timestamp: new Date(),
+    },
   ]);
+<<<<<<< HEAD
   const [inputText, setInputText] = useState('');
   const [outputText, setOutputText] = useState('');
   const [loadingDots, setLoadingDots] = useState('');
+=======
+  const [inputText, setInputText] = useState("");
+  const [outputText, setOutputText] = useState("");
+>>>>>>> 3b4632ada183f11fd77ea387558f07aec50959b5
   const flatListRef = useRef(null);
 
   useEffect(() => {
@@ -43,12 +63,12 @@ export default function Chat() {
   }, [messages]);
 
   const handleSend = async () => {
-    const token = await AsyncStorage.getItem('accessToken');
+    const token = await AsyncStorage.getItem("accessToken");
     if (!token) {
-      console.log('토큰이 없습니다.');
+      console.log("토큰이 없습니다.");
       return;
     }
-    if (inputText.trim() === '') return;
+    if (inputText.trim() === "") return;
 
     const newMessage = {
       id: Date.now().toString(),
@@ -57,8 +77,8 @@ export default function Chat() {
       timestamp: new Date(),
     };
 
-    setMessages(prev => [...prev, newMessage]);
-    setInputText('');
+    setMessages((prev) => [...prev, newMessage]);
+    setInputText("");
 
     // 로딩 메시지 추가
     const loadingMessageId = Date.now().toString() + '_loading';
@@ -71,15 +91,16 @@ export default function Chat() {
 
     // 봇 응답 시뮬레이션 (실제로는 API 호출)
     const response = await fetch(API_ENDPOINTS.AI_CHATBOT, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ userMessage: inputText }),
     });
     const result = await response.json();
     if (response.ok && result.success && result.data && result.data.answer) {
+<<<<<<< HEAD
       // 로딩 메시지를 실제 응답으로 교체
       setMessages(prev => prev.map(msg =>
         msg.id === loadingMessageId
@@ -95,6 +116,20 @@ export default function Chat() {
           : msg
       ));
       console.error('AI 챗봇 응답 실패:', response.status);
+=======
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now().toString(),
+          text: result.data.answer,
+          isBot: true,
+          timestamp: new Date(),
+        },
+      ]);
+      setOutputText(result.data.answer);
+    } else {
+      console.error("AI 챗봇 응답 실패:", response.status);
+>>>>>>> 3b4632ada183f11fd77ea387558f07aec50959b5
     }
   };
 
@@ -140,32 +175,25 @@ export default function Chat() {
   return (
     <View style={styles.container}>
       {/* 헤더 */}
-      <View style={[styles.header, { paddingTop: insets.top + 10 }]}>
+      <View style={styles.headerBar}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => router.back()}
+          onPress={() => router.push("./home")}
         >
-          <Image
-            source={require('@/assets/images/left.svg')}
-            style={styles.backIcon}
-            contentFit="contain"
-          />
+          <Text style={styles.backButtonText}>←</Text>
         </TouchableOpacity>
-        <View style={styles.headerContent}>
-          <Image
-            source={require('@/assets/images/dreame1.png')}
-            style={styles.botAvatar}
-            contentFit="contain"
-          />
-          <Text style={styles.headerTitle}>드림이</Text>
-        </View>
-        <View style={styles.placeholder} />
+        <Image
+          source={require("@/assets/images/dreame1.png")}
+          style={styles.botAvatar}
+          contentFit="contain"
+        />
+        <Text style={styles.screenTitle}>드림이 챗봇</Text>
       </View>
 
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.keyboardView}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
       >
         {/* 메시지 리스트 */}
         <FlatList
@@ -174,7 +202,9 @@ export default function Chat() {
           renderItem={renderMessage}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.messagesList}
-          onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
+          onContentSizeChange={() =>
+            flatListRef.current?.scrollToEnd({ animated: true })
+          }
         />
 
         {/* 입력 영역 */}
@@ -191,10 +221,10 @@ export default function Chat() {
           <TouchableOpacity
             style={[
               styles.sendButton,
-              inputText.trim() === '' && styles.sendButtonDisabled,
+              inputText.trim() === "" && styles.sendButtonDisabled,
             ]}
             onPress={handleSend}
-            disabled={inputText.trim() === ''}
+            disabled={inputText.trim() === ""}
           >
             <Text style={styles.sendButtonText}>전송</Text>
           </TouchableOpacity>
@@ -207,41 +237,43 @@ export default function Chat() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#FFFFFF",
+    paddingTop: 60,
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingBottom: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
-    backgroundColor: '#FFFFFF',
+  headerBar: {
+    height: 44,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#ffffff",
+    paddingHorizontal: 10,
   },
   backButton: {
     padding: 8,
+    position: "absolute",
+    left: 20,
+    zIndex: 1,
   },
-  backIcon: {
-    width: 24,
-    height: 24,
+  backButtonText: {
+    fontSize: 28,
+    color: "#000",
+    fontWeight: "bold",
   },
   headerContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 8,
   },
   botAvatar: {
     width: 32,
     height: 32,
   },
-  headerTitle: {
-    fontSize: 18,
-    fontFamily: 'Pretendard-SemiBold',
-    color: '#000',
-  },
-  placeholder: {
-    width: 40,
+  screenTitle: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: "#000",
+    textAlign: "center",
+    fontFamily: "Pretendard-SemiBold",
   },
   keyboardView: {
     flex: 1,
@@ -254,72 +286,75 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   botMessage: {
-    alignItems: 'flex-start',
+    alignItems: "flex-start",
   },
   userMessage: {
-    alignItems: 'flex-end',
+    alignItems: "flex-end",
   },
   messageBubble: {
-    maxWidth: '75%',
+    maxWidth: "75%",
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 18,
   },
   botBubble: {
-    backgroundColor: '#F5F5F5',
+    backgroundColor: "#F5F5F5",
     borderTopLeftRadius: 4,
   },
   userBubble: {
-    backgroundColor: '#4D90CC',
+    backgroundColor: "#4D90CC",
     borderTopRightRadius: 4,
   },
   messageText: {
     fontSize: 15,
-    fontFamily: 'Pretendard-Regular',
+    fontFamily: "Pretendard-Regular",
     lineHeight: 20,
   },
   botText: {
-    color: '#000',
+    color: "#000",
   },
   userText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
   },
   inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
+    flexDirection: "row",
+    alignItems: "flex-end",
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderTopWidth: 1,
-    borderTopColor: '#F0F0F0',
-    backgroundColor: '#FFFFFF',
+    borderTopColor: "#F0F0F0",
+    backgroundColor: "#FFFFFF",
     gap: 8,
   },
   input: {
     flex: 1,
-    minHeight: 44,
+    minHeight: 40,
     maxHeight: 100,
     paddingHorizontal: 16,
     paddingVertical: 10,
+    marginBottom: 20,
     borderRadius: 22,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: "#F5F5F5",
     fontSize: 15,
-    fontFamily: 'Pretendard-Regular',
-    color: '#000',
+    fontFamily: "Pretendard-Regular",
+    color: "#000",
   },
   sendButton: {
+    height: 40,
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 22,
-    backgroundColor: '#4D90CC',
-    justifyContent: 'center',
-    alignItems: 'center',
+    marginBottom: 20,
+    backgroundColor: "#4D90CC",
+    justifyContent: "center",
+    alignItems: "center",
   },
   sendButtonDisabled: {
-    backgroundColor: '#CCCCCC',
+    backgroundColor: "#CCCCCC",
   },
   sendButtonText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 15,
-    fontFamily: 'Pretendard-SemiBold',
+    fontFamily: "Pretendard-SemiBold",
   },
 });
