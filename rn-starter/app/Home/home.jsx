@@ -17,7 +17,7 @@ export default function Home() {
   const [activities, setActivities] = useState([]);
   const [loadingActivities, setLoadingActivities] = useState(true);
   const scrollViewRef = useRef(null);
-
+  const [aiMission, setAiMission] = useState('');
   // 사용자 정보 불러오기
   useEffect(() => {
     const loadUserInfo = async () => {
@@ -129,6 +129,49 @@ export default function Home() {
     const index = Math.round(scrollPosition / width);
     setActiveIndex(index);
   };
+  
+  // AI 미션 불러오기
+  useEffect(() => {
+    const fetchAiMission = async () => {
+      try {
+        const token = await AsyncStorage.getItem('accessToken');
+        
+        if (!token) {
+          console.log('토큰이 없습니다.');
+          return;
+        }
+
+        const response = await fetch(API_ENDPOINTS.GET_AI_MISSION, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          console.log('AI 미션 데이터:', result);
+          
+          // 응답 형식: { success: true, message: "성공", data: { mission: "..." } }
+          if (result.success && result.data && result.data.mission) {
+            setAiMission(result.data.mission);
+          } else {
+            console.log('미션 데이터가 없습니다.');
+          }
+        } else if (response.status === 401) {
+          console.log('토큰이 만료되었습니다.');
+        } else {
+          const errorText = await response.text();
+          console.error('AI 미션 불러오기 실패:', response.status, errorText);
+        }
+      } catch (error) {
+        console.error('AI 미션 불러오기 실패:', error);
+      }
+    };
+
+    fetchAiMission();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -213,7 +256,13 @@ export default function Home() {
       <ScrollView style={styles.scrollContent} contentContainerStyle={styles.scrollContentContainer}>
       {/* 오늘의 미션 */}
       <Text style={styles.title}>오늘의 맞춤미션</Text> 
-      <View style={styles.missionContainer}></View>
+      <View style={styles.missionContainer}>
+        {aiMission ? (
+          <Text style={styles.missionText}>{aiMission}</Text>
+        ) : (
+          <Text style={styles.missionText}>미션을 불러오는 중...</Text>
+        )}
+      </View>
       <Text style={styles.title}>{userName}님을 위한 맞춤활동 </Text> 
       {/*api 연결 후 맞춤형 리스트로 변경*/}
       <View style={styles.activitiesContainer}>
@@ -269,6 +318,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     backgroundColor: '#F0F0F0',
     borderRadius: 10,
+  },
+  missionText: {
+    fontSize: 15,
+    fontFamily: 'Pretendard-Regular',
+    color: '#000',
+    lineHeight: 22,
   },
   fixedHeader: {
     position: 'absolute',
