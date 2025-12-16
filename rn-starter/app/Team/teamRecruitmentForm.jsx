@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import { View, Text, ScrollView, KeyboardAvoidingView, TouchableOpacity, StyleSheet, TextInput, Alert } from 'react-native';
+import { View, Text, ScrollView, KeyboardAvoidingView, TouchableOpacity, StyleSheet, TextInput, Modal } from 'react-native';
 import { Image } from 'expo-image';
 import Button from '../../components/Button';
 import DateRangePicker from '../../components/DateRangePicker';
@@ -43,6 +43,10 @@ export default function teamRecruitmentForm() {
   const [startDate, setStartDate] = useState(getTodayStart());
   const [endDate, setEndDate] = useState(getTomorrowStart());
 
+  // 알림 모달 state
+  const [showAlertModal, setShowAlertModal] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+
   // 역할 입력 핸들러
   const handleChange = (text, id) => {
     const newInputs = inputs.map((item) => {
@@ -82,19 +86,23 @@ export default function teamRecruitmentForm() {
 
     // 필수 입력값 검증
     if (!titleInfo.trim()) {
-      Alert.alert('알림', '제목을 입력해주세요.');
+      setAlertMessage('제목을 입력해주세요.');
+      setShowAlertModal(true);
       return;
     }
     if (roles.length === 0) {
-      Alert.alert('알림', '최소 한 개 이상의 역할을 입력해주세요.');
+      setAlertMessage('최소 한 개 이상의 역할을 입력해주세요.');
+      setShowAlertModal(true);
       return;
     }
     if (!traitInfo.trim()) {
-      Alert.alert('알림', '특성을 입력해주세요.');
+      setAlertMessage('특성을 입력해주세요.');
+      setShowAlertModal(true);
       return;
     }
     if (!introductionInfo.trim()) {
-      Alert.alert('알림', '진행 방식 및 한 줄 소개를 입력해주세요.');
+      setAlertMessage('진행 방식 및 한 줄 소개를 입력해주세요.');
+      setShowAlertModal(true);
       return;
     }
 
@@ -353,6 +361,33 @@ export default function teamRecruitmentForm() {
             />
           </ScrollView>
         </KeyboardAvoidingView>
+
+        {/* 알림 모달 */}
+        <Modal
+          visible={showAlertModal}
+          transparent={true}
+          animationType="fade"
+          onRequestClose={() => setShowAlertModal(false)}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContainer}>
+              <Image
+                source={require('@/assets/images/alert.svg')}
+                style={styles.alertIcon}
+                contentFit="contain"
+              />
+              <Text style={styles.modalTitle}>{alertMessage}</Text>
+              <View style={styles.modalButtonContainer}>
+                <TouchableOpacity
+                  style={[styles.modalButton, styles.confirmButton]}
+                  onPress={() => setShowAlertModal(false)}
+                >
+                  <Text style={styles.confirmButtonText}>확인</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </Modal>
       </View>
   );
 }
@@ -527,5 +562,51 @@ const styles = StyleSheet.create({
     color: '#000',
     minWidth: 50,
     textAlign: 'center',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    width: '80%',
+    alignItems: 'center',
+  },
+  alertIcon: {
+    width: 48,
+    height: 48,
+    flexShrink: 0,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontFamily: 'Pretendard-SemiBold',
+    color: '#000',
+    marginTop: 10,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  modalButtonContainer: {
+    flexDirection: 'row',
+    gap: 12,
+    width: '100%',
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  confirmButton: {
+    backgroundColor: '#f0f0f0',
+  },
+  confirmButtonText: {
+    fontSize: 16,
+    fontFamily: 'Pretendard-Medium',
+    color: '#000',
   },
 });

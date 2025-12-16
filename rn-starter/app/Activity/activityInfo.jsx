@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, ScrollView, Dimensions, Linking, Image as RNImage } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, ScrollView, Dimensions, Linking, Image as RNImage, Modal } from 'react-native';
 import { Image } from 'expo-image';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
@@ -27,6 +27,8 @@ export default function ActivityInfo() {
   const [loadingTeams, setLoadingTeams] = useState(true);
   const [userInfo, setUserInfo] = useState(null);
   const [myTeamIds, setMyTeamIds] = useState([]);
+  const [myTeams, setMyTeams] = useState([]);
+  const [showAlreadyRecruitingModal, setShowAlreadyRecruitingModal] = useState(false);
 
   const fetchTeams = useCallback(async () => {
     if (!eventData?.id) {
@@ -127,6 +129,7 @@ export default function ActivityInfo() {
 
           const myIds = myTeamsList.map(team => team.id);
           setMyTeamIds(myIds);
+          setMyTeams(myTeamsList);
         }
       } catch (error) {
         console.error('사용자 정보 및 팀 목록 불러오기 실패:', error);
@@ -285,13 +288,24 @@ export default function ActivityInfo() {
           {/* 이 활동으로 팀 만들기 */}
           <TouchableOpacity
             style={styles.primaryButtonBox}
-            onPress={() => router.push({
-              pathname: '/Team/teamRecruitmentForm',
-              params: {
-                activityTitle: eventData.title,
-                eventId: eventData.id
+            onPress={() => {
+              // 같은 활동으로 이미 모집중인 팀이 있는지 확인
+              const hasSameActivityTeam = myTeams.some(team =>
+                team.connectedActivityTitle === eventData.title
+              );
+
+              if (hasSameActivityTeam) {
+                setShowAlreadyRecruitingModal(true);
+              } else {
+                router.push({
+                  pathname: '/Team/teamRecruitmentForm',
+                  params: {
+                    activityTitle: eventData.title,
+                    eventId: eventData.id
+                  }
+                });
               }
-            })}
+            }}
           >
             <Text style={styles.primaryButtonText}>이 활동으로 팀 만들기</Text>
           </TouchableOpacity>
@@ -348,6 +362,33 @@ export default function ActivityInfo() {
 
         </View>
       </ScrollView>
+
+      {/* 이미 모집중인 팀이 있을 때 모달 */}
+      <Modal
+        visible={showAlreadyRecruitingModal}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setShowAlreadyRecruitingModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Image
+              source={require('@/assets/images/alert.svg')}
+              style={styles.alertIcon}
+              contentFit="contain"
+            />
+            <Text style={styles.modalTitle}>이미 모집중인 팀이 있습니다.</Text>
+            <View style={styles.modalButtonContainer}>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.confirmButton]}
+                onPress={() => setShowAlreadyRecruitingModal(false)}
+              >
+                <Text style={styles.confirmButtonText}>확인</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -636,6 +677,52 @@ const styles = StyleSheet.create({
     color: '#999',
     textAlign: 'center',
     paddingVertical: 20,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    width: '80%',
+    alignItems: 'center',
+  },
+  alertIcon: {
+    width: 48,
+    height: 48,
+    flexShrink: 0,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontFamily: 'Pretendard-SemiBold',
+    color: '#000',
+    marginTop: 10,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  modalButtonContainer: {
+    flexDirection: 'row',
+    gap: 12,
+    width: '100%',
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  confirmButton: {
+    backgroundColor: '#f0f0f0',
+  },
+  confirmButtonText: {
+    fontSize: 16,
+    fontFamily: 'Pretendard-Medium',
+    color: '#000',
   },
 });
 

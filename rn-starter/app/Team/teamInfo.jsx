@@ -148,8 +148,21 @@ export default function TeamInfo() {
     const capacity = team.capacity || 0;
     const recruitmentEndDate = team.recruitmentEndDate;
 
+    // 날짜만 비교 (시간 제외)
+    let isDatePassed = false;
+    if (recruitmentEndDate) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const endDate = new Date(recruitmentEndDate);
+      endDate.setHours(0, 0, 0, 0);
+
+      // 오늘이 마감일 이후인 경우에만 true
+      isDatePassed = today > endDate;
+    }
+
     // capacity == currentMemberCount 이거나 recruitmentEndDate가 지났으면 모달 표시
-    if (capacity === currentMemberCount || (recruitmentEndDate && new Date() > new Date(recruitmentEndDate))) {
+    if (capacity === currentMemberCount || isDatePassed) {
       setShowRecruitmentClosedModal(true);
     }
   }, [team]);
