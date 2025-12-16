@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Animated } from 'react-native';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -14,6 +14,7 @@ export default function Chat() {
   ]);
   const [inputText, setInputText] = useState('');
   const [outputText, setOutputText] = useState('');
+  const [loadingDots, setLoadingDots] = useState('');
   const flatListRef = useRef(null);
 
   useEffect(() => {
@@ -22,6 +23,22 @@ export default function Chat() {
       setTimeout(() => {
         flatListRef.current?.scrollToEnd({ animated: true });
       }, 100);
+    }
+  }, [messages]);
+
+  // 로딩 애니메이션
+  useEffect(() => {
+    const hasLoadingMessage = messages.some(msg => msg.isLoading);
+    if (hasLoadingMessage) {
+      const interval = setInterval(() => {
+        setLoadingDots(prev => {
+          if (prev === '...') return '';
+          return prev + '.';
+        });
+      }, 500);
+      return () => clearInterval(interval);
+    } else {
+      setLoadingDots('');
     }
   }, [messages]);
 
@@ -43,6 +60,15 @@ export default function Chat() {
     setMessages(prev => [...prev, newMessage]);
     setInputText('');
 
+    // 로딩 메시지 추가
+    const loadingMessageId = Date.now().toString() + '_loading';
+    setMessages(prev => [...prev, {
+      id: loadingMessageId,
+      isBot: true,
+      isLoading: true,
+      timestamp: new Date()
+    }]);
+
     // 봇 응답 시뮬레이션 (실제로는 API 호출)
     const response = await fetch(API_ENDPOINTS.AI_CHATBOT, {
       method: 'POST',
@@ -54,9 +80,20 @@ export default function Chat() {
     });
     const result = await response.json();
     if (response.ok && result.success && result.data && result.data.answer) {
-      setMessages(prev => [...prev, { id: Date.now().toString(), text: result.data.answer, isBot: true, timestamp: new Date() }]);
+      // 로딩 메시지를 실제 응답으로 교체
+      setMessages(prev => prev.map(msg =>
+        msg.id === loadingMessageId
+          ? { ...msg, text: result.data.answer, isLoading: false, timestamp: new Date() }
+          : msg
+      ));
       setOutputText(result.data.answer);
     } else {
+      // 에러 발생 시 로딩 메시지를 에러 메시지로 교체
+      setMessages(prev => prev.map(msg =>
+        msg.id === loadingMessageId
+          ? { ...msg, text: '죄송합니다. 응답을 생성하는데 실패했습니다.', isLoading: false, timestamp: new Date() }
+          : msg
+      ));
       console.error('AI 챗봇 응답 실패:', response.status);
     }
   };
@@ -76,14 +113,25 @@ export default function Chat() {
             item.isBot ? styles.botBubble : styles.userBubble,
           ]}
         >
-          <Text
-            style={[
-              styles.messageText,
-              item.isBot ? styles.botText : styles.userText,
-            ]}
-          >
-            {item.text}
-          </Text>
+          {item.isLoading ? (
+            <Text
+              style={[
+                styles.messageText,
+                styles.botText,
+              ]}
+            >
+              {item.text}{loadingDots}
+            </Text>
+          ) : (
+            <Text
+              style={[
+                styles.messageText,
+                item.isBot ? styles.botText : styles.userText,
+              ]}
+            >
+              {item.text}
+            </Text>
+          )}
         </View>
       </View>
     );

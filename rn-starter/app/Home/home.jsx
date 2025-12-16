@@ -316,7 +316,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
     padding: 20,
     marginBottom: 10,
-    backgroundColor: '#F0F0F0',
+    backgroundColor: '#F5F5F5',
     borderRadius: 10,
   },
   missionText: {
@@ -426,7 +426,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 28,
     borderWidth: 1,
-    borderColor: '#4D90CC',
+    borderColor: '#3E6AF433',
     backgroundColor: '#FFFFFF',
     elevation: 5,
     shadowColor: '#000',
