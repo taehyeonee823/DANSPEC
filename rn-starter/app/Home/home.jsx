@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
-import { View, StyleSheet, ScrollView, Image, Dimensions, TouchableOpacity, Text } from 'react-native';
-import { useRouter } from 'expo-router';
+import { View, StyleSheet, ScrollView, Dimensions, TouchableOpacity, Text } from 'react-native';
+import { useRouter} from 'expo-router';
+import { Image } from 'expo-image';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_ENDPOINTS } from '@/config/api';
 import NaviBar from '../naviBar';
@@ -237,6 +238,19 @@ export default function Home() {
       </View>
       </ScrollView>
 
+      {/* 플로팅 버튼 */}
+      <TouchableOpacity 
+        style={styles.floatingButton}
+        onPress={() => {
+          // 버튼 클릭 시 동작 (필요시 수정)
+          console.log('플로팅 버튼 클릭');
+          router.push('/Home/chat');
+        }}
+      >
+        <Image source={require('@/assets/images/dreame1.png')} style={styles.floatingButtonImage} />
+        <Text style={styles.floatingButtonText}>챗봇</Text>
+      </TouchableOpacity>
+
       <NaviBar currentPage="home" />
     </View>
   );
@@ -345,5 +359,39 @@ const styles = StyleSheet.create({
     marginTop: 16,
     fontSize: 14,
     fontFamily: 'Pretendard-Medium',
+  },
+  floatingButton: {
+    position: 'absolute',
+    right: 20,
+    bottom: 130,
+    width: 56,
+    height: 56,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 28,
+    borderWidth: 1,
+    borderColor: '#4D90CC',
+    backgroundColor: '#FFFFFF',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    zIndex: 10,
+    gap: 2,
+  },
+  floatingButtonImage: {
+    width: 30,
+    height: 30,
+    alignSelf: 'center',
+  },
+  floatingButtonText: {
+    color: '#4D90CC',
+    fontSize: 10,
+    fontFamily: 'Pretendard-SemiBold',
   },
 });
