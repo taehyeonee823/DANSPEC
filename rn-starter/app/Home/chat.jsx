@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Animated } from 'react-native';
 import { Image } from 'expo-image';
@@ -6,15 +5,6 @@ import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { API_ENDPOINTS } from '@/config/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-=======
-import React, { useState, useRef, useEffect } from "react";
-import {View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform} from "react-native";
-import { Image } from "expo-image";
-import { useRouter } from "expo-router";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { API_ENDPOINTS } from "@/config/api";
-import AsyncStorage from "@react-native-async-storage/async-storage";
->>>>>>> 3b4632ada183f11fd77ea387558f07aec50959b5
 
 export default function Chat() {
   const router = useRouter();
@@ -27,14 +17,9 @@ export default function Chat() {
       timestamp: new Date(),
     },
   ]);
-<<<<<<< HEAD
   const [inputText, setInputText] = useState('');
   const [outputText, setOutputText] = useState('');
   const [loadingDots, setLoadingDots] = useState('');
-=======
-  const [inputText, setInputText] = useState("");
-  const [outputText, setOutputText] = useState("");
->>>>>>> 3b4632ada183f11fd77ea387558f07aec50959b5
   const flatListRef = useRef(null);
 
   useEffect(() => {
@@ -100,7 +85,6 @@ export default function Chat() {
     });
     const result = await response.json();
     if (response.ok && result.success && result.data && result.data.answer) {
-<<<<<<< HEAD
       // 로딩 메시지를 실제 응답으로 교체
       setMessages(prev => prev.map(msg =>
         msg.id === loadingMessageId
@@ -116,20 +100,6 @@ export default function Chat() {
           : msg
       ));
       console.error('AI 챗봇 응답 실패:', response.status);
-=======
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: Date.now().toString(),
-          text: result.data.answer,
-          isBot: true,
-          timestamp: new Date(),
-        },
-      ]);
-      setOutputText(result.data.answer);
-    } else {
-      console.error("AI 챗봇 응답 실패:", response.status);
->>>>>>> 3b4632ada183f11fd77ea387558f07aec50959b5
     }
   };
 
