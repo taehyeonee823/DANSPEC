@@ -3,7 +3,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { View, StyleSheet, ScrollView, Dimensions, TouchableOpacity, Text } from 'react-native';
 import { useRouter} from 'expo-router';
 import { Image } from 'expo-image';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 import { API_ENDPOINTS } from '@/config/api';
 import NaviBar from '../naviBar';
 import ActivityApplyBox from '../Activity/activityApplyBox';
@@ -22,7 +22,7 @@ export default function Home() {
   useEffect(() => {
     const loadUserInfo = async () => {
       try {
-        const token = await AsyncStorage.getItem('accessToken');
+        const token = await SecureStore.getItemAsync('accessToken');
 
         if (!token) {
           console.log('토큰이 없습니다.');
@@ -63,7 +63,7 @@ export default function Home() {
     const loadActivities = async () => {
       setLoadingActivities(true);
       try {
-        const token = await AsyncStorage.getItem('accessToken');
+        const token = await SecureStore.getItemAsync('accessToken');
         const response = await fetch(API_ENDPOINTS.RECOMMENDED_EVENTS, {
           method: 'GET',
           headers: {
@@ -134,8 +134,8 @@ export default function Home() {
   useEffect(() => {
     const fetchAiMission = async () => {
       try {
-        const token = await AsyncStorage.getItem('accessToken');
-        
+        const token = await SecureStore.getItemAsync('accessToken');
+
         if (!token) {
           console.log('토큰이 없습니다.');
           return;

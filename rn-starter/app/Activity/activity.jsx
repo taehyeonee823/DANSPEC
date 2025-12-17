@@ -8,7 +8,7 @@ import CategoryChips from '@/components/CategoryChips';
 import ActivityApplyBox from './activityApplyBox';
 import DeptTab from './deptTab';
 import { API_ENDPOINTS } from '@/config/api';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 
 export default function Activity() {
   const router = useRouter();
@@ -39,7 +39,7 @@ export default function Activity() {
     if (selectedCategory === "기타") {
       try {
         setLoading(true);
-        const token = await AsyncStorage.getItem('accessToken');
+        const token = await SecureStore.getItemAsync('accessToken');
         if (!token) {
           console.warn('액세스 토큰이 없습니다. 로그인 후 다시 시도하세요.');
           setEvents([]);

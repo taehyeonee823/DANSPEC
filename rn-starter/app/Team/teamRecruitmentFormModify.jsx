@@ -14,7 +14,7 @@ import { Image } from "expo-image";
 import Button from "../../components/Button";
 import DateRangePicker from "../../components/DateRangePicker";
 import { API_ENDPOINTS } from "@/config/api";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 
 export default function teamRecruitmentForm() {
   const router = useRouter();
@@ -59,7 +59,7 @@ export default function teamRecruitmentForm() {
 
       try {
         setLoading(true);
-        const token = await AsyncStorage.getItem("accessToken");
+        const token = await SecureStore.getItemAsync("accessToken");
 
         if (!token) {
           setLoading(false);
@@ -201,7 +201,7 @@ export default function teamRecruitmentForm() {
     }
 
     try {
-      const token = await AsyncStorage.getItem("accessToken");
+      const token = await SecureStore.getItemAsync("accessToken");
 
       if (!token) {
         return;
@@ -273,7 +273,7 @@ export default function teamRecruitmentForm() {
     };
 
     try {
-      const token = await AsyncStorage.getItem("accessToken");
+      const token = await SecureStore.getItemAsync("accessToken");
 
       if (!token) {
         return;

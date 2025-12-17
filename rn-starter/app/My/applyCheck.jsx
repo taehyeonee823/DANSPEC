@@ -4,7 +4,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ApplierCard from './applierCard';
 import { API_ENDPOINTS } from '@/config/api';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 
 export default function ApplyCheck() {
   const router = useRouter();
@@ -25,7 +25,7 @@ export default function ApplyCheck() {
     if (!teamId) return;
 
     try {
-      const token = await AsyncStorage.getItem('accessToken');
+      const token = await SecureStore.getItemAsync('accessToken');
       if (!token) return;
 
       const teamIdNum = typeof teamId === 'string' ? parseInt(teamId, 10) : teamId;
@@ -65,7 +65,7 @@ export default function ApplyCheck() {
 
     try {
       setLoading(true);
-      const token = await AsyncStorage.getItem('accessToken');
+      const token = await SecureStore.getItemAsync('accessToken');
       if (!token) {
         console.warn('액세스 토큰이 없습니다. 로그인 후 다시 시도하세요.');
         setApplications([]);
@@ -171,7 +171,7 @@ export default function ApplyCheck() {
 
   const handleApplicationAction = useCallback(async (applicationId, isApproved) => {
     try {
-      const token = await AsyncStorage.getItem('accessToken');
+      const token = await SecureStore.getItemAsync('accessToken');
       if (!token) {
         console.warn('액세스 토큰이 없습니다.');
         return;

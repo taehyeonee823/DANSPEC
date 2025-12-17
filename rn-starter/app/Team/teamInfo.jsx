@@ -5,7 +5,7 @@ import { Text, View, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpac
 import { Image } from 'expo-image';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { API_ENDPOINTS } from '@/config/api';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 
 export default function TeamInfo() {
   const router = useRouter();
@@ -49,7 +49,7 @@ export default function TeamInfo() {
 
       try {
         setLoading(true);
-        const token = await AsyncStorage.getItem('accessToken');
+        const token = await SecureStore.getItemAsync('accessToken');
 
         if (!token) {
           console.warn('액세스 토큰이 없습니다.');
@@ -186,7 +186,7 @@ export default function TeamInfo() {
     }
 
     try {
-      const token = await AsyncStorage.getItem('accessToken');
+      const token = await SecureStore.getItemAsync('accessToken');
       if (!token) {
         return;
       }
@@ -472,7 +472,7 @@ export default function TeamInfo() {
                   style={styles.alertIcon}
                   contentFit="contain"
                 />
-                <Text style={styles.modalTitle}>팀원 모집이 마감되었습니다</Text>
+                <Text style={styles.modalTitle}>팀원 모집이 마감되었어요.</Text>
                 <View style={styles.modalButtonContainer}>
                   <TouchableOpacity
                     style={[styles.modalButton, styles.confirmButton]}

@@ -2,7 +2,7 @@ import { Text, View, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpac
 import React, { useState, useEffect } from "react";
 import { Image } from 'expo-image';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 import { API_ENDPOINTS } from '@/config/api';
 import Button from '../../components/Button';
 import MultiplelineInput from '../../components/MultiplelineInput';
@@ -45,7 +45,7 @@ export default function Index() {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const token = await AsyncStorage.getItem('accessToken');
+        const token = await SecureStore.getItemAsync('accessToken');
         if (!token) {
           setLoadingUser(false);
           return;
@@ -84,7 +84,7 @@ export default function Index() {
       if (Number.isNaN(teamIdNum)) return;
 
       try {
-        const token = await AsyncStorage.getItem('accessToken');
+        const token = await SecureStore.getItemAsync('accessToken');
         if (!token) return;
 
         const url = API_ENDPOINTS.GET_TEAM_DETAIL(teamIdNum);
@@ -119,7 +119,7 @@ export default function Index() {
       if (Number.isNaN(applicationIdNum)) return;
 
       try {
-        const token = await AsyncStorage.getItem('accessToken');
+        const token = await SecureStore.getItemAsync('accessToken');
         if (!token) return;
 
         // 캐시로 이전 값이 보이는 케이스 방지용
@@ -172,7 +172,7 @@ export default function Index() {
 
     try {
       setSubmitting(true);
-      const token = await AsyncStorage.getItem('accessToken');
+      const token = await SecureStore.getItemAsync('accessToken');
       if (!token) {
         return;
       }
@@ -227,7 +227,7 @@ export default function Index() {
 
     try {
       setSubmitting(true);
-      const token = await AsyncStorage.getItem('accessToken');
+      const token = await SecureStore.getItemAsync('accessToken');
       if (!token) {
         return;
       }

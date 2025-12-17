@@ -6,7 +6,7 @@ import Button from '../../components/Button';
 import DateRangePicker from '../../components/DateRangePicker';
 import MultilineInput from '../../components/MultiplelineInput';
 import { API_ENDPOINTS } from '@/config/api';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 
 export default function teamRecruitmentForm() {
   const router = useRouter();
@@ -129,7 +129,7 @@ export default function teamRecruitmentForm() {
       console.log("요청 URL:", API_ENDPOINTS.CREATE_TEAM);
 
       // 토큰 가져오기
-      const accessToken = await AsyncStorage.getItem('accessToken');
+      const accessToken = await SecureStore.getItemAsync('accessToken');
       
       if (!accessToken) {
         Alert.alert('알림', '로그인이 필요합니다.', [
@@ -179,7 +179,7 @@ export default function teamRecruitmentForm() {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const token = await AsyncStorage.getItem('accessToken');
+        const token = await SecureStore.getItemAsync('accessToken');
         if (!token) {
           setLoadingUser(false);
           return;
