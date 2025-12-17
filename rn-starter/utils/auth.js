@@ -1,4 +1,4 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 import { API_ENDPOINTS } from '@/config/api';
 
 /**
@@ -7,7 +7,7 @@ import { API_ENDPOINTS } from '@/config/api';
  */
 export const refreshAccessToken = async () => {
   try {
-    const refreshToken = await AsyncStorage.getItem('refreshToken');
+    const refreshToken = await SecureStore.getItemAsync('refreshToken');
 
     if (!refreshToken) {
       console.log('refreshToken이 없습니다.');
@@ -31,12 +31,12 @@ export const refreshAccessToken = async () => {
       if (data.success && data.data) {
         // 새로운 accessToken 저장
         if (data.data.accessToken) {
-          await AsyncStorage.setItem('accessToken', data.data.accessToken);
+          await SecureStore.setItemAsync('accessToken', data.data.accessToken);
         }
 
         // 새로운 refreshToken이 있으면 업데이트
         if (data.data.refreshToken) {
-          await AsyncStorage.setItem('refreshToken', data.data.refreshToken);
+          await SecureStore.setItemAsync('refreshToken', data.data.refreshToken);
         }
 
         return true;
@@ -61,7 +61,7 @@ export const refreshAccessToken = async () => {
  * @returns {Promise<Response>}
  */
 export const fetchWithAuth = async (url, options = {}, retry = true) => {
-  const token = await AsyncStorage.getItem('accessToken');
+  const token = await SecureStore.getItemAsync('accessToken');
 
   const headers = {
     'Content-Type': 'application/json',

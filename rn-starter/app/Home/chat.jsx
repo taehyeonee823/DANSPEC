@@ -5,7 +5,7 @@ import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { API_ENDPOINTS } from '@/config/api';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 
 export default function Chat() {
   const router = useRouter();
@@ -51,7 +51,7 @@ export default function Chat() {
   }, [messages]);
 
   const handleSend = async () => {
-    const token = await AsyncStorage.getItem("accessToken");
+    const token = await SecureStore.getItemAsync("accessToken");
     if (!token) {
       console.log("토큰이 없습니다.");
       return;

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { API_ENDPOINTS } from '@/config/api';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 import { fetchWithAuth, refreshAccessToken } from '@/utils/auth';
 
 /**
@@ -32,9 +32,9 @@ export const useWebSocket = () => {
         let isMounted = true;
 
         const clearAuthAndStop = async () => {
-            await AsyncStorage.removeItem('accessToken');
-            await AsyncStorage.removeItem('refreshToken');
-            await AsyncStorage.removeItem('autoLogin');
+            await SecureStore.deleteItemAsync('accessToken');
+            await SecureStore.deleteItemAsync('refreshToken');
+            await SecureStore.deleteItemAsync('autoLogin');
         };
 
         // 1) 기존 알림 목록을 GET /api/notifications 로 가져오기
@@ -72,7 +72,7 @@ export const useWebSocket = () => {
             try {
                 // SSE는 fetchWithAuth를 쓰면 재호출 시 스트림이 꼬일 수 있어,
                 // 연결 전 토큰을 한 번만 갱신 시도하고, 해당 토큰으로 바로 연결
-                const accessToken = await AsyncStorage.getItem('accessToken');
+                const accessToken = await SecureStore.getItemAsync('accessToken');
                 if (!accessToken) {
                     // refresh 시도
                     const refreshed = await refreshAccessToken();
@@ -82,7 +82,7 @@ export const useWebSocket = () => {
                     }
                 }
 
-                const tokenAfter = await AsyncStorage.getItem('accessToken');
+                const tokenAfter = await SecureStore.getItemAsync('accessToken');
                 if (!tokenAfter) return;
 
                 const url = API_ENDPOINTS.NOTIFICATIONS_SUBSCRIBE;

@@ -4,7 +4,7 @@ import { Image } from 'expo-image';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
 import { API_ENDPOINTS } from '@/config/api';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 
 export default function ActivityInfo() {
   const router = useRouter();
@@ -38,7 +38,7 @@ export default function ActivityInfo() {
     }
     
     try {
-      const token = await AsyncStorage.getItem('accessToken');
+      const token = await SecureStore.getItemAsync('accessToken');
       const url = API_ENDPOINTS.GET_TEAMS({ eventId: eventData.id });
       console.log('=== 팀 목록 조회 ===');
       console.log('요청 URL:', url);
@@ -85,7 +85,7 @@ export default function ActivityInfo() {
   useEffect(() => {
     const fetchUserInfoAndMyTeams = async () => {
       try {
-        const token = await AsyncStorage.getItem('accessToken');
+        const token = await SecureStore.getItemAsync('accessToken');
         if (!token) return;
 
         // 사용자 정보 가져오기

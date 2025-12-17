@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 
 export default function ApplyConfirmed() {
   const router = useRouter();
@@ -11,10 +11,10 @@ export default function ApplyConfirmed() {
     // 화면이 마운트될 때 로그아웃 처리
     const handleLogout = async () => {
       try {
-        await AsyncStorage.removeItem('accessToken');
-        await AsyncStorage.removeItem('refreshToken');
-        await AsyncStorage.removeItem('autoLogin');
-        await AsyncStorage.removeItem('savedEmail');
+        await SecureStore.deleteItemAsync('accessToken');
+        await SecureStore.deleteItemAsync('refreshToken');
+        await SecureStore.deleteItemAsync('autoLogin');
+        await SecureStore.deleteItemAsync('savedEmail');
       } catch (error) {
         console.error('로그아웃 오류:', error);
       }

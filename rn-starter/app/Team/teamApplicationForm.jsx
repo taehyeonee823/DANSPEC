@@ -1,7 +1,7 @@
 import { Text, View, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpacity, Image, Alert } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 import { API_ENDPOINTS } from '@/config/api';
 import Button from '../../components/Button';
 import MultiplelineInput from '../../components/MultiplelineInput';
@@ -29,7 +29,7 @@ export default function Index() {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const token = await AsyncStorage.getItem('accessToken');
+        const token = await SecureStore.getItemAsync('accessToken');
         if (!token) {
           setLoadingUser(false);
           return;
@@ -69,7 +69,7 @@ export default function Index() {
 
     try {
       setSubmitting(true);
-      const token = await AsyncStorage.getItem('accessToken');
+      const token = await SecureStore.getItemAsync('accessToken');
       if (!token) {
         Alert.alert('오류', '로그인이 필요합니다.');
         return;

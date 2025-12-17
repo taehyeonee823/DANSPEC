@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, Text, View, Modal, Image, ScrollView } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 import { API_ENDPOINTS } from '@/config/api';
 
 
@@ -23,7 +23,7 @@ export default function SignUpScreen() {
   useEffect(() => {
     const loadUserInfo = async () => {
       try {
-        const token = await AsyncStorage.getItem('accessToken');
+        const token = await SecureStore.getItemAsync('accessToken');
         if (!token) {
           showModal('⚠️ 오류', '로그인이 필요합니다.');
           router.replace('/login');
@@ -56,8 +56,8 @@ export default function SignUpScreen() {
           }
         } else if (response.status === 401) {
           // 토큰 만료
-          await AsyncStorage.removeItem('accessToken');
-          await AsyncStorage.removeItem('refreshToken');
+          await SecureStore.deleteItemAsync('accessToken');
+          await SecureStore.deleteItemAsync('refreshToken');
           router.replace('/login');
         }
       } catch (error) {
@@ -133,7 +133,7 @@ export default function SignUpScreen() {
     }
 
     try {
-      const token = await AsyncStorage.getItem('accessToken');
+      const token = await SecureStore.getItemAsync('accessToken');
       if (!token) {
         showModal('⚠️ 오류', '로그인이 필요합니다.');
         router.replace('/login');

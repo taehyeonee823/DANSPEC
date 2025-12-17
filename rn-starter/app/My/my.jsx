@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Text, Modal } from 'react-native';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 import { API_ENDPOINTS } from '@/config/api';
 import NaviBar from '../naviBar';
 
@@ -30,7 +30,7 @@ export default function My() {
 
   const fetchUserInfo = async () => {
     try {
-      const token = await AsyncStorage.getItem('accessToken');
+      const token = await SecureStore.getItemAsync('accessToken');
 
       if (!token) {
         console.log('토큰이 없습니다. 로그인 페이지로 이동합니다.');
@@ -67,8 +67,8 @@ export default function My() {
         console.error('사용자 정보 가져오기 실패:', response.status);
         // 토큰이 만료되었을 수 있으므로 로그인 페이지로 이동
         if (response.status === 401) {
-          await AsyncStorage.removeItem('accessToken');
-          await AsyncStorage.removeItem('refreshToken');
+          await SecureStore.deleteItemAsync('accessToken');
+          await SecureStore.deleteItemAsync('refreshToken');
           router.replace('/login');
         }
       }
@@ -81,11 +81,11 @@ export default function My() {
 
   const handleLogout = async () => {
     try {
-      // AsyncStorage에서 토큰 삭제
-      await AsyncStorage.removeItem('accessToken');
-      await AsyncStorage.removeItem('refreshToken');
-      await AsyncStorage.removeItem('autoLogin');
-      await AsyncStorage.removeItem('savedEmail');
+      // SecureStore에서 토큰 삭제
+      await SecureStore.deleteItemAsync('accessToken');
+      await SecureStore.deleteItemAsync('refreshToken');
+      await SecureStore.deleteItemAsync('autoLogin');
+      await SecureStore.deleteItemAsync('savedEmail');
 
       setShowLogoutModal(false);
       router.replace('/login');

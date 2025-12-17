@@ -5,7 +5,7 @@ import { Text, View, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpac
 import { Image } from 'expo-image';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { API_ENDPOINTS } from '@/config/api';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 
 export default function TeamInfo() {
   const router = useRouter();
@@ -49,7 +49,7 @@ export default function TeamInfo() {
 
       try {
         setLoading(true);
-        const token = await AsyncStorage.getItem('accessToken');
+        const token = await SecureStore.getItemAsync('accessToken');
 
         if (!token) {
           console.warn('액세스 토큰이 없습니다.');
@@ -186,7 +186,7 @@ export default function TeamInfo() {
     }
 
     try {
-      const token = await AsyncStorage.getItem('accessToken');
+      const token = await SecureStore.getItemAsync('accessToken');
       if (!token) {
         return;
       }

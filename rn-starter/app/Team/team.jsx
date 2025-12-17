@@ -8,7 +8,7 @@ import TeamApplyBox from './teamApplyBox';
 import TeamApplyBox2 from './teamApplyBox2';
 import CategoryTab from './categoryTab';
 import { API_ENDPOINTS } from '@/config/api';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 
 export default function Team() {
   const router = useRouter();
@@ -31,7 +31,7 @@ export default function Team() {
   const fetchMyTeams = useCallback(async () => {
     try {
       setLoading(true);
-      const token = await AsyncStorage.getItem('accessToken');
+      const token = await SecureStore.getItemAsync('accessToken');
       if (!token) {
         console.warn('액세스 토큰이 없습니다. 로그인 후 다시 시도하세요.');
         setTeams([]);
@@ -120,7 +120,7 @@ export default function Team() {
   const fetchMyApplications = useCallback(async () => {
     try {
       setLoadingApplications(true);
-      const token = await AsyncStorage.getItem('accessToken');
+      const token = await SecureStore.getItemAsync('accessToken');
       if (!token) {
         console.warn('액세스 토큰이 없습니다. 로그인 후 다시 시도하세요.');
         setMyApplications([]);

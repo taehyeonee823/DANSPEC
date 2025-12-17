@@ -3,7 +3,7 @@ import { useRouter } from 'expo-router';
 import { View, Text, ScrollView, KeyboardAvoidingView, TouchableOpacity, StyleSheet, TextInput, Platform, Modal } from 'react-native';
 import { Image } from 'expo-image';
 import DateTimePicker from '@react-native-community/datetimepicker'; 
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 import Button from '../../components/Button';
 import { API_ENDPOINTS } from '../../config/api';
 
@@ -163,7 +163,7 @@ export default function etcteamRecruitmentForm() {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const token = await AsyncStorage.getItem('accessToken');
+        const token = await SecureStore.getItemAsync('accessToken');
         if (!token) {
           setLoadingUser(false);
           return;
@@ -240,7 +240,7 @@ export default function etcteamRecruitmentForm() {
       console.log("요청 URL:", API_ENDPOINTS.CREATE_TEAM);
 
       // 토큰 가져오기
-      const accessToken = await AsyncStorage.getItem('accessToken');
+      const accessToken = await SecureStore.getItemAsync('accessToken');
       
       if (!accessToken) {
         Alert.alert('알림', '로그인이 필요합니다.', [

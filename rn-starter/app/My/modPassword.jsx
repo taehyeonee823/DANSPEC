@@ -3,7 +3,7 @@ import { View, StyleSheet, TextInput, TouchableOpacity, Text, Modal } from 'reac
 import { useRouter } from 'expo-router';
 import { Image } from 'expo-image';
 import { API_ENDPOINTS } from '@/config/api';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 
 export default function ModPassword() {
   const router = useRouter();
@@ -17,7 +17,7 @@ export default function ModPassword() {
   const [focusedInput, setFocusedInput] = useState(null);
 
   useEffect(() => {
-    const token = AsyncStorage.getItem('accessToken');
+    const token = SecureStore.getItemAsync('accessToken');
     if (!token) {
       router.replace('/login');
     }
@@ -39,7 +39,7 @@ export default function ModPassword() {
       return;
     }
 
-    const token = await AsyncStorage.getItem('accessToken');
+    const token = await SecureStore.getItemAsync('accessToken');
     const response = await fetch(API_ENDPOINTS.UPDATE_USER_PASSWORD, {
       method: 'POST',
       headers: {

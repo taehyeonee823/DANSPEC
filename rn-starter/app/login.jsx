@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, Modal, Image, View, Text, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { API_ENDPOINTS } from '@/config/api';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -31,9 +31,9 @@ export default function LoginScreen() {
   useEffect(() => {
     const checkAutoLogin = async () => {
       try {
-        const autoLoginEnabled = await AsyncStorage.getItem('autoLogin');
-        const accessToken = await AsyncStorage.getItem('accessToken');
-        const savedEmail = await AsyncStorage.getItem('savedEmail');
+        const autoLoginEnabled = await SecureStore.getItemAsync('autoLogin');
+        const accessToken = await SecureStore.getItemAsync('accessToken');
+        const savedEmail = await SecureStore.getItemAsync('savedEmail');
 
         if (autoLoginEnabled === 'true' && accessToken) {
           console.log('자동 로그인 시도 중...');
@@ -54,9 +54,9 @@ export default function LoginScreen() {
           } else {
             // 토큰이 만료되었으면 삭제
             console.log('토큰이 만료되었습니다.');
-            await AsyncStorage.removeItem('accessToken');
-            await AsyncStorage.removeItem('refreshToken');
-            await AsyncStorage.removeItem('autoLogin');
+            await SecureStore.deleteItemAsync('accessToken');
+            await SecureStore.deleteItemAsync('refreshToken');
+            await SecureStore.deleteItemAsync('autoLogin');
           }
         }
 
@@ -118,13 +118,13 @@ export default function LoginScreen() {
       if (response.ok && data.success) {
         // 토큰 저장
         if (data.data?.accessToken && data.data?.refreshToken) {
-          await AsyncStorage.setItem('accessToken', data.data.accessToken);
-          await AsyncStorage.setItem('refreshToken', data.data.refreshToken);
+          await SecureStore.setItemAsync('accessToken', data.data.accessToken);
+          await SecureStore.setItemAsync('refreshToken', data.data.refreshToken);
 
           // 자동 로그인 설정 저장
           if (autoLogin) {
-            await AsyncStorage.setItem('autoLogin', 'true');
-            await AsyncStorage.setItem('savedEmail', email);
+            await SecureStore.setItemAsync('autoLogin', 'true');
+            await SecureStore.setItemAsync('savedEmail', email);
           }
         }
 
