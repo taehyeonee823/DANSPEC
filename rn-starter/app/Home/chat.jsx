@@ -1,18 +1,10 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> 77db5cd7219dfec9a95ce8e8df39e61f3981ef88
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Animated } from 'react-native';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { API_ENDPOINTS } from '@/config/api';
-<<<<<<< HEAD
-import AsyncStorage from '@react-native-async-storage/async-storage';
-=======
 import * as SecureStore from 'expo-secure-store';
->>>>>>> 77db5cd7219dfec9a95ce8e8df39e61f3981ef88
 
 export default function Chat() {
   const router = useRouter();
@@ -25,17 +17,11 @@ export default function Chat() {
       timestamp: new Date(),
     },
   ]);
-<<<<<<< HEAD
-  const [inputText, setInputText] = useState('');
-  const [outputText, setOutputText] = useState('');
-  const [loadingDots, setLoadingDots] = useState('');
-=======
 
   const [inputText, setInputText] = useState("");
   const [outputText, setOutputText] = useState('');
   const [loadingDots, setLoadingDots] = useState('');
 
->>>>>>> 77db5cd7219dfec9a95ce8e8df39e61f3981ef88
   const flatListRef = useRef(null);
 
   useEffect(() => {
@@ -101,10 +87,6 @@ export default function Chat() {
     });
     const result = await response.json();
     if (response.ok && result.success && result.data && result.data.answer) {
-<<<<<<< HEAD
-=======
-
->>>>>>> 77db5cd7219dfec9a95ce8e8df39e61f3981ef88
       // 로딩 메시지를 실제 응답으로 교체
       setMessages(prev => prev.map(msg =>
         msg.id === loadingMessageId
