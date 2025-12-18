@@ -9,6 +9,7 @@ export default function CategoryTab() {
   const pathname = usePathname();
   const [activeIndex, setActiveIndex] = useState(0);
   const underlineX = useRef(new Animated.Value(0)).current;
+  const isNavigatingRef = useRef(false); // 네비게이션 중 플래그
 
   const screenWidth = Dimensions.get('window').width;
   const tabWidth = screenWidth / categories.length;
@@ -17,12 +18,14 @@ export default function CategoryTab() {
   useEffect(() => {
     if (pathname === '/My/notificationScreen') {
       setActiveIndex(0);
+      isNavigatingRef.current = false; // 네비게이션 완료
       Animated.spring(underlineX, {
         toValue: 0 * tabWidth,
         useNativeDriver: false,
       }).start();
     } else if (pathname === '/My/recruitmentNow') {
       setActiveIndex(1);
+      isNavigatingRef.current = false; // 네비게이션 완료
       Animated.spring(underlineX, {
         toValue: 1 * tabWidth,
         useNativeDriver: false,
@@ -31,6 +34,11 @@ export default function CategoryTab() {
   }, [pathname, tabWidth]);
 
   const onPressTab = (index) => {
+    // 이미 네비게이션 중이면 무시
+    if (isNavigatingRef.current) {
+      return;
+    }
+
     setActiveIndex(index);
     Animated.spring(underlineX, {
       toValue: index * tabWidth,
@@ -40,12 +48,14 @@ export default function CategoryTab() {
     // 알림 탭(index 0)을 누르면 notificationScreen으로 이동
     if (index === 0) {
       if (pathname !== '/My/notificationScreen') {
-        router.push('./notificationScreen');
+        isNavigatingRef.current = true; // 네비게이션 시작
+        router.replace('./notificationScreen'); // push 대신 replace 사용
       }
     } else if (index === 1) {
       // 가입 요청 탭을 누르면 recruitmentNow로 이동
       if (pathname !== '/My/recruitmentNow') {
-        router.push('./recruitmentNow');
+        isNavigatingRef.current = true; // 네비게이션 시작
+        router.replace('./recruitmentNow'); // push 대신 replace 사용
       }
     }
   };
