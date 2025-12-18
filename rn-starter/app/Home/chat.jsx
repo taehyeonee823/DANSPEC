@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Animated } from 'react-native';
 import { Image } from 'expo-image';
@@ -88,7 +87,6 @@ export default function Chat() {
     });
     const result = await response.json();
     if (response.ok && result.success && result.data && result.data.answer) {
-
       // 로딩 메시지를 실제 응답으로 교체
       setMessages(prev => prev.map(msg =>
         msg.id === loadingMessageId

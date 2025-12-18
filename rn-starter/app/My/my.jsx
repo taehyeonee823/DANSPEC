@@ -175,7 +175,7 @@ export default function My() {
 
         <View style={styles.report}>
           <Image
-            source={require('../../assets/images/dreame.png')}
+            source={require('../../assets/images/dreame1.png')}
             style={styles.dreame}
             contentFit="contain"
           />
@@ -245,8 +245,6 @@ export default function My() {
             ))}
           </>
         )}
-
-        <View style={styles.divider} />
 
         <Text style={styles.setting}>계정 설정</Text>
 
@@ -383,19 +381,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Pretendard-Medium'
   },
-  divider: {
-    height: 8,
-    backgroundColor: '#D9D9D9',
-    marginTop: 30,
-    marginBottom: 15,
-    marginLeft: -30,
-    marginRight: -30,
-  },
   setting: {
     fontSize: 22,
     fontFamily: 'Pretendard-SemiBold',
     color: '#000',
+    marginTop: 20,
     marginBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0',
+    paddingBottom: 10,
   },
   modPasswordContainer: {
     flexDirection: 'row',

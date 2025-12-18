@@ -16,6 +16,11 @@ export default function ApplyCheck() {
   const [loading, setLoading] = useState(false);
   const [teamTitle, setTeamTitle] = useState('');
 
+  const formatPhoneNumber = (phone) => {
+    if (!phone) return '';
+    return phone.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+  };
+
   const fetchTeamDetail = useCallback(async () => {
     if (!teamId) return;
 
@@ -131,6 +136,7 @@ export default function ApplyCheck() {
           description: app.message || '',
           time: app.createdAt || '',
           status: app.status || '',
+          contactNumber: formatPhoneNumber(app.contactNumber) || '',
         };
 
         // status가 승인된 경우 멤버로 분류
@@ -249,6 +255,7 @@ export default function ApplyCheck() {
               introduction={application.introduction}
               description={application.description}
               time={application.time}
+              contactNumber={formatPhoneNumber(application.contactNumber)}
               onAccept={application.onAccept}
               onReject={application.onReject}
               navigateToApplyCheck={false}
@@ -276,6 +283,7 @@ export default function ApplyCheck() {
               time={member.time}
               hideButtons={true}
               navigateToApplyCheck={false}
+              contactNumber={formatPhoneNumber(member.contactNumber)}
             />
           ))
         )}
