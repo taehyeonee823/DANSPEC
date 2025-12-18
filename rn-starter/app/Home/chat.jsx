@@ -21,7 +21,6 @@ export default function Chat() {
   const [inputText, setInputText] = useState("");
   const [outputText, setOutputText] = useState('');
   const [loadingDots, setLoadingDots] = useState('');
-
   const flatListRef = useRef(null);
 
   useEffect(() => {
@@ -274,7 +273,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 4,
   },
   userBubble: {
-    backgroundColor: "#4D90CC",
+    backgroundColor: "#3E6AF4",
     borderTopRightRadius: 4,
   },
   messageText: {
@@ -317,7 +316,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 22,
     marginBottom: 20,
-    backgroundColor: "#4D90CC",
+    backgroundColor: "#3E6AF4",
     justifyContent: "center",
     alignItems: "center",
   },

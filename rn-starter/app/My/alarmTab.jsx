@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
   },
   active: {
     color: '#000',
+    fontFamily: 'Pretendard-SemiBold',
   },
   inactive: {
     color: '#cfcfcf',

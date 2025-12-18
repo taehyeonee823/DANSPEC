@@ -221,10 +221,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   title: {
-    fontSize: 15,
+    fontSize: 20,
     fontFamily: 'Pretendard-SemiBold',
     color: '#000',
     textAlign: 'left',
+    marginBottom: 10,
   },
   loadingContainer: {
     padding: 20,
