@@ -7,6 +7,7 @@ import RecruitmentCard from './recruitmentCard';
 import AlarmTab from './alarmTab';
 import { API_ENDPOINTS } from '@/config/api';
 import * as SecureStore from 'expo-secure-store';
+import { dedupeRequest } from '@/utils/requestCache';
 
 export default function RecruitmentNow() {
   const router = useRouter();
@@ -26,17 +27,21 @@ export default function RecruitmentNow() {
 
       const url = API_ENDPOINTS.GET_TEAMS({ myPosts: true });
       console.log('수신함 팀 조회 URL:', url);
-      const response = await fetch(url, {
-        headers: {
-          Accept: 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      });
 
-      const text = await response.text();
+      // 캐싱 및 중복 제거 적용 (5초 TTL)
+      const { ok, status, text } = await dedupeRequest(url, async () => {
+        const response = await fetch(url, {
+          headers: {
+            Accept: 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const text = await response.text();
+        return { ok: response.ok, status: response.status, text };
+      }, { ttlMs: 5000 });
 
-      if (!response.ok) {
-        console.error('수신함 팀 응답 상태 코드:', response.status, text.slice(0, 200));
+      if (!ok) {
+        console.error('수신함 팀 응답 상태 코드:', status, text.slice(0, 200));
         setTeamData([]);
         return;
       }

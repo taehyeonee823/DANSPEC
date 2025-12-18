@@ -15,7 +15,8 @@ export default function ActivityInfo() {
   let eventData = params.eventData ? JSON.parse(params.eventData) : null;
 
   // recommendedTargets가 문자열로 저장되어 있으면 파싱
-  if (eventData && eventData.recommendedTargets && typeof eventData.recommendedTargets === 'string') {
+  if (eventData && eventData.recommendedTargets && typeof eventData.recommendedTargets === 'string') 
+  {
     try {
       eventData.recommendedTargets = JSON.parse(eventData.recommendedTargets);
     } 
@@ -321,43 +322,40 @@ export default function ActivityInfo() {
           {/* 팀 카드 목록 */}
           {loadingTeams ? (
             <Text style={styles.loadingText}>팀 목록을 불러오는 중...</Text>
-          ) : teams.length === 0 ? (
+          ) : teams.filter(team => !isMyTeam(team)).length === 0 ? (
             <Text style={styles.emptyText}>아직 모집 중인 팀이 없습니다.</Text>
           ) : (
-            teams.map((team) => (
-              <TouchableOpacity
-                key={team.id}
-                style={styles.teamCard}
-                onPress={() => {
-                  // 화면 이동 전에 팀 상세 API 호출하지 않음
-                  router.push({
-                    pathname: '/Team/teamInfo2',
-                    params: {
-                      teamId: String(team.id),
-                      teamData: JSON.stringify(team),
-                    },
-                  });
-                }}
-              >
-                {isMyTeam(team) && (
-                  <View style={styles.myTeamBadge}>
-                    <Text style={styles.myTeamBadgeText}>내가 모집중인 팀</Text>
+            teams
+              .filter(team => !isMyTeam(team))
+              .map((team) => (
+                <TouchableOpacity
+                  key={team.id}
+                  style={styles.teamCard}
+                  onPress={() => {
+                    // 화면 이동 전에 팀 상세 API 호출하지 않음
+                    router.push({
+                      pathname: '/Team/teamInfo2',
+                      params: {
+                        teamId: String(team.id),
+                        teamData: JSON.stringify(team),
+                      },
+                    });
+                  }}
+                >
+                  <Text style={styles.teamCardTitle}>{team.title}</Text>
+                  <Text style={styles.teamCardTag}>{team.promotionText}</Text>
+                  <View style={styles.memberCountRow}>
+                    <Image
+                      source={require('@/assets/images/users.svg')}
+                      style={styles.usersIcon}
+                      contentFit="contain"
+                    />
+                    <Text style={styles.memberCountText}>
+                      {`${team.currentMemberCount ?? team.currentMember ?? 0} / ${team.capacity ?? '-'}`}
+                    </Text>
                   </View>
-                )}
-                <Text style={styles.teamCardTitle}>{team.title}</Text>
-                <Text style={styles.teamCardTag}>{team.promotionText}</Text>
-                <View style={styles.memberCountRow}>
-                  <Image
-                    source={require('@/assets/images/users.svg')}
-                    style={styles.usersIcon}
-                    contentFit="contain"
-                  />
-                  <Text style={styles.memberCountText}>
-                    {`${team.currentMemberCount ?? team.currentMember ?? 0} / ${team.capacity ?? '-'}`}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            ))
+                </TouchableOpacity>
+              ))
           )}
 
         </View>
@@ -622,21 +620,6 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
     position: 'relative',
-  },
-  myTeamBadge: {
-    position: 'absolute',
-    top: 12,
-    right: 12,
-    backgroundColor: '#34C759',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
-    zIndex: 1,
-  },
-  myTeamBadgeText: {
-    fontSize: 11,
-    fontFamily: 'Pretendard-SemiBold',
-    color: '#FFFFFF',
   },
   teamCardTitle: {
     fontSize: 16,

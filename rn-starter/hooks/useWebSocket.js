@@ -17,6 +17,7 @@ export const useWebSocket = () => {
     const [loading, setLoading] = useState(true);
     const eventSourceRef = useRef(null);
     const reconnectTimeoutRef = useRef(null);
+    const abortControllerRef = useRef(null);
 
     // API 응답을 컴포넌트용 필드로 매핑하는 헬퍼
     const mapNotification = (n) => ({
@@ -65,6 +66,11 @@ export const useWebSocket = () => {
 
         // 2) SSE로 실시간 알림 구독
         const connectSSE = async () => {
+            // 이전 연결이 있으면 중단
+            if (abortControllerRef.current) {
+                abortControllerRef.current.abort();
+            }
+
             // SSE는 장시간 열린 연결이므로 별도 타임아웃으로 abort하면 AbortError가 계속 발생할 수 있음
             // 필요 시 네트워크가 아주 나쁜 환경에서만 끊고 싶다면 TIMEOUT_MS 값을 크게 잡으세요.
             const TIMEOUT_MS = 0; // 0이면 타임아웃 비활성화
@@ -88,6 +94,7 @@ export const useWebSocket = () => {
                 const url = API_ENDPOINTS.NOTIFICATIONS_SUBSCRIBE;
 
                 const controller = new AbortController();
+                abortControllerRef.current = controller; // ref에 저장
                 const timeoutId = TIMEOUT_MS > 0 ? setTimeout(() => controller.abort(), TIMEOUT_MS) : null;
 
                 const response = await fetch(url, {
@@ -178,7 +185,11 @@ export const useWebSocket = () => {
         return () => {
             isMounted = false;
             if (reconnectTimeoutRef.current) clearTimeout(reconnectTimeoutRef.current);
-            // reader가 열린 상태면 종료시키는 것이 좋지만, 여기서는 fetch 스코프 밖이라 abort로 회수하는 패턴을 권장
+            // SSE 연결 즉시 중단
+            if (abortControllerRef.current) {
+                abortControllerRef.current.abort();
+                abortControllerRef.current = null;
+            }
         };
     }, []);
 
