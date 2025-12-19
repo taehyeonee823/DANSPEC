@@ -195,7 +195,7 @@ export default function Chat() {
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={styles.keyboardView}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
       >
         {/* 메시지 리스트 */}
         <FlatList
@@ -334,8 +334,8 @@ const styles = StyleSheet.create({
     maxHeight: 100,
     paddingHorizontal: 16,
     paddingVertical: 10,
-    marginBottom: 20,
     borderRadius: 22,
+    bottom:20,
     backgroundColor: "#F5F5F5",
     fontSize: 15,
     fontFamily: "Pretendard-Regular",
@@ -346,7 +346,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 22,
-    marginBottom: 20,
+    bottom:20,
     backgroundColor: "#3E6AF4",
     justifyContent: "center",
     alignItems: "center",
