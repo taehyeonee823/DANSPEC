@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from 'expo-router';
 import { View, Text, ScrollView, KeyboardAvoidingView, TouchableOpacity, StyleSheet, TextInput, Platform, Modal } from 'react-native';
 import { Image } from 'expo-image';
-import DateTimePicker from '@react-native-community/datetimepicker'; 
 import * as SecureStore from 'expo-secure-store';
 import Button from '../../components/Button';
+import DateRangePicker from '../../components/DateRangePicker';
 import { API_ENDPOINTS } from '../../config/api';
 
 export default function etcteamRecruitmentForm() {
@@ -30,12 +30,6 @@ export default function etcteamRecruitmentForm() {
   
   const [startDate, setStartDate] = useState(getTodayStart());
   const [endDate, setEndDate] = useState(getTomorrowStart());
-  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
-  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
-  
-  // 임시 선택 날짜 state (iOS Modal에서 '확인'을 누르기 전까지 최종 확정되지 않도록)
-  const [tempStartDate, setTempStartDate] = useState(getTodayStart());
-  const [tempEndDate, setTempEndDate] = useState(getTomorrowStart());
 
   // 알림 모달 state
   const [showAlertModal, setShowAlertModal] = useState(false);
@@ -66,14 +60,6 @@ export default function etcteamRecruitmentForm() {
     setInputs(newInputs);
   };
 
-  // 날짜 포맷팅 함수 (화면 표시용)
-  const formatDate = (date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}.${month}.${day}`;
-  };
-
   // 날짜를 YYYY-MM-DD 형식으로 변환하는 함수 (API 전송용)
   const formatDateForAPI = (date) => {
     const year = date.getFullYear();
@@ -82,75 +68,6 @@ export default function etcteamRecruitmentForm() {
     return `${year}-${month}-${day}`;
   };
 
-  // 날짜 비교 헬퍼 함수 (시간 제외)
-  const compareDates = (date1, date2) => {
-    const d1 = new Date(date1);
-    d1.setHours(0, 0, 0, 0);
-    const d2 = new Date(date2);
-    d2.setHours(0, 0, 0, 0);
-    return d1.getTime() - d2.getTime();
-  };
-
-  // 시작일 Picker 변경 핸들러 (실시간 업데이트)
-  const handleTempStartDateChange = (event, selectedDate) => {
-    if (selectedDate) {
-        // 시간 제거하고 날짜만 설정
-        const dateOnly = new Date(selectedDate);
-        dateOnly.setHours(0, 0, 0, 0);
-        setTempStartDate(dateOnly);
-    }
-  };
-
-  // 시작일 '확인' 버튼 핸들러
-  const confirmStartDate = () => {
-    const dateOnly = tempStartDate;
-    dateOnly.setHours(0, 0, 0, 0);
-    setStartDate(dateOnly);
-
-    // 종료일이 시작일보다 이전이면 종료일을 시작일 + 1일로 설정
-    if (compareDates(dateOnly, endDate) > 0) {
-      const newEndDate = new Date(dateOnly);
-      newEndDate.setDate(newEndDate.getDate() + 1);
-      setEndDate(newEndDate);
-      setTempEndDate(newEndDate); // 임시 종료일도 업데이트
-    }
-    setShowStartDatePicker(false);
-  };
-  
-  // 종료일 Picker 변경 핸들러 (실시간 업데이트)
-  const handleTempEndDateChange = (event, selectedDate) => {
-    if (selectedDate) {
-      // 시간 제거하고 날짜만 설정 (옵션)
-      const dateOnly = new Date(selectedDate);
-      dateOnly.setHours(0, 0, 0, 0);
-      setTempEndDate(dateOnly);
-    }
-  };
-
-  // 종료일 '확인' 버튼 핸들러
-  const confirmEndDate = () => {
-    // 최소 날짜 제한 (startDate)보다 작으면 선택 불가
-    if (compareDates(tempEndDate, startDate) < 0) {
-      alert("모집 종료일은 시작일보다 빠를 수 없습니다.");
-      // 모달을 닫지 않고 사용자에게 재선택 요청
-      return; 
-    }
-    
-    setEndDate(tempEndDate);
-    setShowEndDatePicker(false);
-  };
-  
-  // 시작일 모달 열기 핸들러
-  const openStartDatePicker = () => {
-    setTempStartDate(startDate); // 현재 확정된 값으로 임시값 초기화
-    setShowStartDatePicker(true);
-  };
-  
-  // 종료일 모달 열기 핸들러
-  const openEndDatePicker = () => {
-    setTempEndDate(endDate); // 현재 확정된 값으로 임시값 초기화
-    setShowEndDatePicker(true);
-  };
 
   const [userInfo, setUserInfo] = useState({
     name: '',
@@ -283,7 +200,11 @@ export default function etcteamRecruitmentForm() {
           style={{ position: 'absolute', top:60, left: 8, zIndex: 999, padding: 8 }}
           onPress={() => router.back()}
         >
-          <Text style={{ fontSize: 28, color: '#000', fontWeight: 'bold' }}>←</Text>
+          <Image
+            source={require('@/assets/images/left.svg')}
+            style={{ width: 28, height: 28 }}
+            contentFit="contain"
+          />
         </TouchableOpacity>
 
         <KeyboardAvoidingView behavior="height" style={{ flex: 1, marginTop: 110 }}>
@@ -349,100 +270,16 @@ export default function etcteamRecruitmentForm() {
                 />
               </TouchableOpacity>
             </View>
-            
-            {/* 모집 기간 섹션 (제목 통일) */}
-            <Text style={[styles.sectionTitle, { marginTop: 0 }]}>모집 기간</Text>
-            <View style={styles.datePickerContainer}>
-              <View style={styles.datePickerRow}>
-                <Text style={styles.dateLabel}>시작일</Text>
-                <TouchableOpacity
-                  style={styles.datePickerButton}
-                  onPress={openStartDatePicker}
-                >
-                  <Text style={styles.datePickerText}>{formatDate(startDate)}</Text>
-                  <Image
-                    source={require('@/assets/images/down.svg')}
-                    style={styles.datePickerArrow}
-                    contentFit="contain"
-                  />
-                </TouchableOpacity>
-              </View>
-              
-              <View style={styles.datePickerRow}>
-                <Text style={styles.dateLabel}>종료일</Text>
-                <TouchableOpacity
-                  style={styles.datePickerButton}
-                  onPress={openEndDatePicker}
-                >
-                  <Text style={styles.datePickerText}>{formatDate(endDate)}</Text>
-                  <Image
-                    source={require('@/assets/images/down.svg')}
-                    style={styles.datePickerArrow}
-                    contentFit="contain"
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
 
-            {/* 시작일 DatePicker Modal (iOS 전용) */}
-            <Modal
-              visible={showStartDatePicker}
-              transparent={true}
-              animationType="slide"
-              onRequestClose={() => setShowStartDatePicker(false)}
-            >
-              <View style={styles.modalContainer}>
-                <View style={styles.modalContent}>
-                  <View style={styles.modalHeader}>
-                    <TouchableOpacity onPress={() => setShowStartDatePicker(false)}>
-                      <Text style={styles.modalCancelText}>취소</Text>
-                    </TouchableOpacity>
-                    <Text style={styles.modalTitle}>시작일 선택</Text>
-                    <TouchableOpacity onPress={confirmStartDate}>
-                      <Text style={styles.modalConfirmText}>확인</Text>
-                    </TouchableOpacity>
-                  </View>
-                  <DateTimePicker
-                    value={tempStartDate}
-                    mode="date"
-                    display="spinner"
-                    onChange={handleTempStartDateChange}
-                    minimumDate={getTodayStart()}
-                    style={styles.iosPicker}
-                  />
-                </View>
-              </View>
-            </Modal>
-
-            {/* 종료일 DatePicker Modal (iOS 전용) */}
-            <Modal
-              visible={showEndDatePicker}
-              transparent={true}
-              animationType="slide"
-              onRequestClose={() => setShowEndDatePicker(false)}
-            >
-              <View style={styles.modalContainer}>
-                <View style={styles.modalContent}>
-                  <View style={styles.modalHeader}>
-                    <TouchableOpacity onPress={() => setShowEndDatePicker(false)}>
-                      <Text style={styles.modalCancelText}>취소</Text>
-                    </TouchableOpacity>
-                    <Text style={styles.modalTitle}>종료일 선택</Text>
-                    <TouchableOpacity onPress={confirmEndDate}>
-                      <Text style={styles.modalConfirmText}>확인</Text>
-                    </TouchableOpacity>
-                  </View>
-                  <DateTimePicker
-                    value={tempEndDate}
-                    mode="date"
-                    display="spinner"
-                    onChange={handleTempEndDateChange}
-                    minimumDate={startDate}
-                    style={styles.iosPicker}
-                  />
-                </View>
-              </View>
-            </Modal>
+            {/* 모집 기간 섹션 */}
+            <DateRangePicker
+              startDate={startDate}
+              endDate={endDate}
+              onStartDateChange={setStartDate}
+              onEndDateChange={setEndDate}
+              minStartDate={getTodayStart()}
+              labelStyle={styles.sectionTitle}
+            />
             
             {/* 역할 입력 섹션 */}
             <Text style={styles.sectionTitle}>역할</Text>
@@ -665,76 +502,6 @@ const styles = StyleSheet.create({
   buttonIcon: {
     width: 24,
     height: 24,
-  },
-  datePickerContainer: {
-    gap: 10,
-    marginBottom: 28, // 섹션 간격 추가
-  },
-  datePickerRow: {
-    // 섹션 타이틀 대신 간결한 라벨을 사용하므로, 여기에 플렉스 없이 요소 배치
-    // 기존 코드의 Text style={styles.sectionTitle} 부분을 제거했기 때문에 이 스타일은 유지됩니다.
-  },
-  dateLabel: {
-    fontSize: 16, // sectionTitle과 유사하게 키움
-    fontFamily: 'Pretendard-Medium',
-    color: '#000',
-    marginBottom: 10,
-  },
-  datePickerButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    height: 48,
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#ddd',
-    paddingHorizontal: 12,
-    borderRadius: 8,
-  },
-  datePickerText: {
-    fontSize: 16,
-    color: '#000',
-  },
-  datePickerArrow: {
-    width: 15,
-    height: 15,
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    backgroundColor: '#fff',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    paddingBottom: 40,
-  },
-  modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontFamily: 'Pretendard-SemiBold',
-    color: '#000',
-  },
-  modalCancelText: {
-    fontSize: 16,
-    color: '#666',
-  },
-  modalConfirmText: {
-    fontSize: 16,
-    color: '#007AFF',
-    fontWeight: '600',
-  },
-  iosPicker: {
-    width: '100%',
-    height: 200,
   },
   counterContainer: {
     flexDirection: 'row',

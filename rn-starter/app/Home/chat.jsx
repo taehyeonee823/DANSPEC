@@ -1,10 +1,20 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, Animated } from 'react-native';
-import { Image } from 'expo-image';
-import { useRouter } from 'expo-router';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { API_ENDPOINTS } from '@/config/api';
-import * as SecureStore from 'expo-secure-store';
+import React, { useState, useRef, useEffect } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TextInput,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+  Animated,
+} from "react-native";
+import { Image } from "expo-image";
+import { useRouter } from "expo-router";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { API_ENDPOINTS } from "@/config/api";
+import * as SecureStore from "expo-secure-store";
 
 export default function Chat() {
   const router = useRouter();
@@ -19,8 +29,8 @@ export default function Chat() {
   ]);
 
   const [inputText, setInputText] = useState("");
-  const [outputText, setOutputText] = useState('');
-  const [loadingDots, setLoadingDots] = useState('');
+  const [outputText, setOutputText] = useState("");
+  const [loadingDots, setLoadingDots] = useState("");
   const flatListRef = useRef(null);
 
   useEffect(() => {
@@ -34,17 +44,17 @@ export default function Chat() {
 
   // 로딩 애니메이션
   useEffect(() => {
-    const hasLoadingMessage = messages.some(msg => msg.isLoading);
+    const hasLoadingMessage = messages.some((msg) => msg.isLoading);
     if (hasLoadingMessage) {
       const interval = setInterval(() => {
-        setLoadingDots(prev => {
-          if (prev === '...') return '';
-          return prev + '.';
+        setLoadingDots((prev) => {
+          if (prev === "...") return "";
+          return prev + ".";
         });
       }, 500);
       return () => clearInterval(interval);
     } else {
-      setLoadingDots('');
+      setLoadingDots("");
     }
   }, [messages]);
 
@@ -67,13 +77,16 @@ export default function Chat() {
     setInputText("");
 
     // 로딩 메시지 추가
-    const loadingMessageId = Date.now().toString() + '_loading';
-    setMessages(prev => [...prev, {
-      id: loadingMessageId,
-      isBot: true,
-      isLoading: true,
-      timestamp: new Date()
-    }]);
+    const loadingMessageId = Date.now().toString() + "_loading";
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: loadingMessageId,
+        isBot: true,
+        isLoading: true,
+        timestamp: new Date(),
+      },
+    ]);
 
     // 봇 응답 시뮬레이션 (실제로는 API 호출)
     const response = await fetch(API_ENDPOINTS.AI_CHATBOT, {
@@ -87,20 +100,34 @@ export default function Chat() {
     const result = await response.json();
     if (response.ok && result.success && result.data && result.data.answer) {
       // 로딩 메시지를 실제 응답으로 교체
-      setMessages(prev => prev.map(msg =>
-        msg.id === loadingMessageId
-          ? { ...msg, text: result.data.answer, isLoading: false, timestamp: new Date() }
-          : msg
-      ));
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === loadingMessageId
+            ? {
+                ...msg,
+                text: result.data.answer,
+                isLoading: false,
+                timestamp: new Date(),
+              }
+            : msg
+        )
+      );
       setOutputText(result.data.answer);
     } else {
       // 에러 발생 시 로딩 메시지를 에러 메시지로 교체
-      setMessages(prev => prev.map(msg =>
-        msg.id === loadingMessageId
-          ? { ...msg, text: '죄송합니다. 응답을 생성하는데 실패했습니다.', isLoading: false, timestamp: new Date() }
-          : msg
-      ));
-      console.error('AI 챗봇 응답 실패:', response.status);
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === loadingMessageId
+            ? {
+                ...msg,
+                text: "죄송합니다. 응답을 생성하는데 실패했습니다.",
+                isLoading: false,
+                timestamp: new Date(),
+              }
+            : msg
+        )
+      );
+      console.error("AI 챗봇 응답 실패:", response.status);
     }
   };
 
@@ -120,13 +147,9 @@ export default function Chat() {
           ]}
         >
           {item.isLoading ? (
-            <Text
-              style={[
-                styles.messageText,
-                styles.botText,
-              ]}
-            >
-              {item.text}{loadingDots}
+            <Text style={[styles.messageText, styles.botText]}>
+              {item.text}
+              {loadingDots}
             </Text>
           ) : (
             <Text
@@ -148,10 +171,18 @@ export default function Chat() {
       {/* 헤더 */}
       <View style={styles.headerBar}>
         <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.push("./home")}
+          style={{
+            position: "absolute",
+            left: 20,
+            padding: 8,
+          }}
+          onPress={() => router.back()}
         >
-          <Text style={styles.backButtonText}>←</Text>
+          <Image
+            source={require("@/assets/images/left.svg")}
+            style={{ width: 30, height: 30, marginLeft: -10 }}
+            contentFit="contain"
+          />
         </TouchableOpacity>
         <Image
           source={require("@/assets/images/dreame1.png")}
