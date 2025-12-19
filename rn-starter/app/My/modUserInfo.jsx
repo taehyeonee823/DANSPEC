@@ -215,7 +215,11 @@ export default function SignUpScreen() {
           }}
           onPress={() => router.back()}
         >
-          <Text style={{ fontSize: 28, color: '#000', fontWeight: 'bold' }}>←</Text>
+          <Image
+            source={require('@/assets/images/left.svg')}
+            style={{ width: 30, height: 30, marginLeft: -10 }}
+            contentFit="contain"
+          />
         </TouchableOpacity>
         <Text
           style={{
