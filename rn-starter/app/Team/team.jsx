@@ -239,6 +239,7 @@ export default function Team() {
                 dueDate={formatDate(team.recruitmentEndDate)}
                 title={team.title}
                 description={team.promotionText}
+                role={team.requiredRoles || team.role}
                 tag={`연결된 활동: ${team.connectedActivityTitle || '자율 모집'}`}
                 recruiting={team.recruiting}
                 currentMemberCount={team.currentMemberCount || team.currentMember || 0}

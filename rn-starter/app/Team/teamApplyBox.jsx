@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 
-export default function teamApplyBox({ dueDate, title, description, tag, onPress, recruiting, currentMemberCount, capacity }) {
+export default function teamApplyBox({ dueDate, title, description, tag, onPress, recruiting, currentMemberCount, capacity, role }) {
   // status 계산 로직
   let status = '팀 모집 중';
 
@@ -77,6 +77,15 @@ export default function teamApplyBox({ dueDate, title, description, tag, onPress
       </View>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.description}>{description}</Text>
+      {role && role.length > 0 && (
+        <View style={styles.roleContainer}>
+          {role.map((roleItem, index) => (
+            <View key={index} style={styles.roleTag}>
+              <Text style={styles.roleText}># {roleItem}</Text>
+            </View>
+          ))}
+        </View>
+      )}
       {!extraBadgeText ? <Text style={styles.tag}>{tag}</Text> : null}
     </TouchableOpacity>
   );
@@ -143,7 +152,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: 'Pretendard-SemiBold',
     color: '#000',
-    marginBottom: 8,
+    marginBottom: 6,
   },
   description: {
     fontSize: 14,
@@ -156,5 +165,23 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Pretendard-Regular',
     color: '#3E6AF4',
+    marginTop: 2,
+  },
+  roleContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginBottom: 6,
+  },
+  roleTag: {
+    backgroundColor: '#3E64F4',
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+  },
+  roleText: {
+    fontSize: 12,
+    fontFamily: 'Pretendard-Medium',
+    color: '#FFFFFF',
   },
 });
