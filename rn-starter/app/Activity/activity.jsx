@@ -248,7 +248,13 @@ export default function Activity() {
                   </View>
                   <Text style={styles.etcTitle}>{team.title}</Text>
                   <Text style={styles.etcPromotion} numberOfLines={2}>{team.promotionText}</Text>
-                  <Text style={styles.etcRole}>{team.role?.join(', ')}</Text>
+                  <View style={styles.etcRoleContainer}>
+                    {team.role?.map((roleItem, index) => (
+                      <View key={index} style={styles.etcRoleTag}>
+                        <Text style={styles.etcRoleText}># {roleItem}</Text>
+                      </View>
+                    ))}
+                  </View>
                 </TouchableOpacity>
               );
             })
@@ -446,9 +452,21 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     lineHeight: 20,
   },
-  etcRole: {
+  etcRoleContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginTop: 4,
+  },
+  etcRoleTag: {
+    backgroundColor: '#3E64F4',
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+  },
+  etcRoleText: {
     fontSize: 12,
-    fontFamily: 'Pretendard-Regular',
-    color: '#3E6AF4',
+    fontFamily: 'Pretendard-Medium',
+    color: '#FFFFFF',
   },
 });
