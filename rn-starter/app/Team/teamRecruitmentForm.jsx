@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import { View, Text, ScrollView, KeyboardAvoidingView, TouchableOpacity, StyleSheet, TextInput, Modal } from 'react-native';
+import { View, Text, ScrollView, KeyboardAvoidingView, TouchableOpacity, StyleSheet, TextInput, Modal, Alert } from 'react-native';
 import { Image } from 'expo-image';
 import Button from '../../components/Button';
 import DateRangePicker from '../../components/DateRangePicker';
@@ -308,7 +308,7 @@ export default function teamRecruitmentForm() {
                 <View key={item.id} style={styles.inputRow}>
                   <TextInput
                     style={styles.input}
-                    placeholder={focusedRoleId === item.id ? '' : `모집 역할 #${index + 1} (예: 기획자)`}
+                    placeholder={focusedRoleId === item.id ? '' : "역할을 입력해주세요"}
                     placeholderTextColor="#CCCCCC"
                     value={item.value}
                     onChangeText={(text) => handleChange(text, item.id)}
@@ -340,7 +340,7 @@ export default function teamRecruitmentForm() {
                 style={styles.defaultInput}
                 value={traitInfo}
                 onChangeText={setTraitInfo}
-                placeholder={isTraitFocused ? '' : "팀이 선호하는 인재상에 대해 작성해주세요"}
+                placeholder={isTraitFocused ? '' : "선호하는 특성을 입력해주세요"}
                 placeholderTextColor="#CCCCCC"
                 onFocus={() => setIsTraitFocused(true)}
                 onBlur={() => setIsTraitFocused(false)}
@@ -350,7 +350,7 @@ export default function teamRecruitmentForm() {
             <MultilineInput
                 value={introductionInfo}
                 onChangeText={setIntroductionInfo}
-                placeholder={isIntroFocused ? '' : "모집글에 대한 소개를 상세하게 작성해주세요"}
+                placeholder={isIntroFocused ? '' : "진행 방식을 상세하게 작성해주세요 "}
                 onFocus={() => setIsIntroFocused(true)}
                 onBlur={() => setIsIntroFocused(false)}
             />

@@ -529,7 +529,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 28,
     fontFamily: 'Pretendard-SemiBold',
-    color: '#A6A6A6',
+    color: '#1A1A1A',
   },
   descriptionBox: {
     flex: 1,
@@ -540,13 +540,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     marginBottom: 28,
     fontFamily: 'Pretendard-Medium',
-    color: '#A6A6A6',
+    color: '#1A1A1A',
     minHeight: 100,
   },
   readOnlyText: {
     fontSize: 16,
     fontFamily: 'Pretendard-Medium',
-    color: '#A6A6A6',
+    color: '#1A1A1A',
     borderBottomColor: '#1A1A1A',
     paddingVertical: 10,
     paddingHorizontal: 12,
@@ -584,12 +584,12 @@ const styles = StyleSheet.create({
   collegeText: {
     fontSize: 14,
     fontFamily: 'Pretendard-Medium',
-    color: '#A6A6A6',
+    color: '#1A1A1A',
   },
   majorText: {
     fontSize: 14,
     fontFamily: 'Pretendard-Medium',
-    color: '#A6A6A6',
+    color: '#1A1A1A',
   },
   emptyBox: {
     flex: 1,
@@ -605,7 +605,7 @@ const styles = StyleSheet.create({
   roleText: {
     fontSize: 16,
     fontFamily: 'Pretendard-Medium',
-    color: '#A6A6A6',
+    color: '#1A1A1A',
     borderBottomColor: '#1A1A1A',
     paddingVertical: 10,
     paddingHorizontal: 12,

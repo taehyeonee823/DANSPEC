@@ -386,7 +386,12 @@ export default function teamRecruitmentForm() {
             </View>
           </View>
           <Text style={styles.sectionTitle}>학년</Text>
-          <Text style={styles.readOnlyText}>{userInfo?.grade ? `${userInfo.grade}학년` : ""}</Text>
+          <View style={styles.departmentRow}>
+              <View style={styles.collegeBox}>
+                <Text style={styles.collegeText}>{userInfo?.grade ? `${userInfo.grade}학년` : '정보 없음'}</Text>
+              </View>
+              <Text style={styles.emptyBox}></Text>
+            </View>
           <Text style={styles.sectionTitle}>모집 인원</Text>
           <View style={styles.counterContainer}>
             <TouchableOpacity
@@ -530,8 +535,8 @@ const styles = StyleSheet.create({
   readOnlyText: {
     fontSize: 16,
     fontFamily: "Pretendard-Regular",
-    color: "#1A1A1A",
-    borderBottomColor: "#CCCCCC",
+    color: "#A6A6A6", 
+    borderBottomColor: "#1A1A1A",
     paddingVertical: 10,
     paddingHorizontal: 12,
     borderBottomWidth: 1,
@@ -575,11 +580,22 @@ const styles = StyleSheet.create({
     fontFamily: "Pretendard-Medium",
     color: "#A6A6A6",
   },
+  emptyBox: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#FFFFFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   defaultInput: {
     height: 48,
     backgroundColor: "#fff",
     borderBottomWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#1A1A1A",
     padding: 8,
     fontSize: 16,
     marginBottom: 28,
@@ -588,7 +604,7 @@ const styles = StyleSheet.create({
     height: 100,
     backgroundColor: "#fff",
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: "#3E6AF433",
     padding: 10,
     borderRadius: 8,
     fontSize: 16,
@@ -604,7 +620,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
+    borderBottomColor: "#1A1A1A",
     padding: 10,
     fontSize: 16,
   },

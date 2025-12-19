@@ -86,15 +86,15 @@ const NotificationScreen = () => {
     return (
         <View style={[styles.mainContainer, { paddingTop: insets.top }]}>
             <View style={styles.headerBar}>
-                <TouchableOpacity
-                    style={styles.backButton}
-                    onPress={() => router.push('/My/my')}
-                >
-                    <Image source={require('@/assets/images/left.svg')} style={styles.backButtonIcon} contentFit="contain" />
-                </TouchableOpacity>
                 <Text style={styles.screenTitle}>
                     수신함
                 </Text>
+                <TouchableOpacity
+                    style={styles.cancelButton}
+                    onPress={() => router.push('/My/my')}
+                >
+                    <Image source={require('@/assets/images/cancel.svg')} style={styles.cancelButtonIcon} contentFit="contain" />
+                </TouchableOpacity>
             </View>
 
             <View style={styles.fixedAlarmTab}>
@@ -127,20 +127,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         paddingHorizontal: 10,
     },
-    backButton: {
+    cancelButton: {
         padding: 8,
         position: 'absolute', 
-        left: 10,
+        right: 10,
         zIndex: 1,
     },
-    backButtonIcon: {
+    cancelButtonIcon: {
         width: 28,
         height: 28,
-    },
-    backButtonText: {
-        fontSize: 28,
-        color: '#000',
-        fontWeight: 'bold',
     },
     screenTitle: {
         fontSize: 20,
