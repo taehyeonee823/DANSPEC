@@ -40,9 +40,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingVertical: 10,
     paddingHorizontal: 15,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#fff',
     borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#eee',
+    borderBottomWidth: 1,
+    borderBottomColor: '#1A1A1A',
+    marginBottom: 10,
   },
 });

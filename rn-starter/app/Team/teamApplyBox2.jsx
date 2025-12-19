@@ -36,7 +36,7 @@ export default function teamApplyBox2({ dueDate, title, description, tag, onPres
             <Text style={statusBadgeStyle}>{statusBadgeText}</Text>
           )}
         </View>
-        <Text style={styles.dueDate}>작성: {dueDate}</Text>
+        <Text style={styles.dueDate}>작성일 {dueDate}</Text>
       </View>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.description}>{description}</Text>

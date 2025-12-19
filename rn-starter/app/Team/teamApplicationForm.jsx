@@ -1,5 +1,6 @@
-import { Text, View, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpacity, Image, Alert } from "react-native";
+import { Text, View, StyleSheet, KeyboardAvoidingView, ScrollView, TouchableOpacity, Alert } from "react-native";
 import React, { useState, useEffect } from "react";
+import { Image } from 'expo-image';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { API_ENDPOINTS } from '@/config/api';
@@ -121,10 +122,14 @@ export default function Index() {
   return (
       <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
         <TouchableOpacity
-          style={{ position: 'absolute', top:60, left: 20, zIndex: 999, padding: 8 }}
+          style={{ position: 'absolute', top:60, left: 8, zIndex: 999, padding: 8 }}
           onPress={() => router.back()}
         >
-          <Text style={{ fontSize: 28, color: '#000', fontWeight: 'bold' }}>←</Text>
+          <Image
+            source={require('@/assets/images/left.svg')}
+            style={{ width: 30, height: 30 }}
+            contentFit="contain"
+          />
         </TouchableOpacity>
 
         <KeyboardAvoidingView behavior="height" style={{ flex: 1, marginTop: 110 }}>
@@ -170,18 +175,18 @@ export default function Index() {
                 onChangeText={setMotivation}
                 placeholder="팀에 지원하게 된 동기와 기여하고 싶은 부분을 상세히 작성해 주세요." 
             />
-            <Text style={styles.sectionTitle}>포트폴리오 / 깃허브 링크</Text>
-            <SinglelineInput
-                value={portfolioLink}
-                onChangeText={setPortfolioLink}
-                placeholder="포트폴리오나 깃허브 링크를 입력해주세요." 
-            /> 
             <Text style={styles.sectionTitle}>연락처</Text>
             <SinglelineInput
                 value={contactInfo}
                 onChangeText={setContactInfo}
                 placeholder="연락처를 입력해주세요."
             />
+            <Text style={styles.sectionTitle}>포트폴리오 / 깃허브 링크</Text>
+            <SinglelineInput
+                value={portfolioLink}
+                onChangeText={setPortfolioLink}
+                placeholder="포트폴리오나 깃허브 링크를 입력해주세요." 
+            /> 
             <Button
                 title={submitting ? "제출 중..." : "신청하기"}
                 onPress={handleSubmit}

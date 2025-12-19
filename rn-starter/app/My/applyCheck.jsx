@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, StyleSheet, TouchableOpacity, Image, ScrollView, Text } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, ScrollView, Text } from 'react-native';
+import { Image } from 'expo-image';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ApplierCard from './applierCard';
@@ -217,19 +218,13 @@ export default function ApplyCheck() {
           style={styles.backButton}
           onPress={() => router.back()}
         >
-          <Text style={styles.backButtonText}>←</Text>
-        </TouchableOpacity>
-        <Text style={styles.screenTitle}>팀원 관리하기</Text>
-        <TouchableOpacity
-          style={styles.closeButton}
-          onPress={() => router.back()}
-        >
           <Image
-            source={require('../../assets/images/xCircle.svg')}
-            style={styles.closeIcon}
+            source={require('@/assets/images/left.svg')}
+            style={styles.backIcon}
             contentFit="contain"
           />
         </TouchableOpacity>
+        <Text style={styles.screenTitle}>팀원 관리하기</Text>
       </View>
 
       <ScrollView style={styles.contentArea} contentContainerStyle={styles.scrollContent}>
@@ -307,28 +302,18 @@ const styles = StyleSheet.create({
   backButton: {
     padding: 8,
     position: 'absolute',
-    left: 20,
+    left: 8,
     zIndex: 1,
   },
-  backButtonText: {
-    fontSize: 28,
-    color: '#000',
-    fontWeight: 'bold',
+  backIcon: {
+    width: 30,
+    height: 30,
   },
   screenTitle: {
     fontSize: 20,
     fontFamily: 'Pretendard-SemiBold',
     color: '#000',
     textAlign: 'center',
-  },
-  closeButton: {
-    position: 'absolute',
-    right: 20,
-    padding: 8,
-  },
-  closeIcon: {
-    width: 24,
-    height: 24,
   },
   contentArea: {
     flex: 1,
