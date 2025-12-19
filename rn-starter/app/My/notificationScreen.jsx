@@ -90,7 +90,7 @@ const NotificationScreen = () => {
                     style={styles.backButton}
                     onPress={() => router.push('/My/my')}
                 >
-                    <Text style={styles.backButtonText}>←</Text>
+                    <Image source={require('@/assets/images/left.svg')} style={styles.backButtonIcon} contentFit="contain" />
                 </TouchableOpacity>
                 <Text style={styles.screenTitle}>
                     수신함
@@ -130,8 +130,12 @@ const styles = StyleSheet.create({
     backButton: {
         padding: 8,
         position: 'absolute', 
-        left: 20,
+        left: 10,
         zIndex: 1,
+    },
+    backButtonIcon: {
+        width: 28,
+        height: 28,
     },
     backButtonText: {
         fontSize: 28,

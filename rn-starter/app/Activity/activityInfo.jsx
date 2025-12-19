@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, ScrollView, Dimensions, Linking, Image as RNImage, Modal } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text, ScrollView, Dimensions, Linking, Modal, Image as RNImage } from 'react-native';
 import { Image } from 'expo-image';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
@@ -182,7 +182,11 @@ export default function ActivityInfo() {
             style={styles.backButton}
             onPress={() => router.back()}
           >
-            <Text style={styles.backIcon}>←</Text>
+            <Image
+              source={require('@/assets/images/left.svg')}
+              style={styles.backIcon}
+              contentFit="contain"
+            />
           </TouchableOpacity>
         </View>
         <View style={styles.content}>
@@ -199,7 +203,11 @@ export default function ActivityInfo() {
           style={styles.backButton}
           onPress={() => router.back()}
         >
-          <Text style={styles.backIcon}>←</Text>
+          <Image
+            source={require('@/assets/images/left.svg')}
+            style={styles.backIcon}
+            contentFit="contain"
+          />
         </TouchableOpacity>
         <View style={styles.headerCenter}>
           <Text style={styles.headerTitle}>활동 정보</Text>
@@ -408,11 +416,11 @@ const styles = StyleSheet.create({
   backButton: {
     padding: 8,
     width: 44,
+    marginLeft: -12,
   },
   backIcon: {
-    fontSize: 28,
-    color: '#000',
-    fontWeight: 'bold',
+    width: 30,
+    height: 30,
   },
   headerCenter: {
     flex: 1,

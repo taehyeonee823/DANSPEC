@@ -315,18 +315,25 @@ export default function Index() {
           </View>
 
           <Text style={styles.sectionTitle}>간단 소개글</Text>
-          <MultiplelineInput
-            value={introductionInfo}
-            onChangeText={setIntroduction}
-            placeholder="자신에 대한 간단한 소개를 한 줄 이상 작성해주세요."
-            editable={canEdit}
-          />
+          <View style={styles.readOnlyMultilineBox}>
+            <Text style={styles.readOnlyMultilineText}>
+              {introductionInfo || '입력된 내용이 없습니다.'}
+            </Text>
+          </View>
 
           <Text style={styles.sectionTitle}>지원 동기</Text>
-          <MultiplelineInput
-            value={motivationInfo}
-            onChangeText={setMotivation}
-            placeholder="팀에 지원하게 된 동기와 기여하고 싶은 부분을 상세히 작성해 주세요."
+          <View style={styles.readOnlyMultilineBox}>
+            <Text style={styles.readOnlyMultilineText}>
+              {motivationInfo || '입력된 내용이 없습니다.'}
+            </Text>
+          </View>
+
+
+          <Text style={styles.sectionTitle}>연락처</Text>
+          <SinglelineInput
+            value={contactInfo}
+            onChangeText={setContactInfo}
+            placeholder="연락처를 입력해주세요."
             editable={canEdit}
           />
 
@@ -337,15 +344,6 @@ export default function Index() {
             placeholder="포트폴리오나 깃허브 링크를 입력해주세요."
             editable={canEdit}
           />
-
-          <Text style={styles.sectionTitle}>연락처</Text>
-          <SinglelineInput
-            value={contactInfo}
-            onChangeText={setContactInfo}
-            placeholder="연락처를 입력해주세요."
-            editable={canEdit}
-          />
-
           {/* 수정하기: PENDING일 때만 표시 */}
           {canEdit && (
           <Button
@@ -455,6 +453,23 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     marginBottom: 28,
     flex: 1,
+  },
+  readOnlyMultilineBox: {
+    minHeight: 100,
+    borderWidth: 1,
+    borderColor: '#3E6AF433',
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    paddingTop: 15,
+    paddingBottom: 15,
+    backgroundColor: '#fff',
+    marginBottom: 20,
+  },
+  readOnlyMultilineText: {
+    fontSize: 16,
+    fontFamily: 'Pretendard-Regular',
+    color: '#000',
+    lineHeight: 24,
   },
   departmentRow: {
     flexDirection: 'row',
