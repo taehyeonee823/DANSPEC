@@ -230,13 +230,13 @@ export default function My() {
           );
         })()}
 
-        {/* 참여 활동 섹션 */}
+        {/* 참여 활동 섹션 - 상위 5개만 표시 */}
         {userInfo.participatedActivities && userInfo.participatedActivities.length > 0 && (
           <>
             <View style={styles.activitiesHeader}>
-              <Text style={styles.activitiesTitle}>참여한 활동</Text>
+              <Text style={styles.activitiesTitle}>최근 활동</Text>
             </View>
-            {userInfo.participatedActivities.map((activity, index) => (
+            {userInfo.participatedActivities.slice(0, 5).map((activity, index) => (
               <TouchableOpacity
                 key={activity.id || index}
                 style={styles.activityCard}
