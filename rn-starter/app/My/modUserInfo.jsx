@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity, Text, View, Modal, Image, ScrollView } from 'react-native';
+import { StyleSheet, TextInput, TouchableOpacity, Text, View, Modal, Image as RNImage, ScrollView } from 'react-native';
+import { Image } from 'expo-image';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { API_ENDPOINTS } from '@/config/api';
-
+import { clearRequestCache } from '@/utils/requestCache';
 
 export default function SignUpScreen() {
   const router = useRouter();
@@ -169,6 +170,9 @@ export default function SignUpScreen() {
       const data = await response.json();
 
       if (response.ok && data.success) {
+        // 캐시 초기화 - 사용자 정보 캐시 삭제
+        clearRequestCache(API_ENDPOINTS.GET_USER_INFO);
+
         // 수정 반영 확인용 GET(응답은 사용하지 않음)
         await fetch(API_ENDPOINTS.USER_ME, {
           method: 'GET',
@@ -230,7 +234,7 @@ export default function SignUpScreen() {
       <Text style={styles.text}>이름</Text>
       <View style={styles.inputGroup}>
         <TextInput
-          style={[styles.input, styles.disabledInput]}
+          style={[styles.inputName]}
           value={name}
           editable={false}
         />
@@ -292,9 +296,11 @@ export default function SignUpScreen() {
               ]}>
                 {department || '단과대학 선택'}
               </Text>
-              <Text style={styles.dropdownIcon}>
-                {showDepartmentModal ? '▲' : '▼'}
-              </Text>
+              <Image
+                source={require('@/assets/images/down.svg')}
+                style={[styles.dropdownIcon, showDepartmentModal && { transform: [{ rotate: '180deg' }] }]}
+                contentFit="contain"
+              />
             </TouchableOpacity>
 
             {showDepartmentModal && campus && (
@@ -337,9 +343,11 @@ export default function SignUpScreen() {
               ]}>
                 {major || '학과 선택'}
               </Text>
-              <Text style={styles.dropdownIcon}>
-                {showMajorModal ? '▲' : '▼'}
-              </Text>
+              <Image
+                source={require('@/assets/images/down.svg')}
+                style={[styles.dropdownIcon, showMajorModal && { transform: [{ rotate: '180deg' }] }]}
+                contentFit="contain"
+              />
             </TouchableOpacity>
 
             {showMajorModal && department && (
@@ -377,9 +385,11 @@ export default function SignUpScreen() {
         ]}>
           {grade || '학년 선택'}
         </Text>
-        <Text style={styles.dropdownIcon}>
-          {showGradeModal ? '▲' : '▼'}
-        </Text>
+        <Image
+          source={require('@/assets/images/down.svg')}
+          style={[styles.dropdownIcon, showGradeModal && { transform: [{ rotate: '180deg' }] }]}
+          contentFit="contain"
+        />
       </TouchableOpacity>
 
       {showGradeModal && (
@@ -443,11 +453,11 @@ export default function SignUpScreen() {
       />
     </View>
 
-    <Text style={styles.text}>간단 소개</Text>
+    <Text style={styles.text}>한 줄 소개</Text>
     <View style={styles.inputGroup}>
       <TextInput
         style={[styles.input, styles.introInput]}
-        placeholder={focusedInput === 'intro' ? '' : '자신을 소개해주세요 한 줄이면 충분합니다!'}
+        placeholder={focusedInput === 'intro' ? '' : '나를 잘 보여줄 수 있는 소개 글을 한 줄로 작성해주세요.'}
         placeholderTextColor="#999"
         value={introduction}
         onChangeText={setIntroduction}
@@ -463,7 +473,7 @@ export default function SignUpScreen() {
       style={styles.signupButton}
       onPress={handleSignup}
     >
-      <Text style={styles.signupButtonText}>수정하기</Text>
+      <Text style={styles.signupButtonText}>변경하기</Text>
     </TouchableOpacity>
 
       </ScrollView>
@@ -553,13 +563,23 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     color: '#1A1A1A',
   },
-  introInput: {
+   inputName: {
     height: 35,
-    paddingTop: 10,
-  },
-  disabledInput: {
-    backgroundColor: '#F5F5F5',
+    borderBottomWidth: 1,
+    borderColor: '#D9D9D9',
+    paddingHorizontal: 16,
+    fontSize: 16,
+    fontFamily: 'Pretendard-Medium',
+    backgroundColor: '#FFFFFF',
     color: '#999',
+  },
+  introInput: {
+    height: 80,
+    paddingTop: 10,
+    borderWidth: 1,
+    borderColor: '#DAE1FB',
+    borderBottomWidth: 2,
+    borderRadius: 8,
   },
   checkButton: {
     backgroundColor: '#007AFF',
@@ -593,8 +613,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   campusButtonSelected: {
-    backgroundColor: '#007AFF',
-    borderColor: '#007AFF',
+    backgroundColor: '#326AF4',
+    borderColor: '#326AF4',
   },
   campusButtonText: {
     fontSize: 16,
@@ -621,7 +641,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 45,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: '#DAE1FB',
     borderRadius: 8,
     paddingHorizontal: 15,
     backgroundColor: '#fff',
@@ -635,14 +655,14 @@ const styles = StyleSheet.create({
     color: '#999',
   },
   dropdownIcon: {
-    fontSize: 12,
-    color: '#666',
+    width: 16,
+    height: 16,
   },
   dropdownList: {
     width: '100%',
     backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: '#DAE1FB',
     borderRadius: 8,
     marginTop: -10,
     marginBottom: 15,
@@ -655,7 +675,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: '#DAE1FB',
   },
   departmentOptionText: {
     fontSize: 16,
@@ -677,17 +697,17 @@ const styles = StyleSheet.create({
     width: '50%',
     height: 45,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: '#DAE1FB',
     borderRadius: 8,
     paddingHorizontal: 15,
     backgroundColor: '#fff',
     marginBottom: 15,
   },
   gradeDropdownList: {
-    width: '45%',
+    width: '50%',
     backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: '#DAE1FB',
     borderRadius: 8,
     marginTop: -10,
     marginBottom: 15,
@@ -696,7 +716,7 @@ const styles = StyleSheet.create({
   signupButton: {
     width: '100%',
     height: 50,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#326AF4',
     borderRadius: 8,
     borderWidth: 1,
     borderColor: '#3E6AF4',
@@ -705,7 +725,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   signupButtonText: {
-    color: '#3E6AF4',
+    color: '#fff',
     fontSize: 16,
     fontFamily: 'Pretendard-Regular',
   },

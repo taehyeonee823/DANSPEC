@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity, Text, View, Modal, Image, ScrollView } from 'react-native';
+import { StyleSheet, TextInput, TouchableOpacity, Text, View, Modal, Image as RNImage, ScrollView } from 'react-native';
+import { Image } from 'expo-image';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 
 import { API_ENDPOINTS } from '@/config/api';
@@ -304,9 +305,11 @@ export default function SignUpScreen() {
               ]}>
                 {college || '단과대학 선택'}
               </Text>
-              <Text style={styles.dropdownIcon}>
-                {showCollegeModal ? '▲' : '▼'}
-              </Text>
+              <Image
+                source={require('@/assets/images/down.svg')}
+                style={[styles.dropdownIcon, showCollegeModal && { transform: [{ rotate: '180deg' }] }]}
+                contentFit="contain"
+              />
             </TouchableOpacity>
 
             {showCollegeModal && campus && (
@@ -349,9 +352,11 @@ export default function SignUpScreen() {
               ]}>
                 {major || '학과 선택'}
               </Text>
-              <Text style={styles.dropdownIcon}>
-                {showMajorModal ? '▲' : '▼'}
-              </Text>
+              <Image
+                source={require('@/assets/images/down.svg')}
+                style={[styles.dropdownIcon, showMajorModal && { transform: [{ rotate: '180deg' }] }]}
+                contentFit="contain"
+              />
             </TouchableOpacity>
 
             {showMajorModal && college && (
@@ -389,9 +394,11 @@ export default function SignUpScreen() {
         ]}>
           {grade || '학년 선택'}
         </Text>
-        <Text style={styles.dropdownIcon}>
-          {showGradeModal ? '▲' : '▼'}
-        </Text>
+        <Image
+          source={require('@/assets/images/down.svg')}
+          style={[styles.dropdownIcon, showGradeModal && { transform: [{ rotate: '180deg' }] }]}
+          contentFit="contain"
+        />
       </TouchableOpacity>
 
       {showGradeModal && (
@@ -451,7 +458,7 @@ export default function SignUpScreen() {
     <View style={styles.inputContainer3}>
       <TextInput
         style={[styles.input2, styles.introInput]}
-        placeholder="자신을 소개해주세요 한 줄이면 충분합니다!"
+        placeholder="나를 잘 보여줄 수 있는 소개 글을 한 줄로 작성해주세요."
         placeholderTextColor="#999"
         value={tagline}
         onChangeText={setTagline}
@@ -562,7 +569,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 40,
     borderWidth: 1,
-    borderColor: '#3E6AF433',
+    borderColor: '#DAE1FB',
     paddingHorizontal: 8,
     fontSize: 16,
     borderRadius: 8,
@@ -571,9 +578,10 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   introInput: {
-    height: 100,
+    height: 80,
     paddingTop: 12,
     paddingBottom: 12,
+    fontSize: 14,
   },
   checkButton: {
     backgroundColor: '#007AFF',
@@ -634,7 +642,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 45,
     borderWidth: 1,
-    borderColor: '#3E6AF433',
+    borderColor: '#DAE1FB',
     borderRadius: 8,
     paddingHorizontal: 15,
     backgroundColor: '#fff',
@@ -648,14 +656,14 @@ const styles = StyleSheet.create({
     color: '#999',
   },
   dropdownIcon: {
-    fontSize: 12,
-    color: '#666',
+    width: 16,
+    height: 16,
   },
   dropdownList: {
     width: '100%',
     backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: '#DAE1FB',
     borderRadius: 8,
     marginTop: -10,
     marginBottom: 15,
@@ -668,7 +676,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: '#DAE1FB',
   },
   departmentOptionText: {
     fontSize: 16,
@@ -687,20 +695,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    width: '48%',
+    width: '50%',
     height: 45,
     borderWidth: 1,
-    borderColor: '#3E6AF433',
+    borderColor: '#DAE1FB',
     borderRadius: 8,
     paddingHorizontal: 15,
     backgroundColor: '#fff',
     marginBottom: 15,
   },
   gradeDropdownList: {
-    width: '45%',
+    width: '50%',
     backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: '#DAE1FB',
     borderRadius: 8,
     marginTop: -10,
     marginBottom: 15,

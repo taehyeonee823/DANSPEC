@@ -4,6 +4,7 @@ import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { API_ENDPOINTS } from '@/config/api';
+import { dedupeRequest } from '@/utils/requestCache';
 import NaviBar from '../naviBar';
 
 export default function My() {
@@ -38,16 +39,23 @@ export default function My() {
         return;
       }
 
-      const response = await fetch(API_ENDPOINTS.GET_USER_INFO, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
+      const url = API_ENDPOINTS.GET_USER_INFO;
 
-      if (response.ok) {
-        const data = await response.json();
+      // 캐싱 및 중복 제거 적용 (60초 TTL)
+      const { ok, status, text } = await dedupeRequest(url, async () => {
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+        const text = await response.text();
+        return { ok: response.ok, status: response.status, text };
+      }, { ttlMs: 60000 });
+
+      if (ok) {
+        const data = JSON.parse(text);
         console.log('사용자 정보:', data);
 
         if (data.success && data.data) {
@@ -64,9 +72,9 @@ export default function My() {
           });
         }
       } else {
-        console.error('사용자 정보 가져오기 실패:', response.status);
+        console.error('사용자 정보 가져오기 실패:', status);
         // 토큰이 만료되었을 수 있으므로 로그인 페이지로 이동
-        if (response.status === 401) {
+        if (status === 401) {
           await SecureStore.deleteItemAsync('accessToken');
           await SecureStore.deleteItemAsync('refreshToken');
           router.replace('/login');
