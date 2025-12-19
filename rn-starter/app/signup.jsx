@@ -228,10 +228,14 @@ export default function SignUpScreen() {
       }} />
 
       <TouchableOpacity
-          style={{ position: 'absolute', top:60, left: 20, zIndex: 999, padding: 8 }}
-          onPress={() => router.back()}
-        >
-          <Text style={{ fontSize: 28, color: '#000', fontWeight: 'bold' }}>←</Text>
+        style={styles.backButton}
+        onPress={() => router.back()}
+      >
+        <Image
+          source={require('@/assets/images/left.svg')}
+          style={styles.backIcon}
+          contentFit="contain"
+        />
       </TouchableOpacity>
 
       <ScrollView style={styles.container}
@@ -763,5 +767,16 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '600',
+  },
+  backButton: {
+    position: 'absolute',
+    top: 60,
+    left: 10,
+    zIndex: 999,
+    padding: 8,
+  },
+  backIcon: {
+    width: 30,
+    height: 30,
   },
 });

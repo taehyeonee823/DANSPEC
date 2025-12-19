@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { StyleSheet, TextInput, TouchableOpacity, Text, View, Modal } from 'react-native';
+import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { API_ENDPOINTS } from '@/config/api';
 
@@ -199,10 +200,14 @@ export default function VerificationScreen() {
       }} />
 
       <TouchableOpacity
-        style={{ position: 'absolute', top: 60, left: 20, zIndex: 999, padding: 8 }}
+        style={styles.backButton}
         onPress={() => router.back()}
       >
-        <Text style={{ fontSize: 28, color: '#000', fontWeight: 'bold' }}>←</Text>
+        <Image
+          source={require('@/assets/images/left.svg')}
+          style={styles.backIcon}
+          contentFit="contain"
+        />
       </TouchableOpacity>
 
       <View style={styles.container}>
@@ -488,5 +493,16 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '600',
+  },
+  backButton: {
+    position: 'absolute',
+    top: 60,
+    left: 10,
+    zIndex: 999,
+    padding: 8,
+  },
+  backIcon: {
+    width: 30,
+    height: 30,
   },
 });
