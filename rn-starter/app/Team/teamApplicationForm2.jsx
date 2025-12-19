@@ -39,6 +39,9 @@ export default function Index() {
 
   const [showStatusBlockedModal, setShowStatusBlockedModal] = useState(false);
   const [showMemberCountModal, setShowMemberCountModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
 
   const isFinalStatus = applicationStatus === 'APPROVED' || applicationStatus === 'REJECTED';
 
@@ -198,6 +201,16 @@ export default function Index() {
       });
 
       if (!response.ok) {
+        const text = await response.text();
+        let errorMsg = '수정에 실패했습니다.';
+        try {
+          const errorData = JSON.parse(text);
+          errorMsg = errorData.message || errorMsg;
+        } catch (e) {
+          // JSON 파싱 실패 시 기본 메시지 사용
+        }
+        setErrorMessage(errorMsg);
+        setShowErrorModal(true);
         return;
       }
 
@@ -209,7 +222,9 @@ export default function Index() {
         },
       });
     } catch (error) {
-      // ignore
+      console.error('수정 중 오류:', error);
+      setErrorMessage('네트워크 오류가 발생했습니다. 다시 시도해주세요.');
+      setShowErrorModal(true);
     } finally {
       setSubmitting(false);
     }
@@ -244,12 +259,27 @@ export default function Index() {
       });
 
       if (!response.ok) {
+        const text = await response.text();
+        let errorMsg = '삭제에 실패했습니다.';
+        try {
+          const errorData = JSON.parse(text);
+          errorMsg = errorData.message || errorMsg;
+        } catch (e) {
+          // JSON 파싱 실패 시 기본 메시지 사용
+        }
+        setErrorMessage(errorMsg);
+        setShowErrorModal(true);
+        setShowDeleteConfirmModal(false);
         return;
       }
 
+      setShowDeleteConfirmModal(false);
       router.back();
     } catch (error) {
-      // ignore
+      console.error('삭제 중 오류:', error);
+      setErrorMessage('네트워크 오류가 발생했습니다. 다시 시도해주세요.');
+      setShowErrorModal(true);
+      setShowDeleteConfirmModal(false);
     } finally {
       setSubmitting(false);
     }
@@ -270,7 +300,7 @@ export default function Index() {
         {canEdit && (
         <TouchableOpacity
           style={styles.topBarButton}
-          onPress={handleDelete}
+          onPress={() => setShowDeleteConfirmModal(true)}
           disabled={submitting}
         >
           <Text style={[styles.topBarActionText, submitting && styles.disabledText]}>삭제하기</Text>
@@ -315,19 +345,34 @@ export default function Index() {
           </View>
 
           <Text style={styles.sectionTitle}>간단 소개글</Text>
-          <View style={styles.readOnlyMultilineBox}>
-            <Text style={styles.readOnlyMultilineText}>
-              {introductionInfo || '입력된 내용이 없습니다.'}
-            </Text>
-          </View>
+          {canEdit ? (
+            <MultiplelineInput
+              value={introductionInfo}
+              onChangeText={setIntroduction}
+              placeholder="간단 소개글을 입력해주세요."
+            />
+          ) : (
+            <View style={styles.readOnlyMultilineBox}>
+              <Text style={styles.readOnlyMultilineText}>
+                {introductionInfo || '입력된 내용이 없습니다.'}
+              </Text>
+            </View>
+          )}
 
           <Text style={styles.sectionTitle}>지원 동기</Text>
-          <View style={styles.readOnlyMultilineBox}>
-            <Text style={styles.readOnlyMultilineText}>
-              {motivationInfo || '입력된 내용이 없습니다.'}
-            </Text>
-          </View>
-
+          {canEdit ? (
+            <MultiplelineInput
+              value={motivationInfo}
+              onChangeText={setMotivation}
+              placeholder="지원 동기를 입력해주세요."
+            />
+          ) : (
+            <View style={styles.readOnlyMultilineBox}>
+              <Text style={styles.readOnlyMultilineText}>
+                {motivationInfo || '입력된 내용이 없습니다.'}
+              </Text>
+            </View>
+          )}
 
           <Text style={styles.sectionTitle}>연락처</Text>
           <SinglelineInput
@@ -356,7 +401,7 @@ export default function Index() {
         </ScrollView>
       </KeyboardAvoidingView>
 
-      {/* 상태 제한 모달 (my.jsx 로그아웃 모달 스타일 참조) */}
+      {/* 상태 제한 모달 */}
       <Modal
         visible={showStatusBlockedModal}
         transparent={true}
@@ -377,6 +422,69 @@ export default function Index() {
                 onPress={() => setShowStatusBlockedModal(false)}
               >
                 <Text style={styles.confirmButtonText}>확인</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* 에러 모달 */}
+      <Modal
+        visible={showErrorModal}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setShowErrorModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Image
+              source={require('@/assets/images/alert.svg')}
+              style={styles.alertIcon}
+              contentFit="contain"
+            />
+            <Text style={styles.modalTitle}>{errorMessage}</Text>
+            <View style={styles.modalButtonContainer}>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.confirmButton]}
+                onPress={() => setShowErrorModal(false)}
+              >
+                <Text style={styles.confirmButtonText}>확인</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* 삭제 확인 모달 */}
+      <Modal
+        visible={showDeleteConfirmModal}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setShowDeleteConfirmModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Image
+              source={require('@/assets/images/alert.svg')}
+              style={styles.alertIcon}
+              contentFit="contain"
+            />
+            <Text style={styles.modalTitle}>정말 삭제하시겠습니까?</Text>
+            <View style={styles.modalButtonContainer}>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.cancelButton]}
+                onPress={() => setShowDeleteConfirmModal(false)}
+              >
+                <Text style={styles.cancelButtonText}>취소</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalButton, styles.deleteButton]}
+                onPress={handleDelete}
+                disabled={submitting}
+              >
+                <Text style={[styles.deleteButtonText, submitting && styles.disabledText]}>
+                  {submitting ? '삭제 중...' : '삭제'}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -446,7 +554,7 @@ const styles = StyleSheet.create({
   readOnlyText: {
     fontSize: 16,
     fontFamily: 'Pretendard-Medium',
-    color: '#A6A6A6',
+    color: '#1A1A1A',
     borderBottomColor: '#1A1A1A',
     paddingVertical: 10,
     paddingHorizontal: 12,
@@ -501,12 +609,12 @@ const styles = StyleSheet.create({
   collegeText: {
     fontSize: 14,
     fontFamily: 'Pretendard-Medium',
-    color: '#A6A6A6',
+    color: '#1A1A1A',
   },
   majorText: {
     fontSize: 14,
     fontFamily: 'Pretendard-Medium',
-    color: '#A6A6A6',
+    color: '#1A1A1A',
   },
   emptyBox: {
     flex: 1,
@@ -529,7 +637,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 28,
     fontFamily: 'Pretendard-SemiBold',
-    color: '#A6A6A6',
+    color: '#1A1A1A',
   },
   modalOverlay: {
     flex: 1,
@@ -576,5 +684,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Pretendard-Medium',
     color: '#000',
+  },
+  cancelButton: {
+    backgroundColor: '#f0f0f0',
+  },
+  cancelButtonText: {
+    fontSize: 16,
+    fontFamily: 'Pretendard-Medium',
+    color: '#000',
+  },
+  deleteButton: {
+    backgroundColor: '#FF3B30',
+  },
+  deleteButtonText: {
+    fontSize: 16,
+    fontFamily: 'Pretendard-Medium',
+    color: '#FFFFFF',
   },
 });

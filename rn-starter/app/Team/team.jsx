@@ -190,6 +190,17 @@ export default function Team() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTabIndex]);
 
+  // 화면이 포커스될 때마다 데이터 새로고침
+  useFocusEffect(
+    useCallback(() => {
+      if (activeTabIndex === 0) {
+        fetchMyTeams();
+      } else if (activeTabIndex === 1) {
+        fetchMyApplications();
+      }
+    }, [activeTabIndex, fetchMyTeams, fetchMyApplications])
+  );
+
   return (
     <View style={styles.container}>
       <View
