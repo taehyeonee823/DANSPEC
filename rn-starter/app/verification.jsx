@@ -264,7 +264,9 @@ export default function VerificationScreen() {
             secureTextEntry
             autoCapitalize="none"
             autoComplete="off"
+            autoCorrect={false}
             textContentType="none"
+            passwordRules=""
           />
         </View>
 
@@ -278,7 +280,9 @@ export default function VerificationScreen() {
             secureTextEntry
             autoCapitalize="none"
             autoComplete="off"
+            autoCorrect={false}
             textContentType="none"
+            passwordRules=""
           />
         </View>
         {!passwordMatch && confirmPassword.length > 0 && (
