@@ -45,6 +45,23 @@ export default function Index() {
 
   const isFinalStatus = applicationStatus === 'APPROVED' || applicationStatus === 'REJECTED';
 
+  // 연락처 포맷팅 함수 (010-1234-5678 형식)
+  const formatPhoneNumber = (phone) => {
+    if (!phone) return '';
+    // 숫자만 추출
+    const numbers = phone.replace(/[^0-9]/g, '');
+    if (numbers.length <= 3) return numbers;
+    if (numbers.length <= 7) return `${numbers.slice(0, 3)}-${numbers.slice(3)}`;
+    return `${numbers.slice(0, 3)}-${numbers.slice(3, 7)}-${numbers.slice(7, 11)}`;
+  };
+
+  // 연락처 입력 핸들러 (하이픈 제거 후 저장)
+  const handleContactChange = (text) => {
+    // 하이픈 제거하고 숫자만 저장
+    const numbers = text.replace(/[^0-9]/g, '');
+    setContactInfo(numbers);
+  };
+
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
@@ -375,12 +392,19 @@ export default function Index() {
           )}
 
           <Text style={styles.sectionTitle}>연락처</Text>
-          <SinglelineInput
-            value={contactInfo}
-            onChangeText={setContactInfo}
-            placeholder="연락처를 입력해주세요."
-            editable={canEdit}
-          />
+          {canEdit ? (
+            <SinglelineInput
+              value={formatPhoneNumber(contactInfo)}
+              onChangeText={handleContactChange}
+              placeholder="연락처를 입력해주세요."
+              keyboardType="phone-pad"
+              maxLength={13}
+            />
+          ) : (
+            <Text style={styles.readOnlyText}>
+              {contactInfo ? formatPhoneNumber(contactInfo) : '입력된 내용이 없습니다.'}
+            </Text>
+          )}
 
           <Text style={styles.sectionTitle}>포트폴리오 / 깃허브 링크</Text>
           <SinglelineInput
