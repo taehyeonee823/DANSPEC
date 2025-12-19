@@ -71,8 +71,8 @@ const styles = StyleSheet.create({
   statusPending: {
     fontSize: 12,
     fontFamily: 'Pretendard-Medium',
-    color: '#FF0000',
-    backgroundColor: '#F9CBCB',
+    color: '#FF8D28',
+    backgroundColor: '#FFDE0A',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 15,

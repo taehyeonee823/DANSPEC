@@ -383,7 +383,7 @@ export default function ActivityInfo() {
               style={styles.alertIcon}
               contentFit="contain"
             />
-            <Text style={styles.modalTitle}>이미 모집중인 팀이 있습니다.</Text>
+            <Text style={styles.modalTitle}>내가 모집 중인 팀이 있습니다.</Text>
             <View style={styles.modalButtonContainer}>
               <TouchableOpacity
                 style={[styles.modalButton, styles.confirmButton]}

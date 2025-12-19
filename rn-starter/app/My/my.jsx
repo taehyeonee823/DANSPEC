@@ -59,6 +59,7 @@ export default function My() {
         console.log('사용자 정보:', data);
 
         if (data.success && data.data) {
+          // 1단계: 기본 회원 정보 먼저 표시
           setUserInfo({
             name: data.data.name || '',
             college: data.data.college || '',
@@ -67,9 +68,18 @@ export default function My() {
             interestJobPrimary: data.data.interestJobPrimary || '',
             interestJobSecondary: data.data.interestJobSecondary || '',
             interestJobTertiary: data.data.interestJobTertiary || '',
-            dreamyReport: data.data.dreamyReport || null,
-            participatedActivities: data.data.participatedActivities || [],
+            dreamyReport: null,
+            participatedActivities: [],
           });
+
+          // 2단계: 드림이 리포트와 참여 활동 나중에 추가
+          setTimeout(() => {
+            setUserInfo(prev => ({
+              ...prev,
+              dreamyReport: data.data.dreamyReport || null,
+              participatedActivities: data.data.participatedActivities || [],
+            }));
+          }, 100);
         }
       } else {
         console.error('사용자 정보 가져오기 실패:', status);

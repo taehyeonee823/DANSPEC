@@ -35,25 +35,50 @@ export default function LoginScreen() {
         const accessToken = await SecureStore.getItemAsync('accessToken');
         const savedEmail = await SecureStore.getItemAsync('savedEmail');
 
+        console.log('=== 자동 로그인 체크 ===');
+        console.log('autoLoginEnabled:', autoLoginEnabled);
+        console.log('accessToken exists:', !!accessToken);
+        console.log('savedEmail:', savedEmail);
+
         if (autoLoginEnabled === 'true' && accessToken) {
           console.log('자동 로그인 시도 중...');
 
-          // 토큰이 유효한지 확인
-          const response = await fetch(API_ENDPOINTS.USER_ME, {
-            method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${accessToken}`,
-              'Content-Type': 'application/json',
-            },
-          });
+          // 타임아웃 설정 (10초)
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 10000);
 
-          if (response.ok) {
-            console.log('자동 로그인 성공');
-            router.replace('/Home/home');
-            return;
-          } else {
-            // 토큰이 만료되었으면 삭제
-            console.log('토큰이 만료되었습니다.');
+          try {
+            // 토큰이 유효한지 확인
+            const response = await fetch(API_ENDPOINTS.USER_ME, {
+              method: 'GET',
+              headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+              },
+              signal: controller.signal,
+            });
+
+            clearTimeout(timeoutId);
+
+            if (response.ok) {
+              console.log('자동 로그인 성공 - 홈으로 이동');
+              router.replace('/Home/home');
+              return;
+            } else {
+              // 토큰이 만료되었으면 삭제
+              console.log('토큰 유효하지 않음 - 상태 코드:', response.status);
+              await SecureStore.deleteItemAsync('accessToken');
+              await SecureStore.deleteItemAsync('refreshToken');
+              await SecureStore.deleteItemAsync('autoLogin');
+            }
+          } catch (fetchError) {
+            clearTimeout(timeoutId);
+            if (fetchError.name === 'AbortError') {
+              console.error('자동 로그인 타임아웃 - 토큰 삭제');
+            } else {
+              console.error('자동 로그인 토큰 검증 실패:', fetchError.message);
+            }
+            // 네트워크 오류 시에도 토큰 삭제
             await SecureStore.deleteItemAsync('accessToken');
             await SecureStore.deleteItemAsync('refreshToken');
             await SecureStore.deleteItemAsync('autoLogin');
@@ -64,6 +89,7 @@ export default function LoginScreen() {
         if (savedEmail) {
           setEmail(savedEmail);
         }
+        console.log('======================');
       } catch (error) {
         console.error('자동 로그인 확인 오류:', error);
       } finally {
