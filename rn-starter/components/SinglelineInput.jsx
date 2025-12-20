@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { TextInput, StyleSheet, View } from 'react-native';
 
-export default function DynamicInputByFocus({ value, onChangeText, placeholder, ...props }) {
+export default function DynamicInputByFocus({ value, onChangeText, placeholder, editable = true, ...props }) {
   const [isFocused, setIsFocused] = useState(false);
 
   // 1. 포커스 상태에 따라 색상을 결정합니다.
+  // editable이 false면 (읽기 전용) 항상 검은색으로 표시
   const inputStyle = {
     ...styles.input,
-    // isFocused가 true면 'black' (터치된 상태)
-    // isFocused가 false면 'gray' (터치가 해제된 상태)
-    color: isFocused ? 'black' : 'gray',
+    // editable이 false이거나 isFocused가 true면 'black'
+    // 그 외에는 'gray' (터치가 해제된 상태)
+    color: (!editable || isFocused) ? 'black' : 'gray',
   };
 
   return (
