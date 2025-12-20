@@ -135,7 +135,7 @@ export default function ApplyCheck() {
           major: app.applicant?.major || '',
           introduction: app.introduction || '',
           description: app.message || '',
-          time: app.createdAt || '',
+          time: app.createdAt || '', // 지원서 생성 시간 (외부 createdAt 필드 사용)
           status: app.status || '',
           contactNumber: formatPhoneNumber(app.contactNumber) || '',
         };
