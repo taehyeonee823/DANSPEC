@@ -7,6 +7,7 @@ import * as Font from 'expo-font';
 import { useEffect, useState } from 'react';
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { UserProvider } from '@/context/UserContext';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -28,23 +29,25 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack screenOptions={{ headerShown: false, animation: 'none' }}>
-          <Stack.Screen name="index" />
-          <Stack.Screen name="login" />
-          <Stack.Screen name="signup" />
-          <Stack.Screen name="Home/home" />
-          <Stack.Screen name="Team/teamApplicationForm" />
-          <Stack.Screen name="Team/applyConfirmed" />
-          <Stack.Screen name="Activity/recruitmentConfirmed" />
-          <Stack.Screen name="My/notificationScreen" />
-          <Stack.Screen name="Team/teamRecruitmentForm" />
-          <Stack.Screen name="Team/teamInfo" />
-          <Stack.Screen name="Team/team" />
-          <Stack.Screen name="Activity/activity" />
-          <Stack.Screen name="My/my" />
-          <Stack.Screen name="My/applyCheck" />
-        </Stack>
-        <StatusBar style="dark" />
+        <UserProvider>
+          <Stack screenOptions={{ headerShown: false, animation: 'none' }}>
+            <Stack.Screen name="index" />
+            <Stack.Screen name="login" />
+            <Stack.Screen name="signup" />
+            <Stack.Screen name="Home/home" />
+            <Stack.Screen name="Team/teamApplicationForm" />
+            <Stack.Screen name="Team/applyConfirmed" />
+            <Stack.Screen name="Activity/recruitmentConfirmed" />
+            <Stack.Screen name="My/notificationScreen" />
+            <Stack.Screen name="Team/teamRecruitmentForm" />
+            <Stack.Screen name="Team/teamInfo" />
+            <Stack.Screen name="Team/team" />
+            <Stack.Screen name="Activity/activity" />
+            <Stack.Screen name="My/my" />
+            <Stack.Screen name="My/applyCheck" />
+          </Stack>
+          <StatusBar style="dark" />
+        </UserProvider>
       </ThemeProvider>
     </GestureHandlerRootView>
   );

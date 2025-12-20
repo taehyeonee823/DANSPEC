@@ -5,31 +5,24 @@ import { useRouter } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { API_ENDPOINTS } from '@/config/api';
 import { dedupeRequest } from '@/utils/requestCache';
+import { useUser } from '@/context/UserContext';
 import NaviBar from '../naviBar';
 
 export default function My() {
   const router = useRouter();
+  const { userInfo: globalUserInfo, clearUserInfo } = useUser(); // 전역 사용자 정보
   const [hasNotification, setHasNotification] = useState(false); // 알림 여부 상태
   const [showLogoutModal, setShowLogoutModal] = useState(false); // 로그아웃 모달 상태
-  const [userInfo, setUserInfo] = useState({
-    name: '',
-    college: '',
-    major: '',
-    grade: '',
-    interestJobPrimary: '',
-    interestJobSecondary: '',
-    interestJobTertiary: '',
-    dreamyReport: null,
-    participatedActivities: [],
-  });
+  const [dreamyReport, setDreamyReport] = useState(null);
+  const [participatedActivities, setParticipatedActivities] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // 사용자 정보 가져오기
+  // 드림이 리포트와 참여 활동 정보 가져오기
   useEffect(() => {
-    fetchUserInfo();
+    fetchDreamyData();
   }, []);
 
-  const fetchUserInfo = async () => {
+  const fetchDreamyData = async () => {
     try {
       const token = await SecureStore.getItemAsync('accessToken');
 
@@ -56,33 +49,14 @@ export default function My() {
 
       if (ok) {
         const data = JSON.parse(text);
-        console.log('사용자 정보:', data);
+        console.log('드림이 리포트 및 활동 정보:', data);
 
         if (data.success && data.data) {
-          // 1단계: 기본 회원 정보 먼저 표시
-          setUserInfo({
-            name: data.data.name || '',
-            college: data.data.college || '',
-            major: data.data.major || '',
-            grade: data.data.grade || '',
-            interestJobPrimary: data.data.interestJobPrimary || '',
-            interestJobSecondary: data.data.interestJobSecondary || '',
-            interestJobTertiary: data.data.interestJobTertiary || '',
-            dreamyReport: null,
-            participatedActivities: [],
-          });
-
-          // 2단계: 드림이 리포트와 참여 활동 나중에 추가
-          setTimeout(() => {
-            setUserInfo(prev => ({
-              ...prev,
-              dreamyReport: data.data.dreamyReport || null,
-              participatedActivities: data.data.participatedActivities || [],
-            }));
-          }, 100);
+          setDreamyReport(data.data.dreamyReport || null);
+          setParticipatedActivities(data.data.participatedActivities || []);
         }
       } else {
-        console.error('사용자 정보 가져오기 실패:', status);
+        console.error('드림이 리포트 및 활동 정보 가져오기 실패:', status);
         // 토큰이 만료되었을 수 있으므로 로그인 페이지로 이동
         if (status === 401) {
           await SecureStore.deleteItemAsync('accessToken');
@@ -91,7 +65,7 @@ export default function My() {
         }
       }
     } catch (error) {
-      console.error('사용자 정보 가져오기 오류:', error);
+      console.error('드림이 리포트 및 활동 정보 가져오기 오류:', error);
     } finally {
       setLoading(false);
     }
@@ -104,6 +78,9 @@ export default function My() {
       await SecureStore.deleteItemAsync('refreshToken');
       await SecureStore.deleteItemAsync('autoLogin');
       await SecureStore.deleteItemAsync('savedEmail');
+
+      // 전역 사용자 정보 클리어
+      clearUserInfo();
 
       setShowLogoutModal(false);
       router.replace('/login');
@@ -177,12 +154,16 @@ export default function My() {
             />
           </View>
           <View style={styles.profileInfo}>
-            <Text style={styles.profileName}>{loading ? '로딩 중...' : userInfo.name}</Text>
+            <Text style={styles.profileName}>{globalUserInfo.name || '로딩 중...'}</Text>
             <Text style={styles.profileInfo}>
-              {loading ? '로딩 중...' : `${userInfo.college} ${userInfo.major} ${userInfo.grade}학년`}
+              {globalUserInfo.college && globalUserInfo.major && globalUserInfo.grade
+                ? `${globalUserInfo.college} ${globalUserInfo.major} ${globalUserInfo.grade}학년`
+                : '로딩 중...'}
             </Text>
             <Text style={styles.profileJob}>
-              {loading ? '로딩 중...' : `희망직무: ${userInfo.interestJobPrimary}`}
+              {globalUserInfo.interestJobPrimary
+                ? `희망직무: ${globalUserInfo.interestJobPrimary}`
+                : '로딩 중...'}
             </Text>
           </View>
         </View>
@@ -201,8 +182,8 @@ export default function My() {
         </View>
 
         {/* 드림이 리포트 내용 */}
-        {userInfo.dreamyReport && (() => {
-          const scoreLevel = getScoreLevel(userInfo.dreamyReport.score);
+        {dreamyReport && (() => {
+          const scoreLevel = getScoreLevel(dreamyReport.score);
           return (
             <View style={styles.reportContent}>
               <View style={styles.scoreContainer}>
@@ -214,29 +195,29 @@ export default function My() {
 
               <View style={styles.reportSection}>
                 <Text style={styles.reportSectionTitle}>강점</Text>
-                <Text style={styles.reportSectionText}>{userInfo.dreamyReport.strength}</Text>
+                <Text style={styles.reportSectionText}>{dreamyReport.strength}</Text>
               </View>
 
               <View style={styles.reportSection}>
                 <Text style={styles.reportSectionTitle}>약점</Text>
-                <Text style={styles.reportSectionText}>{userInfo.dreamyReport.weakness}</Text>
+                <Text style={styles.reportSectionText}>{dreamyReport.weakness}</Text>
               </View>
 
               <View style={styles.reportSection}>
                 <Text style={styles.reportSectionTitle}>추천 활동</Text>
-                <Text style={styles.reportSectionText}>{userInfo.dreamyReport.recommendedAction}</Text>
+                <Text style={styles.reportSectionText}>{dreamyReport.recommendedAction}</Text>
               </View>
             </View>
           );
         })()}
 
         {/* 참여 활동 섹션 - 상위 5개만 표시 */}
-        {userInfo.participatedActivities && userInfo.participatedActivities.length > 0 && (
+        {participatedActivities && participatedActivities.length > 0 && (
           <>
             <View style={styles.activitiesHeader}>
               <Text style={styles.activitiesTitle}>최근 활동</Text>
             </View>
-            {userInfo.participatedActivities.slice(0, 5).map((activity, index) => (
+            {participatedActivities.slice(0, 5).map((activity, index) => (
               <TouchableOpacity
                 key={activity.id || index}
                 style={styles.activityCard}

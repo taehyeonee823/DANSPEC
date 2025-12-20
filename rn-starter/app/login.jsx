@@ -3,9 +3,11 @@ import { StyleSheet, TextInput, TouchableOpacity, Modal, Image, View, Text, Aler
 import { useRouter } from 'expo-router';
 import { API_ENDPOINTS } from '@/config/api';
 import * as SecureStore from 'expo-secure-store';
+import { useUser } from '@/context/UserContext';
 
 export default function LoginScreen() {
   const router = useRouter();
+  const { updateUserInfo } = useUser();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [autoLogin, setAutoLogin] = useState(false);
@@ -62,6 +64,41 @@ export default function LoginScreen() {
 
             if (response.ok) {
               console.log('자동 로그인 성공 - 홈으로 이동');
+              
+              // 사용자 정보 API 호출
+              try {
+                const userInfoResponse = await fetch(API_ENDPOINTS.GET_USER_INFO, {
+                  method: 'GET',
+                  headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json',
+                  },
+                });
+
+                if (userInfoResponse.ok) {
+                  const userInfoData = await userInfoResponse.json();
+                  console.log('=== 자동 로그인 사용자 정보 응답 ===');
+                  console.log('userInfoData:', JSON.stringify(userInfoData, null, 2));
+                  console.log('===================================');
+
+                  if (userInfoData.success && userInfoData.data) {
+                    // 전역 상태에 사용자 정보 저장
+                    updateUserInfo({
+                      name: userInfoData.data.name || '',
+                      college: userInfoData.data.college || '',
+                      major: userInfoData.data.major || '',
+                      grade: userInfoData.data.grade || '',
+                      interestJobPrimary: userInfoData.data.interestJobPrimary || '',
+                    });
+                  }
+                } else {
+                  console.error('자동 로그인 - 사용자 정보 가져오기 실패:', userInfoResponse.status);
+                }
+              } catch (userInfoError) {
+                console.error('자동 로그인 - 사용자 정보 API 호출 오류:', userInfoError);
+                // 사용자 정보 가져오기 실패해도 자동 로그인은 진행
+              }
+              
               router.replace('/Home/home');
               return;
             } else {
@@ -98,7 +135,7 @@ export default function LoginScreen() {
     };
 
     checkAutoLogin();
-  }, []);
+  }, [updateUserInfo, router]);
 
   const handleEmailChange = (text) => {
     setEmail(text);
@@ -151,6 +188,40 @@ export default function LoginScreen() {
           if (autoLogin) {
             await SecureStore.setItemAsync('autoLogin', 'true');
             await SecureStore.setItemAsync('savedEmail', email);
+          }
+
+          // 사용자 정보 API 호출
+          try {
+            const userInfoResponse = await fetch(API_ENDPOINTS.GET_USER_INFO, {
+              method: 'GET',
+              headers: {
+                'Authorization': `Bearer ${data.data.accessToken}`,
+                'Content-Type': 'application/json',
+              },
+            });
+
+            if (userInfoResponse.ok) {
+              const userInfoData = await userInfoResponse.json();
+              console.log('=== 사용자 정보 응답 ===');
+              console.log('userInfoData:', JSON.stringify(userInfoData, null, 2));
+              console.log('======================');
+
+              if (userInfoData.success && userInfoData.data) {
+                // 전역 상태에 사용자 정보 저장
+                updateUserInfo({
+                  name: userInfoData.data.name || '',
+                  college: userInfoData.data.college || '',
+                  major: userInfoData.data.major || '',
+                  grade: userInfoData.data.grade || '',
+                  interestJobPrimary: userInfoData.data.interestJobPrimary || '',
+                });
+              }
+            } else {
+              console.error('사용자 정보 가져오기 실패:', userInfoResponse.status);
+            }
+          } catch (userInfoError) {
+            console.error('사용자 정보 API 호출 오류:', userInfoError);
+            // 사용자 정보 가져오기 실패해도 로그인은 진행
           }
         }
 
