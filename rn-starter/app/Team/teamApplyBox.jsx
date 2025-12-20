@@ -152,14 +152,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: 'Pretendard-SemiBold',
     color: '#000',
-    marginBottom: 6,
+    marginBottom: 10,
   },
   description: {
     fontSize: 14,
     fontFamily: 'Pretendard-Medium',
     color: '#666',
-    marginBottom: 8,
-    lineHeight: 20,
+    lineHeight: 14,
   },
   tag: {
     fontSize: 12,
@@ -170,7 +169,7 @@ const styles = StyleSheet.create({
   roleContainer: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
+    gap: 5,
     marginBottom: 6,
   },
   roleTag: {
