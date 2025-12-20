@@ -6,6 +6,7 @@ import * as SecureStore from 'expo-secure-store';
 import { API_ENDPOINTS } from '@/config/api';
 import { dedupeRequest } from '@/utils/requestCache';
 import { useUser } from '@/context/UserContext';
+import Animated, { useSharedValue, useAnimatedStyle, withRepeat, withTiming, Easing } from 'react-native-reanimated';
 import NaviBar from '../naviBar';
 
 export default function My() {
@@ -16,6 +17,44 @@ export default function My() {
   const [dreamyReport, setDreamyReport] = useState(null);
   const [participatedActivities, setParticipatedActivities] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingDots, setLoadingDots] = useState('');
+
+  // 드림이 애니메이션 (위아래로 둥둥)
+  const translateY = useSharedValue(0);
+  
+  useEffect(() => {
+    translateY.value = withRepeat(
+      withTiming(-10, {
+        duration: 1500,
+        easing: Easing.inOut(Easing.ease),
+      }),
+      -1,
+      true
+    );
+  }, []);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: translateY.value }],
+    };
+  });
+
+  // 로딩 점 애니메이션
+  useEffect(() => {
+    if (loading && !dreamyReport) {
+      const interval = setInterval(() => {
+        setLoadingDots(prev => {
+          if (prev === '') return '.';
+          if (prev === '.') return '..';
+          if (prev === '..') return '...';
+          return '';
+        });
+      }, 500);
+      return () => clearInterval(interval);
+    } else {
+      setLoadingDots('');
+    }
+  }, [loading, dreamyReport]);
 
   // 드림이 리포트와 참여 활동 정보 가져오기
   useEffect(() => {
@@ -180,6 +219,22 @@ export default function My() {
           />
           <Text style={styles.reportText}>드림이 리포트</Text>
         </View>
+
+        {/* 드림이 리포트 로딩 상태 */}
+        {loading && !dreamyReport && (
+          <View style={styles.loadingContainer}>
+            <Animated.View style={[styles.loadingImageContainer, animatedStyle]}>
+              <Image
+                source={require('../../assets/images/dreame.png')}
+                style={styles.loadingDreame}
+                contentFit="contain"
+              />
+            </Animated.View>
+            <Text style={styles.loadingText}>
+              드림이가 열심히 계산 중이에요{loadingDots}
+            </Text>
+          </View>
+        )}
 
         {/* 드림이 리포트 내용 */}
         {dreamyReport && (() => {
@@ -553,5 +608,24 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Pretendard-Medium',
     color: '#FFFFFF',
+  },
+  loadingContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 40,
+    paddingHorizontal: 20,
+  },
+  loadingImageContainer: {
+    marginBottom: 20,
+  },
+  loadingDreame: {
+    width: 120,
+    height: 120,
+  },
+  loadingText: {
+    fontSize: 16,
+    fontFamily: 'Pretendard-Medium',
+    color: '#666',
+    textAlign: 'center',
   },
 });
