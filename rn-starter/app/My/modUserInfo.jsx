@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity, Text, View, Modal, Image as RNImage, ScrollView } from 'react-native';
+import { StyleSheet, TextInput, TouchableOpacity, Text, View, Modal, Image as RNImage, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { Image } from 'expo-image';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
@@ -195,7 +195,11 @@ export default function SignUpScreen() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#ffffff' }}>
+    <KeyboardAvoidingView 
+      style={{ flex: 1, backgroundColor: '#ffffff' }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+    >
       <View
         style={{
           marginTop: 70,
@@ -232,8 +236,12 @@ export default function SignUpScreen() {
         </Text>
       </View>
 
-      <ScrollView style={styles.container}
-        contentContainerStyle={styles.scrollViewContent}>
+      <ScrollView 
+        style={styles.container}
+        contentContainerStyle={styles.scrollViewContent}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
 
       <Text style={styles.text}>이름</Text>
       <View style={styles.inputGroup}>
@@ -502,7 +510,7 @@ export default function SignUpScreen() {
           </View>
         </View>
       </Modal>
-    </View>
+    </KeyboardAvoidingView>
   );
 
 }
