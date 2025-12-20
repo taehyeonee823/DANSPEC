@@ -9,8 +9,24 @@ import AlarmTab from './alarmTab';
 
 // 상대 시간을 계산하는 함수
 const getRelativeTime = (timestamp) => {
+    if (!timestamp) return "시간 정보 없음";
+    
+    // API가 UTC 시간을 반환하므로, 타임존 정보가 없으면 UTC로 명시적으로 처리
+    let timestampToParse = timestamp;
+    // 타임존 표시가 없으면 'Z'를 추가하여 UTC로 명시
+    if (!timestamp.includes('Z') && !timestamp.match(/[+-]\d{2}:?\d{2}$/)) {
+        timestampToParse = timestamp + 'Z';
+    }
+    
     const now = new Date();
-    const past = new Date(timestamp);
+    const past = new Date(timestampToParse);
+    
+    // 유효하지 않은 날짜인지 확인
+    if (isNaN(past.getTime())) {
+        console.warn('Invalid timestamp:', timestamp);
+        return "시간 정보 오류";
+    }
+    
     const diffInSeconds = Math.floor((now - past) / 1000);
 
     if (diffInSeconds < 60) {
