@@ -1,12 +1,20 @@
 # DANSPEC
 ### 서비스 소개
 단국대에 재학생들을 대상으로 공모전, 대외 활동 등 다양한 활동을 맞춤형으로 추천하고, 이를 바탕으로 팀을 모집하고 지원할 수 있는 팀 매칭 서비스
-### 프로젝트 기간 및 팀원
-### 주요 기능
+### 📅 프로젝트 기간 및 팀원
+프로젝트 기간
+2025.11 ~ 2025.12
+프로젝트 팀원
+
+### 🎯주요 기능
 1. 맞춤형 활동 추천 
+
 2. 팀 매칭 기능
+
 3. 활동 탐색 & 챗봇 지원
+
 4. 사용자 활동 분석
+
 ### ⚙️기술 스택
 <b>[Frontend]</b><br/>
 - <img src="https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white" align="center"> <img src="https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB" align="center"> <img src="https://img.shields.io/badge/expo-1C1E24?style=for-the-badge&logo=expo&logoColor=#D04A37" align="center">
