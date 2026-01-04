@@ -1,6 +1,6 @@
 # DANSPEC (단스펙) - FE
 
-## 프로젝트 소개
+## 📌 프로젝트 소개
 🏷️ **프로젝트명: DANSPEC(단스펙)**<br>
 🏆 **TABA 10기 프로젝트 발표회 장려상 수상**
 
@@ -13,9 +13,9 @@
 ---
 
 ## 📅 프로젝트 기간 및 팀원
-### 프로젝트 기간
+### ⏳ 프로젝트 기간
 2025.11 ~ 2025.12
-### 프로젝트 팀원
+### 👥 프로젝트 팀원
 |name|position|
 |------|---|
 |김태현|프론트엔드|
@@ -50,7 +50,7 @@
 
 ## ⚙️기술 스택
 <b>[Frontend]</b><br>
-- <img src="https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white" align="center"> <img src="https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB" align="center"> <img src="https://img.shields.io/badge/expo-1C1E24?style=for-the-badge&logo=expo&logoColor=#D04A37" align="center">
+- <img src="https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white" align="center"> <img src="https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB" align="center"> <img src="https://img.shields.io/badge/expo-1C1E24?style=for-the-badge&logo=expo&logoColor=#D04A37" align="center"><br>
 
 ---
 
@@ -65,7 +65,7 @@
 - Expo GO
 <br>
 
-## 설치 및 실행
+## 🛠️ 설치 및 실행
 1. **레포지토리 클론**
 ```bash
 git clone https://github.com/taehyeonee823/DANSPEC.git
