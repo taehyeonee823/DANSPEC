@@ -40,7 +40,7 @@
 * **활동 기반 팀 모집**: 역할·일정 설정 기반 팀 개설 및 지원자 승인·거절 관리
 * **실시간 참여 알림**: 팀 지원 현황 및 합류 여부 실시간 알림 확인
 <br>
-<video src="https://github.com/user-attachments/assets/abe4428d-4bb6-41d3-95cf-1e5883043cf9" autoplay loop muted playsinline width="100%"></video>
+<video src="https://github.com/user-attachments/assets/abe4428d-4bb6-41d3-95cf-1e5883043cf9" muted loop autoplay playsinline controls width="100%"></video>
 4️⃣ **사용자 활동 분석 및 맞춤 피드백**
 * **역량 분석 리포트**: 활동 기반 강점·약점 및 단계별 성장 지표(양호·보완·개선) 도출
 * **맞춤형 활동 추천**: 부족한 역량 보완을 위한 활동 제안 및 이력 관리
