@@ -39,6 +39,11 @@
 3️⃣ **팀 매칭 및 현황 관리**
 * **활동 기반 팀 모집**: 역할·일정 설정 기반 팀 개설 및 지원자 승인·거절 관리
 * **실시간 참여 알림**: 팀 지원 현황 및 합류 여부 실시간 알림 확인
+<br>
+<video width="100%" height="auto" autoplay loop muted playsinline>
+  <source src="docs/screenshots/team.mp4" type="video/mp4">
+  해당 브라우저는 영상을 지원하지 않습니다.
+</video>
 
 4️⃣ **사용자 활동 분석 및 맞춤 피드백**
 * **역량 분석 리포트**: 활동 기반 강점·약점 및 단계별 성장 지표(양호·보완·개선) 도출
