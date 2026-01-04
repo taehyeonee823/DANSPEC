@@ -41,8 +41,12 @@
 <b>[Frontend]</b><br>
 - <img src="https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white" align="center"> <img src="https://img.shields.io/badge/react_native-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB" align="center"> <img src="https://img.shields.io/badge/expo-1C1E24?style=for-the-badge&logo=expo&logoColor=#D04A37" align="center">
 
+---
+
 ## 🎨서비스 플로우 (Figma)
 서비스 화면 구성 및 플로우를 [Figma에서 확인](https://www.figma.com/design/kRLK2x2HWcd80S7DdDBsaX/DANSPEC?node-id=0-1&t=SZBuM4vy310TgYzx-1)할 수 있습니다.
+
+---
 
 ### 사전 준비
 - Node.js
