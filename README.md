@@ -66,17 +66,17 @@
 <br>
 
 ## 🛠️ 설치 및 실행
-1. **레포지토리 클론**
+1️⃣ **레포지토리 클론**
 ```bash
 git clone https://github.com/taehyeonee823/DANSPEC.git
 cd rn-starter
 ```
-2. **설치 및 실행**
+2️⃣ **설치 및 실행**
 ```bash
 npm install
 npm run start
 ```
-3. Expo Go 앱으로 QR 코드 스캔 후 실행
+3️⃣ Expo Go 앱으로 QR 코드 스캔 후 실행
 
 ---
 
