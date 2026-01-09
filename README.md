@@ -72,7 +72,7 @@
 1️⃣ **레포지토리 클론**
 ```bash
 git clone https://github.com/taehyeonee823/DANSPEC.git
-cd rn-starter
+cd DANSPEC
 ```
 2️⃣ **설치 및 실행**
 ```bash
