@@ -88,4 +88,4 @@ npm run start
 * 본 프로젝트는 **iOS 환경** 기준으로 UI/UX가 최적화되어 있으며, **Expo Go** 를 통한 iPhone 실행을 권장합니다.
 * 대회 출품 및 기술적 검증을 목적으로 제작된 포트폴리오 프로젝트입니다.
 * 사용한 데이터는 [캠퍼스픽](https://www.campuspick.com/) 및 영웅스토리 (단국대학교)에서 수집되었으며, 저작권은 각 제공처에 있습니다.
-* 백엔드 개발자 및 기획자와 협업으로 진행한 팀 프로젝트입니다. https://github.com/parksehyn/DANSPEC_BACKEND
+* 백엔드 개발자(https://github.com/parksehyn/DANSPEC_BACKEND) 및 기획자와 협업으로 진행한 팀 프로젝트입니다.
